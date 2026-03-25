@@ -1,589 +1,467 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0,viewport-fit=cover"/>
-    <title>PRODIGY | THE ULTIMATE VAULT</title>
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;700;900&family=Orbitron:wght@400;500;700;900&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0,viewport-fit=cover"/>
+<title>Prodigy Vault | Sensitive Top</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Orbitron:wght@400;700&family=DM+Sans:wght@300;400;700&display=swap" rel="stylesheet"/>
 
-    <style>
-        :root {
-            --gold: #C9A84C;
-            --gold-bright: #E2C05A;
-            --gold-dark: #7A5800;
-            --gold-deep: #5A3E00;
-            --bg-black: #050505;
-            --card-bg: #0f0f0f;
-            --text-gray: #888;
-            --danger: #ff3333;
-        }
+<style>
+:root {
+  --gold: #C9A84C; --gold-dark: #7A5800; --bg: #050505; --card: #111;
+}
 
-        /* Base Reset */
-        *, *::before, *::after { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
-            -webkit-tap-highlight-color: transparent; 
-        }
+* { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+body { 
+    background: var(--bg); color: white; font-family: 'DM Sans', sans-serif; 
+    overflow-x: hidden; user-select: none; -webkit-user-select: none;
+}
 
-        body {
-            background-color: var(--bg-black);
-            color: #fff;
-            font-family: 'DM Sans', sans-serif;
-            min-height: 100vh;
-            overflow-x: hidden;
-            user-select: none;
-            -webkit-user-select: none;
-        }
+/* --- SECURITY ENGINE (Anti-Snipping) --- */
+#sec-shield {
+    position: fixed; inset: 0; z-index: 999999; background: #000;
+    display: none; align-items: center; justify-content: center;
+}
+.locked-blur { filter: blur(80px) brightness(0); pointer-events: none; transition: 0.1s; }
 
-        /* --- SUPREME SECURITY OVERLAY --- */
-        #security-shield {
-            position: fixed;
-            inset: 0;
-            z-index: 1000000;
-            background: #000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            text-align: center;
-        }
-        #security-shield p {
-            color: var(--gold);
-            font-family: 'Orbitron';
-            letter-spacing: 8px;
-            font-size: 14px;
-            text-transform: uppercase;
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
-        
-        .blur-mode #main-wrapper { 
-            filter: blur(100px) grayscale(1) brightness(0); 
-            pointer-events: none; 
-        }
+/* --- NAV (Minimalist) --- */
+nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(5,5,5,0.9); backdrop-filter: blur(20px);
+    padding: 15px 5%; display: flex; justify-content: center;
+    border-bottom: 1px solid #1a1a1a;
+}
+nav h1 { font-family: 'Cinzel'; color: var(--gold); font-size: 16px; letter-spacing: 5px; }
 
-        /* --- ENTRY SCREEN --- */
-        #entry-screen {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            background: radial-gradient(circle at center, #111 0%, #000 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            transition: 1.5s cubic-bezier(0.8, 0, 0.2, 1);
-        }
-        #entry-screen.access-granted {
-            transform: translateY(-100%);
-            opacity: 0;
-            pointer-events: none;
-        }
-        .vault-title {
-            font-family: 'Cinzel Decorative';
-            font-size: clamp(40px, 10vw, 90px);
-            color: var(--gold);
-            letter-spacing: 15px;
-            margin-bottom: 20px;
-            text-shadow: 0 0 30px rgba(201,168,76,0.3);
-        }
-        .db-status {
-            font-family: 'Orbitron';
-            font-size: 10px;
-            color: var(--gold-dark);
-            letter-spacing: 3px;
-            margin-bottom: 50px;
-        }
-        .btn-initialize {
-            padding: 18px 50px;
-            background: none;
-            border: 1px solid var(--gold);
-            color: var(--gold);
-            font-family: 'Orbitron';
-            font-weight: 700;
-            letter-spacing: 5px;
-            cursor: pointer;
-            transition: 0.4s;
-            position: relative;
-            overflow: hidden;
-        }
-        .btn-initialize:hover {
-            background: var(--gold);
-            color: #000;
-            box-shadow: 0 0 50px var(--gold-dark);
-        }
+/* --- THE GALLERY (SENSITIVE AREA - TOP) --- */
+.gallery-section { padding: 15px; min-height: 90vh; }
+.grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+}
+.photo-card {
+    background: var(--card); position: relative; aspect-ratio: 1/1;
+    overflow: hidden; border: 1px solid #222; transition: 0.3s; cursor: zoom-in;
+}
+.photo-card:hover { border-color: var(--gold); transform: scale(1.02); z-index: 10; }
+.photo-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.4s; }
 
-        /* --- MAIN UI NAVIGATION --- */
-        nav {
-            position: sticky;
-            top: 0;
-            z-index: 500;
-            height: 70px;
-            background: rgba(0,0,0,0.9);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid #1a1a1a;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 5%;
-        }
-        .nav-logo { font-family: 'Cinzel'; color: var(--gold); font-weight: 900; letter-spacing: 3px; }
-        .track-info { font-family: 'Orbitron'; font-size: 9px; color: var(--gold-dark); }
+.del-btn {
+    position: absolute; top: 8px; right: 8px; background: rgba(255,0,0,0.8);
+    border: none; color: white; width: 26px; height: 26px; border-radius: 50%;
+    cursor: pointer; opacity: 0; transition: 0.2s; z-index: 15;
+}
+.photo-card:hover .del-btn { opacity: 1; }
 
-        /* --- GALLERY GRID (SENSITIVE TOP) --- */
-        .gallery-container {
-            padding: 20px 5%;
-            min-height: 80vh;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px;
-        }
-        .photo-card {
-            background: var(--card-bg);
-            border: 1px solid #1a1a1a;
-            aspect-ratio: 1 / 1;
-            position: relative;
-            overflow: hidden;
-            transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            cursor: zoom-in;
-        }
-        .photo-card:hover {
-            border-color: var(--gold);
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-            z-index: 10;
-        }
-        .photo-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: grayscale(0.2);
-            transition: 0.6s;
-        }
-        .photo-card:hover img { filter: grayscale(0) brightness(1.1); }
+/* --- EDITABLE/CONTROL PANEL (ALL BENEATH) --- */
+.control-basement {
+    background: #0a0a0a; border-top: 1px solid var(--gold-dark);
+    padding: 80px 5%; text-align: center;
+}
+.upload-box {
+    border: 1px dashed var(--gold); padding: 50px; border-radius: 4px;
+    max-width: 500px; margin: 0 auto; cursor: pointer; transition: 0.3s;
+}
+.upload-box:hover { background: #151515; box-shadow: 0 0 30px rgba(201,168,76,0.1); }
 
-        .delete-trigger {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(255, 51, 51, 0.9);
-            color: white;
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            font-weight: bold;
-            cursor: pointer;
-            opacity: 0;
-            transform: scale(0.5);
-            transition: 0.3s;
-            z-index: 20;
-        }
-        .photo-card:hover .delete-trigger { opacity: 1; transform: scale(1); }
+.stats-row { 
+    margin-top: 30px; font-family: 'Orbitron'; font-size: 10px; 
+    color: #444; display: flex; justify-content: center; gap: 30px; 
+}
 
-        /* --- CONTROL BASEMENT (EDITABLE BOTTOM) --- */
-        .control-basement {
-            background: #080808;
-            border-top: 1px solid var(--gold-deep);
-            padding: 100px 5%;
-            text-align: center;
-        }
-        .upload-area {
-            border: 1px dashed var(--gold-dark);
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 60px 20px;
-            cursor: pointer;
-            transition: 0.3s;
-            border-radius: 4px;
-        }
-        .upload-area:hover {
-            background: #111;
-            border-color: var(--gold);
-            border-style: solid;
-        }
-        .upload-area h2 { font-family: 'Cinzel'; color: var(--gold); margin-bottom: 10px; font-size: 18px; }
-        .upload-area p { color: #444; font-size: 12px; font-family: 'Orbitron'; letter-spacing: 2px; }
+/* --- LIGHTBOX & ZOOM --- */
+#lightbox {
+    position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.98);
+    display: none; flex-direction: column; align-items: center; justify-content: center;
+    touch-action: none;
+}
+#zoom-wrap { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; cursor: grab; }
+#lb-img { max-width: 95%; max-height: 90%; transform-origin: center; transition: transform 0.1s ease-out; }
 
-        .vault-stats {
-            margin-top: 50px;
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            font-family: 'Orbitron';
-            font-size: 10px;
-            color: var(--gold-deep);
-        }
+.lb-ui { position: absolute; top: 20px; right: 20px; z-index: 3000; display: flex; gap: 10px; }
+.btn-ui { background: #111; border: 1px solid var(--gold); color: white; padding: 8px 15px; cursor: pointer; font-size: 10px; font-family: Orbitron; }
 
-        /* --- PRO LIGHTBOX & ZOOM --- */
-        #lightbox {
-            position: fixed;
-            inset: 0;
-            z-index: 100000;
-            background: rgba(0,0,0,0.98);
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            touch-action: none;
-            overflow: hidden;
-        }
-        #zoom-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: grab;
-        }
-        #lb-img {
-            max-width: 90%;
-            max-height: 90%;
-            transform-origin: center;
-            transition: transform 0.1s ease-out;
-            box-shadow: 0 0 50px rgba(0,0,0,1);
-            pointer-events: none;
-        }
-        .lb-controls {
-            position: absolute;
-            top: 30px;
-            right: 30px;
-            z-index: 100001;
-            display: flex;
-            gap: 15px;
-        }
-        .lb-btn {
-            background: #111;
-            border: 1px solid var(--gold);
-            color: white;
-            padding: 10px 20px;
-            font-family: 'Orbitron';
-            font-size: 11px;
-            cursor: pointer;
-            letter-spacing: 2px;
-        }
-        .lb-btn:hover { background: var(--gold); color: #000; }
+/* --- ENTRY --- */
+#entry { position: fixed; inset: 0; z-index: 5000; background: #000; display: flex; align-items: center; justify-content: center; flex-direction: column; }
 
-        .zoom-info {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-family: 'Orbitron';
-            font-size: 10px;
-            color: var(--gold);
-            opacity: 0.5;
-            letter-spacing: 4px;
-            pointer-events: none;
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 768px) {
-            .grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-            .vault-title { font-size: 40px; letter-spacing: 8px; }
-            .lb-controls { top: 15px; right: 15px; width: 90%; justify-content: space-between; }
-        }
-    </style>
+@media (max-width: 768px) { .grid { grid-template-columns: 1fr 1fr; } }
+</style>
 </head>
 <body oncontextmenu="return false;">
 
-<!-- Anti-Snipping Shield -->
-<div id="security-shield">
-    <p>VAULT ENCRYPTION ACTIVE</p>
-    <p style="font-size: 9px; margin-top: 20px; letter-spacing: 2px;">Unauthorized Capture Prevented</p>
-</div>
+<div id="sec-shield"><p style="color:var(--gold); font-family:Orbitron; letter-spacing:5px;">VAULT LOCKED</p></div>
 
-<div id="main-wrapper">
-    <!-- Entry / Loading -->
-    <div id="entry-screen">
-        <div class="vault-title">PRODIGY</div>
-        <div class="db-status" id="db-msg">ESTABLISHING SECURE CONNECTION...</div>
-        <button class="btn-initialize" id="start-trigger" style="display:none;" onclick="grantAccess()">DECRYPT VAULT</button>
+<div id="app">
+    <!-- 1. ENTRY (DISAPPEARS ON START) -->
+    <div id="entry">
+        <h1 style="font-family:'Cinzel'; color:var(--gold); letter-spacing:15px; font-size: 40px;">VAULT</h1>
+        <button onclick="start()" style="margin-top:40px; padding:15px 50px; background:none; border:1px solid var(--gold); color:var(--gold); cursor:pointer; font-family:Orbitron; letter-spacing:3px;">OPEN ARCHIVE</button>
     </div>
 
-    <!-- Main Content Area -->
-    <div id="vault-ui" style="display:none;">
-        <nav>
-            <div class="nav-logo">ARCHIVE_2026</div>
-            <div class="track-info" id="current-track">TRACK: NULL</div>
-            <button onclick="location.reload()" style="background:none; border:none; color:#333; cursor:pointer; font-family:Orbitron; font-size:9px;">TERMINATE</button>
-        </nav>
+    <div id="main-ui" style="display:none;">
+        <nav><h1>SENSITIVE RECORDS</h1></nav>
 
-        <section class="gallery-container">
-            <div class="grid" id="master-grid">
-                <!-- High-res memories injected here -->
-            </div>
-        </section>
+        <!-- SENSITIVE PHOTOS ARE ALWAYS AT THE TOP -->
+        <div class="gallery-section">
+            <div class="grid" id="photo-grid"></div>
+        </div>
 
-        <!-- All Controls Beneath -->
-        <section class="control-basement">
-            <div class="upload-area" onclick="document.getElementById('file-input').click()">
-                <h2>DEPOSIT MEMORIES</h2>
-                <p>LOCAL ENCRYPTED STORAGE: 10,000+ CAPACITY</p>
-                <input type="file" id="file-input" multiple accept="image/*" style="display:none;" onchange="processUpload(event)">
+        <!-- ALL EDITABLE TEXT & CONTROLS ARE BENEATH -->
+        <div class="control-basement">
+            <div class="upload-box" onclick="document.getElementById('file-input').click()">
+                <h2 style="font-family:'Cinzel'; color:var(--gold); margin-bottom:10px;">DEPOSIT NEW MEDIA</h2>
+                <p style="font-size: 11px; color: #555;">(IMAGES ARE STORED LOCALLY IN BROWSER DATABASE)</p>
+                <input type="file" id="file-input" multiple accept="image/*" style="display:none;" onchange="handleUpload(event)">
             </div>
 
-            <div class="vault-stats">
-                <span id="stat-count">RECORDS: 0</span>
-                <span>|</span>
-                <span>STATUS: SECURE</span>
-                <span>|</span>
-                <span id="session-time">INDEX: TRACK 1</span>
+            <div class="stats-row">
+                <div id="count-label">0 RECORDS FOUND</div>
+                <div>CAPACITY: 10,000+ PHOTOS</div>
+                <div onclick="location.reload()" style="cursor:pointer; text-decoration: underline;">TERMINATE SESSION</div>
             </div>
 
-            <footer style="margin-top:100px; font-family:'Cinzel'; color:#1a1a1a; letter-spacing:10px; font-size:12px;">
-                PRODIGY DIGITAL VAULT SYSTEM
+            <footer style="margin-top: 80px; font-size: 9px; color: #222; font-family: Orbitron; letter-spacing: 5px;">
+                ENCRYPTED ARCHIVE SYSTEM v4.0
             </footer>
-        </section>
+        </div>
     </div>
 </div>
 
-<!-- Pro Zoom Lightbox -->
+<!-- Zoom Lightbox -->
 <div id="lightbox">
-    <div class="lb-controls">
-        <button class="lb-btn" onclick="resetZoom()">RESET VIEW</button>
-        <button class="lb-btn" onclick="exitLightbox()" style="border-color:var(--danger); color:var(--danger);">CLOSE [X]</button>
+    <div class="lb-ui">
+        <button class="btn-ui" onclick="resetZoom()">RESET</button>
+        <button class="btn-ui" onclick="closeLB()" style="border-color:red;">CLOSE</button>
     </div>
-    
-    <div id="zoom-container">
-        <img id="lb-img" src="" alt="High Res Memory">
+    <div id="zoom-wrap">
+        <img id="lb-img" src="">
     </div>
-
-    <div class="zoom-info">SCROLL TO MAGNIFY (15X) | DRAG TO EXPLORE</div>
+    <p style="position:absolute; bottom:20px; color:var(--gold); font-family:Orbitron; font-size:9px; opacity:0.5;">SCROLL TO ZOOM | DRAG TO MOVE</p>
 </div>
-
-<!-- Audio Engine -->
-<audio id="audio-engine" preload="auto"></audio>
 
 <script>
-/* 
-   -----------------------------------------
-   I. SEQUENTIAL AUDIO ENGINE (1-24)
-   -----------------------------------------
-*/
-const audio = document.getElementById('audio-engine');
-const totalTracks = 24;
-
-function getStoredTrack() {
-    let saved = parseInt(localStorage.getItem('prodigy_track_idx')) || 1;
-    return (saved > totalTracks) ? 1 : saved;
-}
-
-function playNextTrack() {
-    let current = getStoredTrack();
-    
-    // Extension handling: audio12 is .mp4, rest are .mpeg
-    let ext = (current === 12) ? 'mp4' : 'mpeg';
-    audio.src = `AUDIO/audio${current}.${ext}`;
-    
-    document.getElementById('current-track').innerText = `PLAYING TRACK ${current.toString().padStart(2, '0')}`;
-    document.getElementById('session-time').innerText = `INDEX: TRACK ${current}`;
-    
-    audio.play().catch(() => console.log("Waiting for user interaction..."));
-    
-    // Save next track for later
-    let next = (current >= totalTracks) ? 1 : current + 1;
-    localStorage.setItem('prodigy_track_idx', next);
-}
-
-audio.onended = playNextTrack;
-
-/* 
-   -----------------------------------------
-   II. PERMANENT DATABASE ENGINE (IndexedDB)
-   -----------------------------------------
-*/
+/* --- DATABASE (IndexedDB) --- */
 let db;
-const dbRequest = indexedDB.open("ProdigyGlobalArchive", 5);
+const req = indexedDB.open("VaultFinal", 1);
+req.onupgradeneeded = (e) => e.target.result.createObjectStore("media", { keyPath: "id", autoIncrement: true });
+req.onsuccess = (e) => { db = e.target.result; updateStats(); };
 
-dbRequest.onupgradeneeded = (e) => {
-    let database = e.target.result;
-    if (!database.objectStoreNames.contains("vault_data")) {
-        database.createObjectStore("vault_data", { keyPath: "id", autoIncrement: true });
-    }
-};
+/* --- SECURITY (Anti-Snipping) --- */
+const app = document.getElementById('app');
+const shield = document.getElementById('sec-shield');
+function lock() { shield.style.display='flex'; app.classList.add('locked-blur'); }
+function unlock() { shield.style.display='none'; app.classList.remove('locked-blur'); }
 
-dbRequest.onsuccess = (e) => {
-    db = e.target.result;
-    document.getElementById('db-msg').innerText = "CONNECTION SECURE. READY TO DECRYPT.";
-    document.getElementById('start-trigger').style.display = "block";
-    updateTotalCount();
-};
+window.onblur = lock; window.onfocus = unlock;
+document.onmouseleave = lock; document.onmouseenter = unlock;
 
-function processUpload(e) {
+/* --- LOGIC --- */
+function start() {
+    document.getElementById('entry').style.display = 'none';
+    document.getElementById('main-ui').style.display = 'block';
+    render();
+}
+
+function handleUpload(e) {
     const files = Array.from(e.target.files);
     files.forEach(file => {
         const reader = new FileReader();
-        reader.onload = (event) => {
-            const tx = db.transaction("vault_data", "readwrite");
-            tx.objectStore("vault_data").add({ blob: event.target.result, date: Date.now() });
-            tx.oncomplete = () => { renderGrid(); updateTotalCount(); };
+        reader.onload = (ev) => {
+            const tx = db.transaction("media", "readwrite");
+            tx.objectStore("media").add({ data: ev.target.result });
+            tx.oncomplete = () => { render(); updateStats(); };
         };
         reader.readAsDataURL(file);
     });
 }
 
-function renderGrid() {
-    const grid = document.getElementById('master-grid');
+function render() {
+    const grid = document.getElementById('photo-grid');
     grid.innerHTML = '';
-    const tx = db.transaction("vault_data", "readonly");
-    const store = tx.objectStore("vault_data");
-    
-    // Using cursor to handle 10,000+ images without crashing
-    store.openCursor(null, 'prev').onsuccess = (e) => {
+    const tx = db.transaction("media", "readonly");
+    tx.objectStore("media").openCursor(null, 'prev').onsuccess = (e) => {
         const cursor = e.target.result;
         if (cursor) {
-            const item = cursor.value;
-            const card = document.createElement('div');
-            card.className = 'photo-card';
-            card.innerHTML = `
-                <button class="delete-trigger" onclick="deleteEntry(${item.id}, event)">✕</button>
-                <img src="${item.blob}" onclick="enterLightbox('${item.blob}')" loading="lazy">
-            `;
-            grid.appendChild(card);
+            const div = document.createElement('div');
+            div.className = 'photo-card';
+            div.innerHTML = `<button class="del-btn" onclick="del(${cursor.value.id}, event)">✕</button>
+                             <img src="${cursor.value.data}" onclick="openLB('${cursor.value.data}')" loading="lazy">`;
+            grid.appendChild(div);
             cursor.continue();
         }
     };
 }
 
-function deleteEntry(id, e) {
+function del(id, e) {
     e.stopPropagation();
-    if (confirm("Permanently erase this record from the local database?")) {
-        const tx = db.transaction("vault_data", "readwrite");
-        tx.objectStore("vault_data").delete(id);
-        tx.oncomplete = () => { renderGrid(); updateTotalCount(); };
+    if(confirm("Erase permanently?")) {
+        const tx = db.transaction("media", "readwrite");
+        tx.objectStore("media").delete(id);
+        tx.oncomplete = () => { render(); updateStats(); };
     }
 }
 
-function updateTotalCount() {
-    const tx = db.transaction("vault_data", "readonly");
-    const req = tx.objectStore("vault_data").count();
-    req.onsuccess = () => {
-        document.getElementById('stat-count').innerText = `RECORDS: ${req.result}`;
-    };
+function updateStats() {
+    const tx = db.transaction("media", "readonly");
+    const req = tx.objectStore("media").count();
+    req.onsuccess = () => document.getElementById('count-label').innerText = `${req.result} RECORDS FOUND`;
 }
 
-/* 
-   -----------------------------------------
-   III. PRO ZOOM & PAN ENGINE
-   -----------------------------------------
-*/
-let scale = 1, posX = 0, posY = 0, dragging = false, lastX, lastY;
-const lb = document.getElementById('lightbox');
-const zoomImg = document.getElementById('lb-img');
-const zoomCont = document.getElementById('zoom-container');
+/* --- ZOOM ENGINE --- */
+let scale = 1, posX = 0, posY = 0, isDragging = false, startX, startY;
+const lbImg = document.getElementById('lb-img');
+const wrapImg = document.getElementById('zoom-wrap');
 
-function enterLightbox(src) {
-    zoomImg.src = src;
-    lb.style.display = 'flex';
+function openLB(src) {
+    lbImg.src = src;
+    document.getElementById('lightbox').style.display = 'flex';
     resetZoom();
 }
+function closeLB() { document.getElementById('lightbox').style.display = 'none'; }
+function resetZoom() { scale = 1; posX = 0; posY = 0; apply(); }
+function apply() { lbImg.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`; }
 
-function exitLightbox() { lb.style.display = 'none'; }
-
-function resetZoom() {
-    scale = 1; posX = 0; posY = 0;
-    applyTransform();
-}
-
-function applyTransform() {
-    zoomImg.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
-}
-
-// Wheel Zoom
-zoomCont.onwheel = (e) => {
+wrapImg.onwheel = (e) => {
     e.preventDefault();
-    const zoomSpeed = 0.3;
-    scale = Math.min(Math.max(1, scale + (e.deltaY > 0 ? -zoomSpeed : zoomSpeed)), 15);
-    applyTransform();
+    scale = Math.min(Math.max(1, scale + (e.deltaY > 0 ? -0.3 : 0.3)), 12);
+    apply();
 };
 
-// Drag Pan
-zoomCont.onmousedown = (e) => {
-    if (scale > 1) {
-        dragging = true;
-        lastX = e.clientX - posX;
-        lastY = e.clientY - posY;
-        zoomCont.style.cursor = 'grabbing';
-    }
+wrapImg.onmousedown = (e) => {
+    if (scale > 1) { isDragging = true; startX = e.clientX - posX; startY = e.clientY - posY; wrapImg.style.cursor='grabbing'; }
 };
-
 window.onmousemove = (e) => {
-    if (dragging) {
-        posX = e.clientX - lastX;
-        posY = e.clientY - lastY;
-        applyTransform();
-    }
+    if (isDragging) { posX = e.clientX - startX; posY = e.clientY - startY; apply(); }
 };
+window.onmouseup = () => { isDragging = false; wrapImg.style.cursor='grab'; };
 
-window.onmouseup = () => {
-    dragging = false;
-    zoomCont.style.cursor = 'grab';
+// Touch (Mobile Pan)
+wrapImg.ontouchstart = (e) => {
+    if (scale > 1) { isDragging = true; startX = e.touches[0].clientX - posX; startY = e.touches[0].clientY - posY; }
 };
-
-// Touch Pan (Mobile)
-zoomCont.ontouchstart = (e) => {
-    if (scale > 1) {
-        dragging = true;
-        lastX = e.touches[0].clientX - posX;
-        lastY = e.touches[0].clientY - posY;
-    }
+wrapImg.ontouchmove = (e) => {
+    if (isDragging) { posX = e.touches[0].clientX - startX; posY = e.touches[0].clientY - startY; apply(); }
 };
-zoomCont.ontouchmove = (e) => {
-    if (dragging) {
-        posX = e.touches[0].clientX - lastX;
-        posY = e.touches[0].clientY - lastY;
-        applyTransform();
-    }
-};
-zoomCont.ontouchend = () => dragging = false;
+wrapImg.ontouchend = () => isDragging = false;
 
-/* 
-   -----------------------------------------
-   IV. SECURITY & SYSTEM FLOW
-   -----------------------------------------
-*/
-function grantAccess() {
-    document.getElementById('entry-screen').classList.add('access-granted');
-    document.getElementById('vault-ui').style.display = 'block';
-    playNextTrack();
-    renderGrid();
-}
-
-// Anti-Capture Logic
-const shield = document.getElementById('security-shield');
-const bodyWrap = document.body;
-
-function activateShield() {
-    shield.style.display = 'flex';
-    bodyWrap.classList.add('blur-mode');
-}
-
-function deactivateShield() {
-    shield.style.display = 'none';
-    bodyWrap.classList.remove('blur-mode');
-}
-
-// Triggers for Windows Snipping Tool / Focus loss
-window.onblur = activateShield;
-window.onfocus = deactivateShield;
-document.onmouseleave = activateShield;
-document.onmouseenter = deactivateShield;
-
-// Block Screenshot Keys
+// Snipping Tool Key Block
 document.onkeydown = (e) => {
-    // Printscreen or Cmd+Shift+4 / Win+Shift+S
     if (e.key === 'PrintScreen' || (e.metaKey && e.shiftKey && (e.key === 'S' || e.key === '4'))) {
-        activateShield();
-        setTimeout(deactivateShield, 3000);
-        return false;
+        lock(); setTimeout(unlock, 2000);
     }
 };
+</script>
+</body>
+</html>
+  gap: 35px; padding: 40px 5%; max-width: 1400px; margin: 0 auto;
+}
+
+.photo-card {
+  background: var(--bg-card); padding: 12px 12px 50px 12px; border-radius: 2px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15); border: 1px solid var(--gold-dark);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s;
+  cursor: pointer; position: relative; overflow: hidden;
+  animation: cardFadeIn 0.6s ease forwards;
+}
+.photo-card img { width: 100%; height: 280px; object-fit: cover; border: 1px solid var(--gold-dark); display: block; filter: contrast(1.05); }
+.card-caption { font-family: 'Cinzel'; font-weight: 900; text-align: center; margin-top: 15px; color: var(--text-dark); font-size: 14px; letter-spacing: 1px; }
+
+/* --- MOBILE SPECIFIC FIXES --- */
+@media (max-width: 768px) {
+  .entry-card { padding: 40px 20px; }
+  .btn-enter { width: 100%; padding: 18px 20px; }
+  .top-bar { padding: 0 15px; height: 60px; }
+  .gallery-grid { 
+    grid-template-columns: repeat(2, 1fr); /* 2 per row on mobile for better visibility */
+    gap: 12px; padding: 15px; 
+  }
+  .photo-card { padding: 8px 8px 35px 8px; }
+  .photo-card img { height: 180px; }
+  .card-caption { font-size: 10px; margin-top: 8px; }
+  .upload-box { padding: 25px !important; margin: 15px auto !important; }
+}
+
+.upload-box { background: var(--bg-card); border: 2px dashed var(--gold-dark); border-radius: 4px; padding: 40px; text-align: center; cursor: pointer; width: 92%; max-width: 800px; margin: 20px auto; transition: 0.3s; }
+
+/* --- LIGHTBOX --- */
+#lightbox {
+  position: fixed; inset: 0; z-index: 100000; background: #000; 
+  display: none; align-items: center; justify-content: center;
+}
+.lb-wrap { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; }
+#lb-img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); border: 1px solid var(--gold); color: var(--gold); width: 50px; height: 50px; border-radius: 50%; z-index: 100001; }
+.btn-prev { left: 10px; } .btn-next { right: 10px; }
+.lb-close { position: absolute; top: 20px; right: 20px; color: #fff; font-family: 'Orbitron'; font-size: 14px; border: 1px solid var(--gold); padding: 8px; z-index: 100002; }
+</style>
+</head>
+<body oncontextmenu="return false;" ondragstart="return false;">
+
+<div id="sec-shield"><p>ENCRYPTED VAULT: SECURITY PROTOCOL ACTIVE</p></div>
+
+<div id="main-wrapper">
+    <canvas id="dust"></canvas>
+    <div class="bg-orb" style="top:-100px; left:-100px;"></div>
+    
+    <audio id="bg-audio" preload="auto"></audio>
+
+    <div id="entry">
+        <div class="entry-card" id="entry-ui"></div>
+    </div>
+
+    <div id="main-page" style="display:none;">
+        <nav class="top-bar">
+            <button class="btn-back" onclick="goBack()" style="background: none; border: 1.5px solid var(--gold); color: var(--gold-dark); padding: 8px 15px; border-radius: 50px; font-family: 'Cinzel'; font-weight: 700; cursor: pointer; font-size: 12px;">LEAVE</button>
+            <div id="nav-badge" style="background:var(--gold); color:#000; padding:6px 15px; border-radius:50px; font-family:'Orbitron'; font-weight:900; font-size:10px;"></div>
+        </nav>
+
+        <div style="text-align:center; padding:40px 20px;">
+            <h1 id="hero-main" style="font-family:'Cinzel Decorative'; font-size:clamp(30px, 8vw, 75px); font-weight:900;"></h1>
+            <p id="hero-tag" style="font-family:'Playfair Display'; font-style:italic; font-size:16px; color:var(--gold-dark); margin-top:10px;"></p>
+        </div>
+
+        <div class="upload-box" onclick="document.getElementById('file-input').click()">
+            <h3 style="font-family:'Cinzel'; color:var(--gold-dark); font-weight:900; font-size: 14px;">+ DEPOSIT NEW MEMORIES</h3>
+            <input type="file" id="file-input" multiple accept="image/*" style="display:none;" onchange="handleUpload(event)">
+        </div>
+
+        <div class="gallery-grid" id="grid"></div>
+
+        <footer style="text-align:center; padding:80px 20px; border-top:1px solid var(--border);">
+            <div id="footer-year" style="font-family:'Cinzel Decorative'; font-size:40px; color:var(--gold);"></div>
+            <p id="footer-note" style="font-family:'Orbitron'; font-size:9px; letter-spacing:4px; margin-top:10px;"></p>
+        </footer>
+    </div>
+</div>
+
+<div id="lightbox">
+    <div class="lb-wrap">
+        <div class="lb-close" onclick="closeLB()">CLOSE [X]</div>
+        <button class="slider-btn btn-prev" onclick="moveSlide(-1)">&#10094;</button>
+        <img id="lb-img" src="" alt="Full Memory">
+        <button class="slider-btn btn-next" onclick="moveSlide(1)">&#10095;</button>
+    </div>
+</div>
+
+<script>
+let galleryItems = [];
+let currentIndex = 0;
+const aud = document.getElementById('bg-audio');
+
+/* --- SECURITY: ANTI-SCREENSHOT ENGINE --- */
+function lock() { 
+    document.getElementById('sec-shield').style.display = 'flex'; 
+    document.body.classList.add('locked'); 
+}
+function unlock() { 
+    document.getElementById('sec-shield').style.display = 'none'; 
+    document.body.classList.remove('locked'); 
+}
+
+// Mobile specific: detect app switching or minimizing (prevents quick screenshots)
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+        lock();
+    } else {
+        setTimeout(unlock, 500);
+    }
+});
+
+window.addEventListener('blur', lock);
+window.addEventListener('focus', unlock);
+
+window.addEventListener('keyup', (e) => {
+    if (e.key === 'PrintScreen') {
+        navigator.clipboard.writeText("");
+        lock();
+        setTimeout(unlock, 2000);
+    }
+});
+
+/* --- AUDIO ENGINE --- */
+const TRACKS = Array.from({length: 23}, (_, i) => `AUDIO/audio${i+1}.${i === 11 ? 'mp4' : 'mpeg'}`);
+let jukebox = [];
+function playMusic() {
+    if (jukebox.length === 0) jukebox = [...TRACKS].sort(() => Math.random() - 0.5);
+    aud.src = jukebox.pop();
+    aud.play().catch(e => {});
+}
+aud.onended = playMusic;
+
+function openVault() {
+    playMusic();
+    document.getElementById('entry').classList.add('gone');
+    document.getElementById('main-page').style.display = 'block';
+    window.scrollTo(0,0);
+}
+
+function goBack() {
+    document.getElementById('entry').classList.remove('gone');
+    setTimeout(() => { document.getElementById('main-page').style.display = 'none'; }, 1000);
+    aud.pause();
+}
+
+function handleUpload(e) {
+    const files = Array.from(e.target.files);
+    files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            const item = { src: ev.target.result };
+            galleryItems.push(item);
+            renderCard(item, galleryItems.length - 1);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function renderCard(item, idx) {
+    const grid = document.getElementById('grid');
+    const div = document.createElement('div');
+    div.className = 'photo-card';
+    div.innerHTML = `
+        <img src="${item.src}" onclick="openLB(${idx})">
+        <div class="card-caption">MEMORIA NO. ${idx + 1}</div>
+    `;
+    grid.insertBefore(div, grid.firstChild);
+}
+
+function openLB(idx) {
+    currentIndex = idx;
+    document.getElementById('lb-img').src = galleryItems[currentIndex].src;
+    document.getElementById('lightbox').style.display = 'flex';
+}
+function closeLB() { document.getElementById('lightbox').style.display = 'none'; }
+function moveSlide(dir) {
+    currentIndex = (currentIndex + dir + galleryItems.length) % galleryItems.length;
+    document.getElementById('lb-img').src = galleryItems[currentIndex].src;
+}
+
+const CONFIG = {
+    entryYear: "REWIND",
+    entryShayari: "\"Kuch yaadein purani hain,<br>Magar dosti abhi nibhani hai.\"",
+    entryButtonText: "Revisiting the Moment",
+    navBadge: "BATCH OF 2026",
+    heroTitle: "Digital Gallery",
+    heroTagline: "A Legacy Stitched in Time and Memories.",
+    footerYear: "2026",
+    footerNote: "DESIGNED BY ABHINAV CHAUHAN"
+};
+
+function init() {
+    document.getElementById('entry-ui').innerHTML = `
+        <div style="font-family:'Orbitron'; font-size:10px; letter-spacing:8px; color:var(--gold-dark); margin-bottom:20px;">PRIVATE ARCHIVE</div>
+        <div style="font-family:'Cinzel Decorative'; font-size:60px; font-weight:900; color:var(--gold-deep); line-height:1;">${CONFIG.entryYear}</div>
+        <p style="font-family:'Playfair Display'; font-style:italic; font-size:20px; margin:40px 0 50px; line-height:1.6;">${CONFIG.entryShayari}</p>
+        <button class="btn-enter" onclick="openVault()">${CONFIG.entryButtonText}</button>
+    `;
+    document.getElementById('nav-badge').textContent = CONFIG.navBadge;
+    document.getElementById('hero-main').textContent = CONFIG.heroTitle;
+    document.getElementById('hero-tag').textContent = CONFIG.heroTagline;
+    document.getElementById('footer-year').textContent = CONFIG.footerYear;
+    document.getElementById('footer-note').textContent = CONFIG.footerNote;
+}
+
+init();
 </script>
 </body>
 </html>
