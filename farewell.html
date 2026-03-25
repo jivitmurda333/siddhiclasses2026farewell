@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farewell 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Cinzel:wght@400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+:root { --crimson: #B31B1B; --gold: #C5A059; --ink: #1A120B; --paper: #FDFBF7; --bg-dark: #050505; }
+#page-transition { position: fixed; inset: 0; background: #000; z-index: 9999; transition: opacity 1s ease; pointer-events: none; opacity: 1; }
+body.loaded #page-transition { opacity: 0; }
+body.exiting #page-transition { opacity: 1; pointer-events: auto; }
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+body { min-height: 100vh; width: 100%; background-color: var(--bg-dark); display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; font-family: 'Cormorant Garamond', serif; perspective: 2000px; }
+.moire-overlay { position: fixed; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 50%), repeating-radial-gradient(circle at 50% 50%, transparent 0, transparent 40px, rgba(197, 160, 89, 0.02) 41px, transparent 42px); opacity: 0; transition: opacity 2s ease; z-index: 1; pointer-events: none; }
+body.letter-open .moire-overlay { opacity: 1; animation: moireShift 20s linear infinite; }
+@keyframes moireShift { 0% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.1) rotate(2deg); } 100% { transform: scale(1) rotate(0deg); } }
+#bg-canvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
+#scene { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; }
+#env-wrapper { position: relative; width: 500px; height: 320px; transform-style: preserve-3d; cursor: pointer; transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.6s ease; filter: drop-shadow(0 30px 60px rgba(0,0,0,1)); }
+@keyframes floatIdle { 0%, 100% { transform: translateY(0px) rotateX(2deg) rotateY(-2deg); } 50% { transform: translateY(-15px) rotateX(4deg) rotateY(2deg); } }
+#env-wrapper.idle { animation: floatIdle 5s ease-in-out infinite; }
+.env-body { position: absolute; inset: 0; background: linear-gradient(160deg, #A89B85 0%, #7A6F5D 100%); border-radius: 2px; transform-style: preserve-3d; }
+.flap-left::before { content:''; position:absolute; inset:0; background:#8E826D; clip-path:polygon(0 0, 50% 50%, 0 100%); }
+.flap-right::before { content:''; position:absolute; inset:0; background:#8E826D; clip-path:polygon(100% 0, 50% 50%, 100% 100%); }
+.flap-bottom::before { content:''; position:absolute; inset:0; background:#9B8F7A; clip-path:polygon(0 100%, 50% 50%, 100% 100%); }
+#top-lid { position: absolute; inset: 0; transform-origin: top center; transform-style: preserve-3d; z-index: 30; transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
+#top-lid::before { content: ''; position: absolute; inset: 0; background: #A89B85; clip-path: polygon(0 0, 100% 0, 50% 54%); backface-visibility: hidden; }
+#seal { position: absolute; left: 50%; top: 44%; transform: translate(-50%, -50%); z-index: 40; width: 64px; height: 64px; }
+#letter { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.1) translateY(400px); width: min(720px, 92vw); max-height: 85vh; background: var(--paper); opacity: 0; z-index: 200; pointer-events: none; overflow-y: auto; box-shadow: 0 0 60px rgba(255, 255, 255, 0.3), 0 0 120px rgba(197, 160, 89, 0.15); transition: all 1s cubic-bezier(0.19, 1, 0.22, 1); border: 1px solid rgba(255,255,255,0.2); }
+#letter.open { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1) translateY(0); }
+.letter-inner { padding: 40px 30px; position: relative; }
+.letter-salutation { font-family: 'Dancing Script', cursive; font-size: clamp(28px,7vw,48px); color: var(--crimson); margin-bottom: 20px; }
+.letter-body { font-size: clamp(14px,4vw,22px); line-height: 1.7; color: var(--ink); text-align: left; white-space: pre-line; }
+.letter-signature { margin-top: 28px; font-family: 'Dancing Script', cursive; font-size: clamp(20px,5vw,32px); color: var(--ink); opacity: 0.8; }
+.letter-btn { display: inline-block; margin-top: 30px; padding: 14px clamp(20px,6vw,48px); border: 1px solid var(--crimson); color: var(--crimson); font-family: 'Cinzel'; font-size: clamp(9px,2.5vw,11px); letter-spacing: 3px; background: transparent; cursor: pointer; transition: 0.4s; text-transform: uppercase; }
+.letter-btn:hover { background: var(--crimson); color: #fff; box-shadow: 0 0 20px rgba(155, 14, 40, 0.4); }
+#overlay { position: fixed; inset: 0; z-index: 150; background: rgba(0,0,0,0); pointer-events: none; transition: 1s; }
+#overlay.active { background: rgba(0, 0, 0, 0.8); pointer-events: auto; }
+@media(max-width:600px) { 
+  #env-wrapper { width: min(340px,88vw); height: min(220px,56vw); } 
+  .letter-inner { padding: 30px 20px; }
+  .letter-salutation { font-size: clamp(24px,8vw,36px); }
+  .letter-body { font-size: clamp(13px,3.8vw,18px); line-height:1.6; }
+  .letter-signature { font-size: clamp(18px,5vw,26px); }
+}
+</style>
+</head>
+<body>
+
+<div id="page-transition"></div>
+<div class="moire-overlay"></div>
+<canvas id="bg-canvas"></canvas>
+<div id="overlay" onclick="closeLetter()"></div>
+
+<div id="scene">
+  <div id="env-wrapper" class="idle" onclick="openEnvelope()">
+    <div class="env-body"><div class="flap-left"></div><div class="flap-right"></div><div class="flap-bottom"></div></div>
+    <div id="top-lid"></div>
+    <div id="seal"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#7A0A1E"/><path d="M32 46 C32 46 14 36 14 25 A10 10 0 0 1 32 22 A10 10 0 0 1 50 25 C50 36 32 46 32 46Z" fill="#9B0E28"/></svg></div>
+  </div>
+</div>
+
+<div id="letter">
+  <div class="letter-inner">
+    <h1 class="letter-salutation" id="letter-salutation"></h1>
+    <div class="letter-body" id="letter-text"></div>
+    <div class="letter-signature" id="letter-author"></div>
+    <div style="text-align:center;">
+      <button class="letter-btn" id="letter-button-text" onclick="nextAction()"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* --- DO NOT EDIT THIS SECTION (LOGIC) --- */
+window.addEventListener('load', () => { setTimeout(() => { document.body.classList.add('loaded'); }, 300); });
+function fadeToNext(url) { document.body.classList.add('exiting'); setTimeout(() => { window.location.href = url; }, 1000); }
+let isOpen = false;
+function openEnvelope() {
+  if (isOpen) return; isOpen = true;
+  document.body.classList.add('letter-open');
+  document.getElementById('env-wrapper').classList.remove('idle');
+  document.getElementById('env-wrapper').style.opacity = '0';
+  document.getElementById('top-lid').style.transform = 'rotateX(-170deg)';
+  setTimeout(() => { document.getElementById('overlay').classList.add('active'); document.getElementById('letter').classList.add('open'); }, 400);
+}
+function closeLetter() { isOpen = false; document.body.classList.remove('letter-open'); document.getElementById('letter').classList.remove('open'); document.getElementById('overlay').classList.remove('active'); setTimeout(() => { document.getElementById('env-wrapper').style.opacity = '1'; document.getElementById('env-wrapper').classList.add('idle'); }, 800); }
+
+const canvas=document.getElementById('bg-canvas'),ctx=canvas.getContext('2d');
+let pts=[];
+function init(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; pts=[]; for(let i=0;i<50;i++)pts.push({x:Math.random(),y:Math.random(),r:Math.random()*1,a:Math.random()}); }
+function draw(){ ctx.clearRect(0,0,canvas.width,canvas.height); pts.forEach(p=>{ ctx.beginPath(); ctx.arc(p.x*canvas.width,p.y*canvas.height,p.r,0,Math.PI*2); ctx.fillStyle=`rgba(197, 160, 89, ${Math.abs(Math.sin(p.a+=0.002))*0.15})`; ctx.fill(); }); requestAnimationFrame(draw); }
+window.addEventListener('resize', init); init(); draw();
+
+/* ------------------------------------------------------------
+    (EDITING TEXT)
+   ------------------------------------------------------------ */
+
+const CONFIG = {
+    salutation: "To Our Dearest Mentors,",
+    
+    // You can use <br> for new lines or <b> for bold
+    bodyText: `<b>Dear Teachers,</b>
+               
+               Thank you for the guidance over the last few years. 
+               We are moving on to a new chapter, but we will never 
+               forget the lessons learned here.
+               
+               Wishing you all the best.`,
+    
+    signature: "Abhinav Chauhan [Developer]",
+    
+    buttonText: "Continue to Gallery",
+    
+    nextPageUrl: "page 3.html"
+};
+
+/* --- APPLY CONFIGURATION (AUTO) --- */
+document.getElementById('letter-salutation').innerHTML = CONFIG.salutation;
+document.getElementById('letter-text').innerHTML = CONFIG.bodyText;
+document.getElementById('letter-author').innerHTML = CONFIG.signature;
+document.getElementById('letter-button-text').innerText = CONFIG.buttonText;
+function nextAction() { fadeToNext(CONFIG.nextPageUrl); }
+</script>
+
+</body>
+</html>
