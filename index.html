@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Farewell 2026 | Entrance</title>
   
+  <!-- Premium Fonts Pairing -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 
   <style>
@@ -25,6 +26,7 @@
       -webkit-font-smoothing: antialiased;
     }
  
+    /* -- Page transition overlay -- */
     #page-transition {
       position:fixed; inset:0;
       background: var(--bg-deep);
@@ -38,7 +40,7 @@
     body {
       font-family:'DM Sans', sans-serif;
       display:flex; flex-direction:column; align-items:center;
-      height: 100vh; height: 100dvh;
+      height:100vh; height:100dvh;
       color: var(--text-main);
       background: var(--bg-gradient);
     }
@@ -62,10 +64,13 @@
       z-index:2; pointer-events:none;
     }
  
+    /* --------------------------------
+       TOP STRAP - ENHANCED & BIGGER
+    -------------------------------- */
     .top-strap {
       position:relative; z-index:10;
       width:100%; 
-      height: clamp(80px, 12vh, 100px);
+      height: clamp(80px, 12vh, 100px); /* Increased height */
       background: linear-gradient(90deg, #4A3300, var(--gold-dark), var(--gold), var(--gold-bright), var(--gold), var(--gold-dark), #4A3300);
       background-size: 200% auto;
       border-bottom: 3px solid var(--gold-dark);
@@ -77,6 +82,7 @@
     
     .top-strap span {
       font-family:'Orbitron', sans-serif;
+      /* Significantly larger text */
       font-size: clamp(18px, 5vw, 26px); 
       font-weight: 900; 
       letter-spacing: clamp(10px, 3vw, 20px);
@@ -86,6 +92,9 @@
       white-space: nowrap;
     }
  
+    /* --------------------------------
+       MAIN CONTENT
+    -------------------------------- */
     .content {
       flex: 1; z-index: 10;
       display: flex; flex-direction: column;
@@ -109,7 +118,7 @@
     .main-title {
       font-family: 'Cinzel Decorative', cursive;
       font-weight: 900;
-      font-size: clamp(65px, 20vw, 180px);
+      font-size: clamp(65px, 20vw, 180px); /* Bigger title */
       color: var(--gold);
       letter-spacing: clamp(4px, 1.5vw, 25px);
       text-transform: uppercase;
@@ -173,6 +182,9 @@
       letter-spacing: 10px;
     }
  
+    /* --------------------------------
+       ANIMATIONS
+    -------------------------------- */
     @keyframes strapDown {
       from { transform:translateY(-100%); }
       to   { transform:translateY(0); }
@@ -190,6 +202,7 @@
       100% { background-position: 200% 50%; }
     }
  
+    /* -- Strong Mobile Presence -- */
     @media (max-height: 700px) {
       .top-strap { height: 70px; }
       .main-title { margin-bottom: 15px; }
@@ -200,6 +213,7 @@
 <body>
 
   <div id="page-transition"></div>
+
   <canvas id="dust"></canvas>
 
   <video autoplay muted loop playsinline id="video-bg">
@@ -225,14 +239,17 @@
   </main>
 
   <script>
+    /* -- MOUSE / GYRO PARALLAX -- */
     const title = document.getElementById('main-title-text');
     
+    // Desktop Mouse Parallax
     document.addEventListener('mousemove', (e) => {
       const x = (window.innerWidth / 2 - e.pageX) / 40;
       const y = (window.innerHeight / 2 - e.pageY) / 40;
       title.style.transform = `rotateY(${x}deg) rotateX(${-y}deg) translateZ(30px)`;
     });
 
+    // Mobile "Floating" fallback logic
     if (window.innerWidth < 1024) {
       let angle = 0;
       function animateMobile() {
@@ -245,6 +262,7 @@
       animateMobile();
     }
 
+    /* -- GOLD DUST PARTICLE SYSTEM -- */
     (function(){
       var c = document.getElementById('dust');
       var ctx = c.getContext('2d');
@@ -281,6 +299,7 @@
       })();
     })();
 
+    /* -- CONFIG & LOGIC -- */
     const CONFIG = {
       topBar:      "Batch of 2026",
       eyebrow:     "A Journey to Remember",
