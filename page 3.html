@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+// This prevents the black screen when clicking the 'Back' button
+window.onpageshow = function(event) {
+    if (event.persisted) {
+        window.location.reload();
+    }
+};
+</script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Batch of 2026</title>
@@ -586,7 +594,7 @@ var PAGE = {
   heading:    "THE BATCH",
   subheading: "A Journey to Remember",
   searchText: "Search a classmate...",
-  footer:     "Memories last forever — Batch of 2026"
+  footer:     "Memories last forever Â— Batch of 2026"
 };
 
 var STUDENT_DATA = [
