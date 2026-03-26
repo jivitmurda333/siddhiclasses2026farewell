@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><script>
+// This prevents the black screen when clicking the 'Back' button
+window.onpageshow = function(event) {
+    if (event.persisted) {
+        window.location.reload();
+    }
+};
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Farewell 2026</title>
