@@ -4,449 +4,670 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0,viewport-fit=cover"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>THE VAULT | DIGITAL GALLERY 2026</title>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Farewell 2026 — Elite Vault</title>
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet"/>
+    <!-- 
+        VAULT TYPOGRAPHY ARCHIVE 
+        Fonts curated for the 2026 Elite Aesthetic
+    -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet"/>
 
-    <!-- Supabase SDK -->
+    <!-- EXTERNAL CORE ENGINE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <style>
+        /* 
+           ========================================
+           VAULT DESIGN SYSTEM: COLOURS & VARIABLES
+           ========================================
+        */
         :root {
-            --gold: #B8860B; 
-            --gold-light: #D4AF37; 
-            --gold-soft: #C9A84C;
-            --gold-deep: #7A5800;
-            --bg-base: #F5EFE1; /* Fixed Beige Theme */
-            --bg-card: #FAF6ED;
-            --text-dark: #1A1A1A;
-            --text-gold: #8A6D2D;
-            --border: rgba(184, 134, 11, 0.3);
-            --shadow: 0 20px 50px rgba(0,0,0,0.1);
+            --gold: #C9A84C; 
+            --gold-bright: #E2C05A; 
+            --gold-dark: #7A5800; 
+            --gold-deep: #5A3E00;
+            --text-dark: #000000; 
+            --text-soft: #2C1E00; 
+            --bg-base: #F2E8D4; 
+            --bg-card: #e5dcc7;
+            --border: rgba(201,168,76,0.45); 
+            --shadow-lg: 0 30px 60px rgba(90,60,5,0.4);
             --safe-top: env(safe-area-inset-top);
+            --transition-smooth: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        /* --- GLOBAL RESET --- */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        
+        /* 
+           ========================================
+           GLOBAL RESET & SCROLLBAR
+           ========================================
+        */
+        *, *::before, *::after { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            -webkit-tap-highlight-color: transparent; 
+        }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--bg-base); }
+        ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 10px; }
+
         body {
-            background-color: var(--bg-base);
-            color: var(--text-dark);
+            background-color: var(--bg-base); 
             font-family: 'DM Sans', sans-serif;
-            overflow-x: hidden;
-            min-height: 100vh;
-            -webkit-user-select: none;
+            min-height: 100vh; 
+            overflow-x: hidden; 
+            -webkit-user-select: none; 
             user-select: none;
-            line-height: 1.6;
+            color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* --- SECURITY PROTOCOL --- */
-        #security-shield {
-            position: fixed; inset: 0; z-index: 999999;
-            background: rgba(245, 239, 225, 0.98);
-            display: none; align-items: center; justify-content: center;
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            text-align: center;
+        /* 
+           ========================================
+           SECURITY PROTOCOLS (Anti-Screenshot)
+           ========================================
+        */
+        #sec-shield {
+            position: fixed; inset: 0; z-index: 1000000; 
+            background: #000; display: none; 
+            align-items: center; justify-content: center;
+            backdrop-filter: blur(40px);
         }
-        .shield-box { border: 1px solid var(--gold); padding: 40px; }
-        .shield-box p { font-family: 'Orbitron'; letter-spacing: 5px; color: var(--gold-deep); font-size: 12px; }
-
-        /* --- DUST & ATMOSPHERE --- */
-        #canvas-dust { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.6; }
-        .ambient-glow {
-            position: fixed; width: 800px; height: 800px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%);
-            z-index: -1; pointer-events: none; filter: blur(80px);
-            animation: drift 25s infinite alternate ease-in-out;
+        #sec-shield .shield-wrap { text-align: center; }
+        #sec-shield p { 
+            color: var(--gold); font-family: 'Orbitron'; 
+            letter-spacing: 6px; font-size: 12px; 
+            text-transform: uppercase; animation: pulseSec 2s infinite;
         }
-        @keyframes drift { from { transform: translate(-10%, -10%); } to { transform: translate(10%, 10%); } }
+        @keyframes pulseSec { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-        /* --- ENTRY SCREEN (The fix for the blank box) --- */
-        #entry-screen {
-            position: fixed; inset: 0; z-index: 10000;
-            background: var(--bg-base);
-            display: flex; align-items: center; justify-content: center;
-            padding: 20px; transition: transform 1.2s cubic-bezier(0.85, 0, 0.15, 1);
+        .locked #main-wrapper { filter: blur(40px); opacity: 0; transform: scale(0.98); }
+
+        /* 
+           ========================================
+           ATMOSPHERIC VISUALS
+           ========================================
+        */
+        #dust { 
+            position: fixed; inset: 0; z-index: 0; 
+            pointer-events: none; opacity: 0.6; 
         }
-        #entry-screen.unlocked { transform: translateY(-100%); pointer-events: none; }
 
-        .entry-container {
-            max-width: 500px; width: 100%; text-align: center;
-            background: var(--bg-card); border: 1px solid var(--gold);
-            padding: 60px 30px; box-shadow: var(--shadow);
+        .bg-orb { 
+            position: fixed; width: 80vw; height: 80vw; 
+            border-radius: 50%; 
+            background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%); 
+            z-index: -1; filter: blur(120px); 
+            animation: floatOrb 25s infinite alternate ease-in-out; 
+        }
+        @keyframes floatOrb { 
+            0% { transform: translate(-15%, -15%) rotate(0deg); } 
+            100% { transform: translate(15%, 15%) rotate(360deg); } 
+        }
+
+        /* 
+           ========================================
+           ENTRY SCREEN COMPONENT
+           ========================================
+        */
+        #entry {
+            position: fixed; inset: 0; z-index: 9999; 
+            display: flex; align-items: center; justify-content: center; 
+            background: var(--bg-base); transition: 1.4s cubic-bezier(0.9, 0, 0.1, 1);
+            padding: 25px;
+        }
+        #entry.gone { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+        
+        .entry-card { 
+            background: var(--bg-card); 
+            border: 1px solid var(--gold-dark); 
+            padding: 80px 40px; text-align: center; 
+            box-shadow: var(--shadow-lg); 
+            width: 100%; max-width: 550px; 
             position: relative; overflow: hidden;
         }
-        .entry-container::after {
-            content: ''; position: absolute; inset: 10px; border: 0.5px solid var(--gold); opacity: 0.5; pointer-events: none;
+        .entry-card::before {
+            content: ''; position: absolute; inset: 10px;
+            border: 1px solid var(--gold-dark); opacity: 0.3; pointer-events: none;
         }
 
-        .gold-title {
-            font-family: 'Cinzel Decorative', serif; font-weight: 900;
-            font-size: clamp(2rem, 8vw, 3.5rem); color: var(--gold-deep);
-            margin-bottom: 10px; letter-spacing: -1px;
+        .btn-enter { 
+            padding: 22px 60px; 
+            background: linear-gradient(135deg, var(--gold-deep), var(--gold-dark), var(--gold)); 
+            border: none; border-radius: 60px; 
+            font-family: 'Cinzel'; font-weight: 900; 
+            color: #fff; cursor: pointer; letter-spacing: 5px; 
+            box-shadow: 0 15px 30px rgba(90,60,5,0.4); 
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: 40px; text-transform: uppercase; font-size: 13px;
         }
+        .btn-enter:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(90,60,5,0.5); }
+        .btn-enter:active { transform: scale(0.94); }
 
-        .btn-enter {
-            margin-top: 40px; background: var(--gold-deep); color: #FFF;
-            border: none; padding: 18px 45px; font-family: 'Cinzel';
-            font-weight: 700; letter-spacing: 4px; cursor: pointer;
-            transition: 0.4s; position: relative; z-index: 1;
-        }
-        .btn-enter:active { transform: scale(0.96); background: var(--gold); }
-
-        /* --- APP HEADER --- */
-        .main-header {
-            position: sticky; top: 0; z-index: 1000;
-            height: 80px; display: flex; align-items: center; justify-content: space-between;
-            padding: var(--safe-top) 5% 0; background: rgba(245, 239, 225, 0.9);
-            backdrop-filter: blur(15px); border-bottom: 1px solid var(--border);
-        }
-
-        /* --- GALLERY GRID --- */
-        .content-wrapper { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        /* 
+           ========================================
+           MAIN APPLICATION UI
+           ========================================
+        */
+        #main-page { display: none; opacity: 0; transition: 1.5s ease-in; }
         
+        .top-bar { 
+            position: sticky; top: 0; z-index: 5000; 
+            height: 85px; 
+            background: rgba(242,232,212,0.85); 
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-bottom: 2px solid var(--gold); 
+            display: flex; align-items: center; justify-content: space-between; 
+            padding: var(--safe-top) 40px 0; 
+        }
+
+        .nav-status {
+            text-align: right; font-family: 'Orbitron';
+        }
+        .nav-status .live-indicator {
+            display: inline-block; width: 8px; height: 8px; 
+            background: #00ff00; border-radius: 50%; margin-right: 5px;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        /* 
+           ========================================
+           GALLERY ENGINE & CARDS
+           ========================================
+        */
         .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px; margin-top: 40px;
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 40px; padding: 60px 5%; max-width: 1600px; margin: 0 auto;
         }
 
         .photo-card {
-            background: var(--bg-card); padding: 12px 12px 55px;
-            border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            transition: 0.5s cubic-bezier(0.2, 1, 0.3, 1); cursor: pointer;
+            background: var(--bg-card); 
+            padding: 15px 15px 60px 15px; 
+            border-radius: 4px;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.12); 
+            border: 1px solid var(--gold-dark);
+            transition: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            cursor: pointer; position: relative; overflow: hidden;
+            animation: cardEntrance 0.8s ease backwards;
+        }
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .photo-card:hover { transform: translateY(-15px); border-color: var(--gold-bright); box-shadow: var(--shadow-lg); }
+
+        .photo-card img { 
+            width: 100%; height: 350px; 
+            object-fit: cover; border: 1px solid var(--gold-dark); 
+            display: block; transition: 0.5s;
+        }
+        .photo-card:hover img { filter: brightness(1.1) contrast(1.05); }
+        
+        .card-caption { 
+            font-family: 'Cinzel'; font-weight: 900; text-align: center; 
+            margin-top: 20px; color: var(--text-dark); font-size: 14px; 
+            letter-spacing: 2px; text-transform: uppercase;
+        }
+
+        .delete-btn {
+            position: absolute; top: 25px; right: 25px;
+            background: rgba(255,255,255,0.9); color: #B00000;
+            width: 35px; height: 35px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; border: 1px solid #B00000; 
+            opacity: 0; transition: 0.3s; z-index: 10;
+        }
+        .photo-card:hover .delete-btn { opacity: 1; }
+
+        /* 
+           ========================================
+           UPLOAD COMPONENT
+           ========================================
+        */
+        .upload-section {
+            background: var(--bg-card); 
+            border: 2px dashed var(--gold-dark); 
+            border-radius: 8px; padding: 60px 20px; 
+            text-align: center; cursor: pointer; 
+            width: 90%; max-width: 900px; 
+            margin: 40px auto; transition: 0.4s;
             position: relative;
         }
-        .photo-card:hover { transform: translateY(-10px); box-shadow: var(--shadow); border-color: var(--gold); }
-
-        .photo-card img {
-            width: 100%; height: 320px; object-fit: cover;
-            border: 0.5px solid var(--border); background: #EEE;
+        .upload-section:hover { background: rgba(201,168,76,0.1); border-style: solid; }
+        
+        #upload-loader { 
+            display: none; position: absolute; inset: 0; 
+            background: rgba(229,220,199,0.9); 
+            align-items: center; justify-content: center; flex-direction: column;
+            z-index: 20;
         }
-
-        .card-meta {
-            position: absolute; bottom: 18px; left: 0; width: 100%;
-            text-align: center; font-family: 'Cinzel'; font-size: 11px;
-            color: var(--text-gold); font-weight: 700; letter-spacing: 2px;
-        }
-
-        /* --- UPLOAD BOX --- */
-        .upload-trigger {
-            border: 2px dashed var(--gold); background: rgba(184,134,11,0.03);
-            padding: 50px 20px; text-align: center; cursor: pointer;
-            margin: 40px auto; max-width: 800px; transition: 0.3s;
-        }
-        .upload-trigger:hover { background: rgba(184,134,11,0.08); }
-
-        /* --- DELETE BUTTON --- */
-        .erase-btn {
-            position: absolute; top: 20px; right: 20px;
-            background: rgba(255, 255, 255, 0.9); color: #D00;
-            width: 32px; height: 32px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 14px; border: 1px solid #D00; opacity: 0; transition: 0.3s;
-        }
-        .photo-card:hover .erase-btn { opacity: 1; }
-
-        /* --- MOBILE OPTIMIZATION --- */
-        @media (max-width: 768px) {
-            .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .photo-card { padding: 8px 8px 45px; }
-            .photo-card img { height: 190px; }
-            .main-header { height: 70px; padding: 0 15px; }
-            .gold-title { font-size: 2.2rem; }
-            .content-wrapper { padding: 10px; }
-        }
-
-        /* --- LIGHTBOX --- */
-        #lightbox {
-            position: fixed; inset: 0; z-index: 100000;
-            background: #000; display: none; align-items: center; justify-content: center;
-        }
-        #lb-img { max-width: 95%; max-height: 85vh; object-fit: contain; }
-        .lb-close { position: absolute; top: 30px; right: 30px; color: var(--gold-soft); font-family: 'Orbitron'; cursor: pointer; }
-        .lb-nav {
-            position: absolute; bottom: 40px; display: flex; gap: 30px;
-        }
-        .lb-btn { background: none; border: 1px solid var(--gold); color: #FFF; padding: 10px 25px; font-family: 'Cinzel'; cursor: pointer; }
-
-        /* --- TOAST MESSAGES --- */
-        #toast {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: var(--gold-deep); color: #FFF; padding: 12px 30px;
-            font-family: 'Orbitron'; font-size: 10px; border-radius: 50px;
-            z-index: 2000000; display: none; letter-spacing: 2px;
-        }
-
-        .loading-ring {
-            width: 50px; height: 50px; border: 3px solid rgba(184,134,11,0.2);
-            border-top: 3px solid var(--gold); border-radius: 50%;
-            animation: spin 1s linear infinite; margin: 0 auto;
+        .spinner {
+            width: 50px; height: 50px; border: 3px solid rgba(122,88,0,0.2);
+            border-top: 3px solid var(--gold-dark); border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* 
+           ========================================
+           MOBILE INTERFACE (Elite Responsive)
+           ========================================
+        */
+        @media (max-width: 768px) {
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 15px; }
+            .photo-card { padding: 8px 8px 40px 8px; }
+            .photo-card img { height: 200px; }
+            .card-caption { font-size: 10px; }
+            .top-bar { height: 70px; padding: 0 20px; }
+            .gold-title { font-size: 45px !important; }
+            .entry-card { padding: 50px 20px; }
+        }
+
+        /* 
+           ========================================
+           LIGHTBOX SYSTEM
+           ========================================
+        */
+        #lightbox {
+            position: fixed; inset: 0; z-index: 100000; 
+            background: rgba(0,0,0,0.98); 
+            display: none; align-items: center; justify-content: center;
+            flex-direction: column;
+        }
+        .lb-stage { 
+            width: 100vw; height: 100vh; 
+            display: flex; align-items: center; justify-content: center; 
+            position: relative; 
+        }
+        #lb-img { 
+            max-width: 95%; max-height: 85%; 
+            object-fit: contain; border: 2px solid var(--gold); 
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        }
+        .nav-btn { 
+            position: absolute; top: 50%; transform: translateY(-50%); 
+            background: rgba(255,255,255,0.1); border: 1px solid var(--gold); 
+            color: var(--gold); width: 60px; height: 60px; border-radius: 50%; 
+            font-size: 24px; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .nav-btn:hover { background: var(--gold); color: #000; }
+        .prev-btn { left: 30px; } .next-btn { right: 30px; }
+        .lb-close { 
+            position: absolute; top: 40px; right: 40px; 
+            color: #fff; font-family: 'Orbitron'; font-size: 12px; 
+            border: 1px solid var(--gold); padding: 12px 20px; 
+            cursor: pointer; z-index: 100002; letter-spacing: 2px;
+        }
+
+        /* 
+           ========================================
+           TOAST NOTIFICATIONS
+           ========================================
+        */
+        #vault-toast {
+            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+            background: var(--gold-deep); color: #fff; padding: 15px 40px;
+            font-family: 'Orbitron'; font-size: 11px; border-radius: 60px;
+            z-index: 5000000; display: none; letter-spacing: 3px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border: 1px solid var(--gold);
+        }
     </style>
 </head>
-<body oncontextmenu="return false;">
+<body oncontextmenu="return false;" ondragstart="return false;">
 
-    <!-- SECURITY BLUR -->
-    <div id="security-shield">
-        <div class="shield-box">
-            <p>ENCRYPTED VAULT LOCKED</p>
-            <p style="font-size: 8px; margin-top: 10px; opacity: 0.6;">RETURN TO WINDOW TO DECRYPT</p>
+    <!-- SECURITY SHIELD OVERLAY -->
+    <div id="sec-shield">
+        <div class="shield-wrap">
+            <p>Vault Access Suspended</p>
+            <p style="font-size: 8px; margin-top: 10px; opacity: 0.5;">Return to window to continue</p>
         </div>
     </div>
 
-    <!-- NOTIFICATION -->
-    <div id="toast">ACTION COMPLETE</div>
+    <!-- NOTIFICATION SYSTEM -->
+    <div id="vault-toast">VAULT SYNCHRONIZED</div>
 
-    <!-- DUST EFFECTS -->
-    <div class="ambient-glow" style="top: -10%; left: -10%;"></div>
-    <div class="ambient-glow" style="bottom: -10%; right: -10%; animation-delay: -7s;"></div>
-    <canvas id="canvas-dust"></canvas>
+    <div id="main-wrapper">
+        <!-- CANVAS PHYSICS LAYER -->
+        <canvas id="dust"></canvas>
+        <div class="bg-orb" style="top:-20%; left:-20%;"></div>
+        <div class="bg-orb" style="bottom:-20%; right:-20%; animation-delay: -10s;"></div>
+        
+        <!-- AUDIO ARCHIVE ENGINE -->
+        <audio id="bg-audio" preload="auto"></audio>
 
-    <!-- ENTRY SCREEN -->
-    <section id="entry-screen">
-        <div class="entry-container">
-            <p style="font-family: 'Playfair Display'; font-style: italic; color: var(--gold-deep); font-size: 14px;">The Archive Presents</p>
-            <h1 class="gold-title">THE VAULT</h1>
-            <p style="font-family: 'Cinzel'; letter-spacing: 5px; font-size: 10px; color: var(--text-gold);">REVISITING MEMORIES 2026</p>
-            <div style="height: 1px; width: 60px; background: var(--gold); margin: 30px auto;"></div>
-            <p style="font-family: 'Playfair Display'; font-style: italic; padding: 0 20px; font-size: 14px; opacity: 0.8;">
-                "Kuch yaadein purani hain,<br>Magar dosti abhi nibhani hai."
-            </p>
-            <button class="btn-enter" onclick="unlockApp()">UNLOCK ARCHIVE</button>
-        </div>
-    </section>
-
-    <!-- MAIN APP -->
-    <main id="app-content" style="display: none; opacity: 0; transition: 1s;">
-        <nav class="main-header">
-            <button onclick="lockApp()" style="background:none; border:1px solid var(--gold); color:var(--gold-deep); padding:8px 20px; font-family:'Cinzel'; font-size:10px; cursor:pointer; border-radius:50px;">LEAVE</button>
-            <div style="text-align: right;">
-                <p style="font-family:'Orbitron'; font-size:9px; color:var(--gold-deep); letter-spacing:2px; font-weight:900;">SECURE ACCESS</p>
-                <p style="font-family:'Cinzel'; font-size:10px; color:var(--text-gold);">BATCH OF 2026</p>
+        <!-- ENTRY SCREEN LAYER -->
+        <section id="entry">
+            <div class="entry-card">
+                <div style="font-family:'Orbitron'; font-size:10px; letter-spacing:10px; color:var(--gold-dark); margin-bottom:25px; font-weight: 700;">PREMIUM ACCESS</div>
+                <div style="font-family:'Cinzel Decorative'; font-size: clamp(45px, 10vw, 75px); font-weight:900; color:var(--gold-deep); line-height:0.9;">REWIND</div>
+                <div style="height: 1px; width: 80px; background: var(--gold-dark); margin: 40px auto; opacity: 0.4;"></div>
+                <p style="font-family:'Playfair Display'; font-style:italic; font-size:20px; margin-bottom:50px; line-height:1.6; color:var(--text-soft);">
+                    "Kuch yaadein purani hain,<br>Magar dosti abhi nibhani hai."
+                </p>
+                <button class="btn-enter" onclick="EliteVault.Actions.open()">Enter the Archive</button>
             </div>
-        </nav>
+        </section>
 
-        <header style="text-align:center; padding: 60px 20px 20px;">
-            <h2 class="gold-title" style="font-size: clamp(30px, 8vw, 60px);">DIGITAL GALLERY</h2>
-            <p style="font-family:'Playfair Display'; font-style:italic; color:var(--gold-deep);">A legacy stitched in time and memories.</p>
-        </header>
+        <!-- MAIN VAULT DASHBOARD -->
+        <div id="main-page">
+            <nav class="top-bar">
+                <button onclick="EliteVault.Actions.close()" style="background: none; border: 1.5px solid var(--gold); color: var(--gold-dark); padding: 10px 25px; border-radius: 50px; font-family: 'Cinzel'; font-weight: 900; cursor: pointer; font-size: 11px; letter-spacing: 2px;">EXIT VAULT</button>
+                <div class="nav-status">
+                    <span class="live-indicator"></span>
+                    <span style="color:var(--gold-deep); font-weight:900; font-size:10px; letter-spacing:2px;">SECURE LIVE SYNC</span>
+                    <div style="font-family:'Cinzel'; font-size:10px; color:var(--gold-dark); margin-top:3px;">BATCH OF 2026</div>
+                </div>
+            </nav>
 
-        <div class="content-wrapper">
-            <!-- Upload Section -->
-            <div class="upload-trigger" id="upload-zone" onclick="document.getElementById('file-input').click()">
+            <header style="text-align:center; padding:80px 20px 40px;">
+                <h1 class="gold-title" style="font-family:'Cinzel Decorative'; font-size:clamp(45px, 9vw, 90px); font-weight:900; color:var(--gold-deep); letter-spacing: -2px;">DIGITAL GALLERY</h1>
+                <p style="font-family:'Playfair Display'; font-style:italic; font-size:20px; color:var(--gold-dark); margin-top:10px; opacity: 0.8;">A legacy stitched in time and memories.</p>
+            </header>
+
+            <!-- UPLOAD INTERFACE -->
+            <div class="upload-section" onclick="document.getElementById('file-input').click()">
                 <div id="upload-idle">
-                    <p style="font-family:'Cinzel'; font-size:14px; color:var(--gold-deep); font-weight:900;">+ DEPOSIT NEW MEMORY</p>
-                    <p style="font-size:10px; opacity:0.6; margin-top:5px;">JPEG / PNG ARCHIVES UP TO 15MB</p>
+                    <h3 style="font-family:'Cinzel'; color:var(--gold-dark); font-weight:900; font-size: 16px; letter-spacing: 3px;">+ DEPOSIT NEW MEMORY</h3>
+                    <p style="font-family:'DM Sans'; font-size: 11px; margin-top: 8px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px;">Accepts High-Resolution JPEGs & PNGs</p>
                 </div>
-                <div id="upload-working" style="display: none;">
-                    <div class="loading-ring"></div>
-                    <p style="font-family:'Orbitron'; font-size:10px; margin-top:15px; color:var(--gold-deep);">ENCRYPTING DATA...</p>
+                <div id="upload-loader">
+                    <div class="spinner"></div>
+                    <p style="font-family:'Orbitron'; font-size:10px; margin-top:15px; letter-spacing:4px; color:var(--gold-dark);">ENCRYPTING DATA...</p>
                 </div>
-                <input type="file" id="file-input" accept="image/*" style="display:none" onchange="processUpload(event)">
+                <input type="file" id="file-input" accept="image/*" style="display:none;" onchange="EliteVault.Data.upload(event)">
             </div>
 
-            <!-- Gallery -->
-            <div id="gallery-grid" class="gallery-grid">
-                <!-- Memories injected here -->
+            <!-- THE GRID -->
+            <div class="gallery-grid" id="main-grid">
+                <!-- Data Hydration via JavaScript -->
             </div>
-        </div>
 
-        <footer style="padding: 120px 20px 80px; text-align: center; border-top: 1px solid var(--border);">
-            <h3 style="font-family:'Cinzel Decorative'; font-size: 40px; color:var(--gold); opacity: 0.4;">2026</h3>
-            <p style="font-family:'Orbitron'; font-size:8px; letter-spacing:6px; color:var(--gold-deep); margin-top:15px;">AUTHENTIC DIGITAL HERITAGE</p>
-        </footer>
-    </main>
-
-    <!-- LIGHTBOX -->
-    <div id="lightbox">
-        <div class="lb-close" onclick="closeLB()">[ CLOSE ]</div>
-        <img id="lb-img" src="">
-        <div class="lb-nav">
-            <button class="lb-btn" onclick="navLB(-1)">PREV</button>
-            <button class="lb-btn" onclick="navLB(1)">NEXT</button>
+            <footer style="text-align:center; padding:150px 20px 100px; border-top:1px solid var(--border);">
+                <div style="font-family:'Cinzel Decorative'; font-size:55px; color:var(--gold); opacity: 0.4;">2026</div>
+                <p style="font-family:'Orbitron'; font-size:9px; letter-spacing:6px; margin-top:20px; color: var(--gold-dark); font-weight: 700;">DESIGNED BY ABHINAV CHAUHAN</p>
+                <p style="font-family:'DM Sans'; font-size:10px; margin-top:40px; opacity: 0.3;">STITCHED IN GOLD &bull; FOREVER DIGITAL</p>
+            </footer>
         </div>
     </div>
 
-    <!-- AUDIO PLAYER -->
-    <audio id="vault-music" loop></audio>
+    <!-- LIGHTBOX COMPONENT -->
+    <div id="lightbox">
+        <div class="lb-close" onclick="EliteVault.Lightbox.close()">CLOSE ARCHIVE [X]</div>
+        <div class="lb-stage">
+            <button class="nav-btn prev-btn" onclick="EliteVault.Lightbox.navigate(-1)">&#8249;</button>
+            <img id="lb-img" src="" alt="Full Vault Memory">
+            <button class="nav-btn next-btn" onclick="EliteVault.Lightbox.navigate(1)">&#8250;</button>
+        </div>
+    </div>
 
     <script>
-        /* --- SUPABASE CONFIG --- */
-        const SB_URL = 'https://znptyheexlkuvielzjtd.supabase.co';
-        const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpucHR5aGVleGxrdXZpZWx6anRkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MTA4MjgsImV4cCI6MjA5MDA4NjgyOH0.r2mgPh4clcW00NRAexcvS0p65tzZD5A9RPqfYFGtGH4';
-        const _supabase = supabase.createClient(SB_URL, SB_KEY);
+        /**
+         * ============================================================
+         * ELITE VAULT CORE ARCHITECTURE 2026
+         * Engineered for High-Performance Memory Archival
+         * ============================================================
+         */
 
-        let archiveData = [];
-        let viewIndex = 0;
-        const music = document.getElementById('vault-music');
-
-        /* --- STARTUP --- */
-        window.addEventListener('DOMContentLoaded', () => {
-            setupDust();
-            fetchArchives();
-        });
-
-        /* --- DUST ANIMATION --- */
-        function setupDust() {
-            const c = document.getElementById('canvas-dust');
-            const ctx = c.getContext('2d');
-            let particles = [];
+        const EliteVault = (() => {
             
-            const resize = () => { c.width = window.innerWidth; c.height = window.innerHeight; };
-            window.addEventListener('resize', resize);
-            resize();
+            // SUPABASE CONFIGURATION
+            const SB_URL = 'https://znptyheexlkuvielzjtd.supabase.co';
+            const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpucHR5heexlkuvielzjtdIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MTA4MjgsImV4cCI6MjA5MDA4NjgyOH0.r2mgPh4clcW00NRAexcvS0p65tzZD5A9RPqfYFGtGH4';
+            const _supabase = supabase.createClient(SB_URL, SB_KEY);
 
-            for(let i=0; i<60; i++) {
-                particles.push({
-                    x: Math.random()*c.width, y: Math.random()*c.height,
-                    s: Math.random()*1.5, vx: (Math.random()-0.5)*0.4, vy: (Math.random()-0.5)*0.4
+            // GLOBAL STATE
+            let state = {
+                items: [],
+                currentIndex: 0,
+                isSyncing: false,
+                audioStarted: false
+            };
+
+            // AUDIO ARCHIVE (23 TRACKS)
+            const audioTracks = Array.from({length: 23}, (_, i) => `AUDIO/audio${i+1}.${i === 11 ? 'mp4' : 'mpeg'}`);
+            let playlist = [];
+            const audioElem = document.getElementById('bg-audio');
+
+            /**
+             * PARTICLE ENGINE
+             */
+            const initParticles = () => {
+                const canvas = document.getElementById('dust');
+                const ctx = canvas.getContext('2d');
+                let pts = [];
+
+                const resize = () => {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                };
+
+                window.addEventListener('resize', resize);
+                resize();
+
+                for(let i=0; i<70; i++) {
+                    pts.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        s: Math.random() * 1.2,
+                        vx: (Math.random() - 0.5) * 0.4,
+                        vy: (Math.random() - 0.5) * 0.4,
+                        o: Math.random()
+                    });
+                }
+
+                function loop() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = "rgba(201,168,76,0.35)";
+                    
+                    pts.forEach(p => {
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        
+                        if(p.x < 0) p.x = canvas.width;
+                        if(p.x > canvas.width) p.x = 0;
+                        if(p.y < 0) p.y = canvas.height;
+                        if(p.y > canvas.height) p.y = 0;
+
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
+                        ctx.fill();
+                    });
+                    requestAnimationFrame(loop);
+                }
+                loop();
+            };
+
+            /**
+             * DATA LAYER
+             */
+            const loadGallery = async () => {
+                const { data, error } = await _supabase
+                    .from('photos')
+                    .select('*')
+                    .order('id', { ascending: false });
+
+                if (!error) {
+                    state.items = data;
+                    renderUI();
+                }
+            };
+
+            const renderUI = () => {
+                const grid = document.getElementById('main-grid');
+                grid.innerHTML = '';
+
+                state.items.forEach((item, idx) => {
+                    const card = document.createElement('div');
+                    card.className = 'photo-card';
+                    card.innerHTML = `
+                        <div class="delete-btn" onclick="EliteVault.Data.remove(event, ${item.id}, '${item.owner}', '${item.storage_path}')">&times;</div>
+                        <img src="${item.url}" loading="lazy" onclick="EliteVault.Lightbox.open(${idx})">
+                        <div class="card-caption">MEMORY FROM: ${item.owner}</div>
+                    `;
+                    grid.appendChild(card);
                 });
-            }
+            };
 
-            function draw() {
-                ctx.clearRect(0,0,c.width, c.height);
-                ctx.fillStyle = "rgba(184, 134, 11, 0.3)";
-                particles.forEach(p => {
-                    p.x += p.vx; p.y += p.vy;
-                    if(p.x<0) p.x=c.width; if(p.x>c.width) p.x=0;
-                    if(p.y<0) p.y=c.height; if(p.y>c.height) p.y=0;
-                    ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
-                });
-                requestAnimationFrame(draw);
-            }
-            draw();
-        }
+            /**
+             * PUBLIC MODULES
+             */
+            return {
+                Actions: {
+                    open: () => {
+                        // Play Audio Logic
+                        if (!state.audioStarted) {
+                            playlist = [...audioTracks].sort(() => Math.random() - 0.5);
+                            audioElem.src = playlist.pop();
+                            audioElem.play().catch(() => console.log("User interaction required for audio"));
+                            audioElem.onended = () => {
+                                if(playlist.length === 0) playlist = [...audioTracks].sort(() => Math.random() - 0.5);
+                                audioElem.src = playlist.pop();
+                                audioElem.play();
+                            };
+                            state.audioStarted = true;
+                        }
 
-        /* --- APP CORE LOGIC --- */
-        function unlockApp() {
-            // Play audio - browser requires user interaction
-            music.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'; 
-            music.play().catch(()=>{});
+                        document.getElementById('entry').classList.add('gone');
+                        document.getElementById('main-page').style.display = 'block';
+                        gsap.to('#main-page', { opacity: 1, duration: 1 });
+                        loadGallery();
+                    },
+                    close: () => {
+                        gsap.to('#main-page', { opacity: 0, duration: 0.8, onComplete: () => {
+                            document.getElementById('main-page').style.display = 'none';
+                            document.getElementById('entry').classList.remove('gone');
+                            audioElem.pause();
+                            state.audioStarted = false;
+                        }});
+                    }
+                },
 
-            document.getElementById('entry-screen').classList.add('unlocked');
-            document.getElementById('app-content').style.display = 'block';
-            setTimeout(() => { document.getElementById('app-content').style.opacity = '1'; }, 100);
-        }
+                Data: {
+                    upload: async (e) => {
+                        const file = e.target.files[0];
+                        if (!file) return;
 
-        function lockApp() {
-            document.getElementById('app-content').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('app-content').style.display = 'none';
-                document.getElementById('entry-screen').classList.remove('unlocked');
-                music.pause();
-            }, 1000);
-        }
+                        const name = prompt("IDENTIFY YOURSELF (Your Name):").trim().toUpperCase();
+                        if (!name) return;
 
-        /* --- DATABASE ACTIONS --- */
-        async function fetchArchives() {
-            const { data, error } = await _supabase.from('photos').select('*').order('id', {ascending: false});
-            if(!error) {
-                archiveData = data;
-                renderGallery();
-            }
-        }
+                        const loader = document.getElementById('upload-loader');
+                        loader.style.display = 'flex';
 
-        function renderGallery() {
-            const grid = document.getElementById('gallery-grid');
-            grid.innerHTML = '';
-            archiveData.forEach((item, idx) => {
-                const div = document.createElement('div');
-                div.className = 'photo-card';
-                div.innerHTML = `
-                    <div class="erase-btn" onclick="deleteMemory(event, ${item.id}, '${item.owner}', '${item.storage_path}')">&times;</div>
-                    <img src="${item.url}" alt="Memory" loading="lazy" onclick="openLB(${idx})">
-                    <div class="card-meta">FROM: ${item.owner.toUpperCase()}</div>
-                `;
-                grid.appendChild(div);
-            });
-        }
+                        // PATH FIX: Use lowercase bucket name as shown in Supabase
+                        const bucketName = 'memories';
+                        const fileName = `${Date.now()}_${name.replace(/\s+/g, '_')}_${file.name}`;
+                        const filePath = `${fileName}`;
 
-        async function processUpload(e) {
-            const file = e.target.files[0];
-            if(!file) return;
+                        try {
+                            const { error: uploadError } = await _supabase.storage
+                                .from(bucketName)
+                                .upload(filePath, file);
 
-            const owner = prompt("ENTER YOUR NAME FOR THE ARCHIVE:");
-            if(!owner) return;
+                            if (uploadError) throw uploadError;
 
-            // Toggle loading UI
-            document.getElementById('upload-idle').style.display = 'none';
-            document.getElementById('upload-working').style.display = 'block';
+                            const { data: { publicUrl } } = _supabase.storage
+                                .from(bucketName)
+                                .getPublicUrl(filePath);
 
-            const fileName = `${Date.now()}_${owner.toLowerCase()}_${file.name}`;
-            const path = `uploads/${fileName}`;
+                            const { error: dbError } = await _supabase
+                                .from('photos')
+                                .insert([{ 
+                                    url: publicUrl, 
+                                    owner: name, 
+                                    storage_path: filePath 
+                                }]);
 
-            try {
-                // 1. Upload to Storage
-                const { error: upErr } = await _supabase.storage.from('MEMORIES').upload(path, file);
-                if(upErr) throw upErr;
+                            if (dbError) throw dbError;
 
-                // 2. Get URL
-                const { data: urlObj } = _supabase.storage.from('MEMORIES').getPublicUrl(path);
+                            EliteVault.Utils.toast("MEMORY SECURED IN VAULT");
+                            loadGallery();
+                        } catch (err) {
+                            alert("Vault Access Error: " + err.message);
+                        } finally {
+                            loader.style.display = 'none';
+                        }
+                    },
 
-                // 3. Save to DB
-                const { error: dbErr } = await _supabase.from('photos').insert([{
-                    url: urlObj.publicUrl,
-                    owner: owner.toLowerCase(),
-                    storage_path: path
-                }]);
+                    remove: async (e, id, owner, path) => {
+                        e.stopPropagation();
+                        const verify = prompt(`TYPE "${owner}" TO ERASE THIS MEMORY:`).trim().toUpperCase();
+                        
+                        if (verify === owner) {
+                            await _supabase.storage.from('memories').remove([path]);
+                            await _supabase.from('photos').delete().eq('id', id);
+                            EliteVault.Utils.toast("MEMORY PERMANENTLY ERASED");
+                            loadGallery();
+                        } else {
+                            EliteVault.Utils.toast("IDENTITY MISMATCH");
+                        }
+                    }
+                },
 
-                if(dbErr) throw dbErr;
+                Lightbox: {
+                    open: (idx) => {
+                        state.currentIndex = idx;
+                        const img = document.getElementById('lb-img');
+                        img.src = state.items[idx].url;
+                        document.getElementById('lightbox').style.display = 'flex';
+                        gsap.from(img, { scale: 0.9, opacity: 0, duration: 0.4 });
+                    },
+                    close: () => {
+                        document.getElementById('lightbox').style.display = 'none';
+                    },
+                    navigate: (dir) => {
+                        state.currentIndex = (state.currentIndex + dir + state.items.length) % state.items.length;
+                        const img = document.getElementById('lb-img');
+                        img.src = state.items[state.currentIndex].url;
+                    }
+                },
 
-                flashToast("MEMORY ARCHIVED");
-                fetchArchives();
-            } catch (err) {
-                alert("Archive Error: " + err.message);
-            } finally {
-                document.getElementById('upload-idle').style.display = 'block';
-                document.getElementById('upload-working').style.display = 'none';
-            }
-        }
+                Utils: {
+                    toast: (msg) => {
+                        const t = document.getElementById('vault-toast');
+                        t.innerText = msg;
+                        t.style.display = 'block';
+                        setTimeout(() => t.style.display = 'none', 3000);
+                    },
+                    init: () => {
+                        initParticles();
 
-        async function deleteMemory(e, id, owner, path) {
-            e.stopPropagation();
-            const verify = prompt(`Type "${owner.toUpperCase()}" to confirm erasure:`);
-            if(verify?.toLowerCase() !== owner.toLowerCase()) return flashToast("SECURITY MISMATCH");
+                        // REALTIME SYNC
+                        _supabase.channel('live-vault')
+                            .on('postgres_changes', { event: '*', schema: 'public', table: 'photos' }, () => {
+                                loadGallery();
+                                EliteVault.Utils.toast("VAULT UPDATED VIA LIVE SYNC");
+                            }).subscribe();
 
-            await _supabase.storage.from('MEMORIES').remove([path]);
-            await _supabase.from('photos').delete().eq('id', id);
-            flashToast("MEMORY ERASED");
-            fetchArchives();
-        }
+                        // SECURITY BLUR
+                        document.addEventListener("visibilitychange", () => {
+                            const shield = document.getElementById('sec-shield');
+                            if (document.hidden) {
+                                shield.style.display = 'flex';
+                                document.body.classList.add('locked');
+                            } else {
+                                setTimeout(() => {
+                                    shield.style.display = 'none';
+                                    document.body.classList.remove('locked');
+                                }, 500);
+                            }
+                        });
+                        
+                        // INITIAL DATA LOAD
+                        loadGallery();
+                    }
+                }
+            };
+        })();
 
-        /* --- LIGHTBOX --- */
-        function openLB(idx) {
-            viewIndex = idx;
-            document.getElementById('lb-img').src = archiveData[idx].url;
-            document.getElementById('lightbox').style.display = 'flex';
-        }
-        function closeLB() { document.getElementById('lightbox').style.display = 'none'; }
-        function navLB(dir) {
-            viewIndex = (viewIndex + dir + archiveData.length) % archiveData.length;
-            document.getElementById('lb-img').src = archiveData[viewIndex].url;
-        }
-
-        /* --- UTILS --- */
-        function flashToast(msg) {
-            const t = document.getElementById('toast');
-            t.innerText = msg;
-            t.style.display = 'block';
-            setTimeout(() => t.style.display = 'none', 3000);
-        }
-
-        /* --- SECURITY SHIELD LOGIC --- */
-        document.addEventListener("visibilitychange", () => {
-            const shield = document.getElementById('security-shield');
-            if (document.hidden) {
-                shield.style.display = 'flex';
-            } else {
-                setTimeout(() => shield.style.display = 'none', 400);
-            }
-        });
-        window.onblur = () => document.getElementById('security-shield').style.display = 'flex';
-        window.onfocus = () => document.getElementById('security-shield').style.display = 'none';
+        // INITIALIZE THE SYSTEM
+        EliteVault.Utils.init();
 
     </script>
 </body>
