@@ -5,23 +5,25 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0,viewport-fit=cover"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Memory Vault </title>
+    <title>Farewell 2026 — Elite Vault Masterpiece</title>
 
     <!-- 
-        VAULT TYPOGRAPHY ARCHIVE 
-        Fonts curated for the 2026 Elite Aesthetic
+        ============================================================
+        PREMIUM ASSET REPOSITORY
+        ============================================================
     -->
+    <!-- Elite Typography -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet"/>
 
-    <!-- EXTERNAL CORE ENGINE -->
+    <!-- External Engines -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <style>
         /* 
-           ========================================
-           VAULT DESIGN SYSTEM: COLOURS & VARIABLES
-           ========================================
+           ============================================================
+           VAULT DESIGN SYSTEM: CORE VARIABLES
+           ============================================================
         */
         :root {
             --gold: #C9A84C; 
@@ -33,15 +35,17 @@
             --bg-base: #F2E8D4; 
             --bg-card: #e5dcc7;
             --border: rgba(201,168,76,0.45); 
-            --shadow-lg: 0 30px 60px rgba(90,60,5,0.4);
+            --shadow-lg: 0 40px 100px rgba(90,60,5,0.4);
+            --shadow-sm: 0 10px 30px rgba(0,0,0,0.08);
             --safe-top: env(safe-area-inset-top);
-            --transition-smooth: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            --curve: 4px;
+            --transition-elite: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         /* 
-           ========================================
-           GLOBAL RESET & SCROLLBAR
-           ========================================
+           ============================================================
+           GLOBAL APP RESET & PERFORMANCE FIXES
+           ============================================================
         */
         *, *::before, *::after { 
             box-sizing: border-box; 
@@ -50,48 +54,52 @@
             -webkit-tap-highlight-color: transparent; 
         }
 
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: var(--bg-base); }
-        ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 10px; }
-
-        body {
+        html, body {
             background-color: var(--bg-base); 
             font-family: 'DM Sans', sans-serif;
-            min-height: 100vh; 
+            min-height: 100%;
+            height: 100%;
             overflow-x: hidden; 
             -webkit-user-select: none; 
             user-select: none;
             color: var(--text-dark);
             -webkit-font-smoothing: antialiased;
+            scroll-behavior: smooth;
         }
 
+        /* Custom Scrollbar for Elite Browsing */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: var(--bg-base); }
+        ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 10px; }
+
         /* 
-           ========================================
-           SECURITY PROTOCOLS (Anti-Screenshot)
-           ========================================
+           ============================================================
+           SECURITY SHIELD (ANTI-SCREENSHOT ENGINE)
+           ============================================================
         */
         #sec-shield {
-            position: fixed; inset: 0; z-index: 1000000; 
+            position: fixed; inset: 0; z-index: 2000000; 
             background: #000; display: none; 
             align-items: center; justify-content: center;
-            backdrop-filter: blur(40px);
+            backdrop-filter: blur(50px);
+            -webkit-backdrop-filter: blur(50px);
         }
-        #sec-shield .shield-wrap { text-align: center; }
+        #sec-shield .shield-content { text-align: center; padding: 40px; }
         #sec-shield p { 
             color: var(--gold); font-family: 'Orbitron'; 
-            letter-spacing: 6px; font-size: 12px; 
-            text-transform: uppercase; animation: pulseSec 2s infinite;
+            letter-spacing: 6px; font-size: 11px; text-transform: uppercase;
+            animation: pulseShield 2s infinite;
         }
-        @keyframes pulseSec { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        @keyframes pulseShield { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.98); } }
 
-        .locked #main-wrapper { filter: blur(40px); opacity: 0; transform: scale(0.98); }
+        .locked #main-wrapper { filter: blur(40px); opacity: 0; transform: scale(0.95); transition: 0.5s; }
 
         /* 
-           ========================================
-           ATMOSPHERIC VISUALS
-           ========================================
+           ============================================================
+           ATMOSPHERIC ENGINE (DUST & ORBS)
+           ============================================================
         */
-        #dust { 
+        #dust-canvas { 
             position: fixed; inset: 0; z-index: 0; 
             pointer-events: none; opacity: 0.6; 
         }
@@ -101,62 +109,70 @@
             border-radius: 50%; 
             background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%); 
             z-index: -1; filter: blur(120px); 
-            animation: floatOrb 25s infinite alternate ease-in-out; 
+            animation: moveOrb 30s infinite alternate ease-in-out; 
         }
-        @keyframes floatOrb { 
-            0% { transform: translate(-15%, -15%) rotate(0deg); } 
-            100% { transform: translate(15%, 15%) rotate(360deg); } 
+        @keyframes moveOrb { 
+            0% { transform: translate(-15%, -15%); } 
+            100% { transform: translate(15%, 15%); } 
         }
 
         /* 
-           ========================================
-           ENTRY SCREEN COMPONENT
-           ========================================
+           ============================================================
+           ENTRY SCREEN COMPONENT (THE VAULT GATE)
+           ============================================================
         */
         #entry {
-            position: fixed; inset: 0; z-index: 9999; 
+            position: fixed; inset: 0; z-index: 99999; 
             display: flex; align-items: center; justify-content: center; 
-            background: var(--bg-base); transition: 1.4s cubic-bezier(0.9, 0, 0.1, 1);
-            padding: 25px;
+            background: var(--bg-base); transition: 1.6s cubic-bezier(0.9, 0, 0.1, 1);
+            padding: 30px;
         }
         #entry.gone { transform: translateY(-100%); opacity: 0; pointer-events: none; }
         
         .entry-card { 
             background: var(--bg-card); 
             border: 1px solid var(--gold-dark); 
-            padding: 80px 40px; text-align: center; 
+            padding: 100px 40px; text-align: center; 
             box-shadow: var(--shadow-lg); 
-            width: 100%; max-width: 550px; 
-            position: relative; overflow: hidden;
+            width: 100%; max-width: 600px; 
+            position: relative;
+            animation: cardEnter 1.2s ease forwards;
         }
+        @keyframes cardEnter { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
         .entry-card::before {
-            content: ''; position: absolute; inset: 10px;
-            border: 1px solid var(--gold-dark); opacity: 0.3; pointer-events: none;
+            content: ''; position: absolute; inset: 12px;
+            border: 1px solid var(--gold-dark); opacity: 0.25; pointer-events: none;
+        }
+
+        .gold-line {
+            height: 1px; width: 80px; background: var(--gold-dark);
+            margin: 40px auto; opacity: 0.5;
         }
 
         .btn-enter { 
-            padding: 22px 60px; 
+            padding: 22px 70px; 
             background: linear-gradient(135deg, var(--gold-deep), var(--gold-dark), var(--gold)); 
             border: none; border-radius: 60px; 
             font-family: 'Cinzel'; font-weight: 900; 
             color: #fff; cursor: pointer; letter-spacing: 5px; 
-            box-shadow: 0 15px 30px rgba(90,60,5,0.4); 
+            box-shadow: 0 20px 40px rgba(90,60,5,0.4); 
             transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            margin-top: 40px; text-transform: uppercase; font-size: 13px;
+            text-transform: uppercase; font-size: 13px;
         }
-        .btn-enter:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(90,60,5,0.5); }
+        .btn-enter:hover { transform: translateY(-5px); box-shadow: 0 25px 50px rgba(90,60,5,0.5); }
         .btn-enter:active { transform: scale(0.94); }
 
         /* 
-           ========================================
-           MAIN APPLICATION UI
-           ========================================
+           ============================================================
+           MAIN PAGE ARCHITECTURE
+           ============================================================
         */
-        #main-page { display: none; opacity: 0; transition: 1.5s ease-in; }
+        #app-content { display: none; opacity: 0; transition: 1.5s ease-in; }
         
-        .top-bar { 
+        .elite-header { 
             position: sticky; top: 0; z-index: 5000; 
-            height: 85px; 
+            height: 90px; 
             background: rgba(242,232,212,0.85); 
             backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             border-bottom: 2px solid var(--gold); 
@@ -164,510 +180,516 @@
             padding: var(--safe-top) 40px 0; 
         }
 
-        .nav-status {
-            text-align: right; font-family: 'Orbitron';
-        }
-        .nav-status .live-indicator {
-            display: inline-block; width: 8px; height: 8px; 
-            background: #00ff00; border-radius: 50%; margin-right: 5px;
-            box-shadow: 0 0 10px #00ff00;
+        .nav-status { text-align: right; }
+        .live-tag {
+            font-family: 'Orbitron'; font-size: 9px; color: #00ff00;
+            letter-spacing: 2px; font-weight: 900; text-transform: uppercase;
         }
 
         /* 
-           ========================================
-           GALLERY ENGINE & CARDS
-           ========================================
+           ============================================================
+           GALLERY GRID ENGINE
+           ============================================================
         */
-        .gallery-grid {
+        .main-gallery {
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 40px; padding: 60px 5%; max-width: 1600px; margin: 0 auto;
+            gap: 45px; padding: 80px 5%; max-width: 1700px; margin: 0 auto;
         }
 
-        .photo-card {
+        .archive-card {
             background: var(--bg-card); 
-            padding: 15px 15px 60px 15px; 
-            border-radius: 4px;
-            box-shadow: 0 20px 45px rgba(0,0,0,0.12); 
+            padding: 15px 15px 65px 15px; 
+            border-radius: var(--curve);
+            box-shadow: var(--shadow-sm); 
             border: 1px solid var(--gold-dark);
-            transition: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            transition: var(--transition-elite);
             cursor: pointer; position: relative; overflow: hidden;
-            animation: cardEntrance 0.8s ease backwards;
+            animation: itemFadeUp 0.8s ease backwards;
         }
-        @keyframes cardEntrance {
-            from { opacity: 0; transform: translateY(40px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+        @keyframes itemFadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .photo-card:hover { transform: translateY(-15px); border-color: var(--gold-bright); box-shadow: var(--shadow-lg); }
+        .archive-card:hover { transform: translateY(-15px); border-color: var(--gold-bright); box-shadow: var(--shadow-lg); }
 
-        .photo-card img { 
-            width: 100%; height: 350px; 
+        .archive-card img { 
+            width: 100%; height: 380px; 
             object-fit: cover; border: 1px solid var(--gold-dark); 
-            display: block; transition: 0.5s;
+            display: block; transition: 0.6s;
         }
-        .photo-card:hover img { filter: brightness(1.1) contrast(1.05); }
+        .archive-card:hover img { filter: contrast(1.05) brightness(1.05); }
         
-        .card-caption { 
+        .owner-badge { 
+            position: absolute; bottom: 22px; width: 100%; left: 0;
             font-family: 'Cinzel'; font-weight: 900; text-align: center; 
-            margin-top: 20px; color: var(--text-dark); font-size: 14px; 
-            letter-spacing: 2px; text-transform: uppercase;
+            color: var(--text-dark); font-size: 13px; 
+            letter-spacing: 3px; text-transform: uppercase;
         }
 
-        .delete-btn {
+        .erase-trigger {
             position: absolute; top: 25px; right: 25px;
-            background: rgba(255,255,255,0.9); color: #B00000;
+            background: rgba(255,255,255,0.95); color: #d00;
             width: 35px; height: 35px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 18px; border: 1px solid #B00000; 
+            font-weight: bold; border: 1px solid #d00; font-size: 18px;
             opacity: 0; transition: 0.3s; z-index: 10;
         }
-        .photo-card:hover .delete-btn { opacity: 1; }
+        .archive-card:hover .erase-trigger { opacity: 1; }
 
         /* 
-           ========================================
-           UPLOAD COMPONENT
-           ========================================
+           ============================================================
+           UPLOAD INTERFACE (POLICY COMPLIANT)
+           ============================================================
         */
-        .upload-section {
-            background: var(--bg-card); 
-            border: 2px dashed var(--gold-dark); 
-            border-radius: 8px; padding: 60px 20px; 
-            text-align: center; cursor: pointer; 
-            width: 90%; max-width: 900px; 
-            margin: 40px auto; transition: 0.4s;
-            position: relative;
+        .upload-chamber { 
+            background: var(--bg-card); border: 2px dashed var(--gold-dark); 
+            border-radius: var(--curve); padding: 80px 20px; text-align: center; 
+            cursor: pointer; width: 94%; max-width: 950px; 
+            margin: 60px auto; transition: 0.4s ease;
+            position: relative; overflow: hidden;
         }
-        .upload-section:hover { background: rgba(201,168,76,0.1); border-style: solid; }
+        .upload-chamber:hover { background: rgba(201,168,76,0.1); border-style: solid; }
         
-        #upload-loader { 
+        #chamber-loader { 
             display: none; position: absolute; inset: 0; 
-            background: rgba(229,220,199,0.9); 
+            background: rgba(242,232,212,0.95); 
             align-items: center; justify-content: center; flex-direction: column;
             z-index: 20;
         }
-        .spinner {
-            width: 50px; height: 50px; border: 3px solid rgba(122,88,0,0.2);
+        .ring-loader {
+            width: 50px; height: 50px; border: 3px solid rgba(122,88,0,0.1);
             border-top: 3px solid var(--gold-dark); border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: rotateLoader 1s linear infinite;
         }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes rotateLoader { 100% { transform: rotate(360deg); } }
 
         /* 
-           ========================================
-           MOBILE INTERFACE (Elite Responsive)
-           ========================================
+           ============================================================
+           MOBILE INTERFACE (ELITE ADAPTATION)
+           ============================================================
         */
         @media (max-width: 768px) {
-            .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 15px; }
-            .photo-card { padding: 8px 8px 40px 8px; }
-            .photo-card img { height: 200px; }
-            .card-caption { font-size: 10px; }
-            .top-bar { height: 70px; padding: 0 20px; }
-            .gold-title { font-size: 45px !important; }
-            .entry-card { padding: 50px 20px; }
+            .main-gallery { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
+            .archive-card { padding: 8px 8px 45px 8px; }
+            .archive-card img { height: 210px; }
+            .owner-badge { font-size: 9px; letter-spacing: 1px; }
+            .elite-header { height: 75px; padding: 0 20px; }
+            .gold-title { font-size: 42px !important; }
+            .entry-card { padding: 60px 20px; }
+            .upload-chamber { padding: 40px 15px; margin: 20px auto; }
         }
 
         /* 
-           ========================================
-           LIGHTBOX SYSTEM
-           ========================================
+           ============================================================
+           LIGHTBOX MAGNIFICATION SYSTEM
+           ============================================================
         */
-        #lightbox {
-            position: fixed; inset: 0; z-index: 100000; 
-            background: rgba(0,0,0,0.98); 
+        #vault-lightbox {
+            position: fixed; inset: 0; z-index: 1000000; background: rgba(0,0,0,0.98); 
             display: none; align-items: center; justify-content: center;
-            flex-direction: column;
         }
-        .lb-stage { 
-            width: 100vw; height: 100vh; 
-            display: flex; align-items: center; justify-content: center; 
-            position: relative; 
+        .lb-canvas { 
+            width: 100vw; height: 100vh; display: flex; 
+            align-items: center; justify-content: center; position: relative; 
         }
-        #lb-img { 
-            max-width: 95%; max-height: 85%; 
-            object-fit: contain; border: 2px solid var(--gold); 
-            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        #lb-image { 
+            max-width: 95%; max-height: 85%; object-fit: contain; 
+            border: 2px solid var(--gold); box-shadow: 0 0 60px rgba(0,0,0,0.5);
         }
-        .nav-btn { 
+        .nav-arrow { 
             position: absolute; top: 50%; transform: translateY(-50%); 
-            background: rgba(255,255,255,0.1); border: 1px solid var(--gold); 
+            background: rgba(255,255,255,0.05); border: 1px solid var(--gold); 
             color: var(--gold); width: 60px; height: 60px; border-radius: 50%; 
             font-size: 24px; cursor: pointer; transition: 0.3s;
             display: flex; align-items: center; justify-content: center;
         }
-        .nav-btn:hover { background: var(--gold); color: #000; }
-        .prev-btn { left: 30px; } .next-btn { right: 30px; }
-        .lb-close { 
+        .nav-arrow:hover { background: var(--gold); color: #000; }
+        .prev-arrow { left: 30px; } .next-arrow { right: 30px; }
+        .lb-close-btn { 
             position: absolute; top: 40px; right: 40px; 
             color: #fff; font-family: 'Orbitron'; font-size: 12px; 
-            border: 1px solid var(--gold); padding: 12px 20px; 
-            cursor: pointer; z-index: 100002; letter-spacing: 2px;
+            border: 1px solid var(--gold); padding: 10px 20px; 
+            cursor: pointer; z-index: 10;
         }
 
         /* 
-           ========================================
-           TOAST NOTIFICATIONS
-           ========================================
+           ============================================================
+           UI TOAST NOTIFICATIONS
+           ============================================================
         */
         #vault-toast {
             position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
-            background: var(--gold-deep); color: #fff; padding: 15px 40px;
-            font-family: 'Orbitron'; font-size: 11px; border-radius: 60px;
+            background: var(--gold-deep); color: #fff; padding: 16px 40px;
+            font-family: 'Orbitron'; font-size: 10px; border-radius: 60px;
             z-index: 5000000; display: none; letter-spacing: 3px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            border: 1px solid var(--gold);
+            box-shadow: var(--shadow-lg); border: 1px solid var(--gold);
         }
     </style>
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;">
 
-    <!-- SECURITY SHIELD OVERLAY -->
+    <!-- Security Blur Overlay -->
     <div id="sec-shield">
-        <div class="shield-wrap">
-            <p>Vault Access Suspended</p>
-            <p style="font-size: 8px; margin-top: 10px; opacity: 0.5;">Return to window to continue</p>
+        <div class="shield-content">
+            <p>Vault Connection Encrypted</p>
+            <p style="font-size: 8px; margin-top: 15px; opacity: 0.4;">Archival security protocol active</p>
         </div>
     </div>
 
-    <!-- NOTIFICATION SYSTEM -->
-    <div id="vault-toast">VAULT SYNCHRONIZED</div>
+    <!-- Notification Engine -->
+    <div id="vault-toast">SYSTEM SYNCHRONIZED</div>
 
     <div id="main-wrapper">
-        <!-- CANVAS PHYSICS LAYER -->
-        <canvas id="dust"></canvas>
-        <div class="bg-orb" style="top:-20%; left:-20%;"></div>
-        <div class="bg-orb" style="bottom:-20%; right:-20%; animation-delay: -10s;"></div>
+        <!-- Ambient Atmosphere -->
+        <canvas id="dust-canvas"></canvas>
+        <div class="bg-orb" style="top:-25%; left:-25%;"></div>
+        <div class="bg-orb" style="bottom:-25%; right:-25%; animation-delay: -15s;"></div>
         
-        <!-- AUDIO ARCHIVE ENGINE -->
+        <!-- Jukebox Archive -->
         <audio id="bg-audio" preload="auto"></audio>
 
-        <!-- ENTRY SCREEN LAYER -->
+        <!-- The Entrance Gate -->
         <section id="entry">
             <div class="entry-card">
-                <div style="font-family:'Orbitron'; font-size:10px; letter-spacing:10px; color:var(--gold-dark); margin-bottom:25px; font-weight: 700;">DIGITAL GALLERY ACCESS</div>
-                <div style="font-family:'Cinzel Decorative'; font-size: clamp(45px, 10vw, 75px); font-weight:900; color:var(--gold-deep); line-height:0.9;">REWIND</div>
-                <div style="height: 1px; width: 80px; background: var(--gold-dark); margin: 40px auto; opacity: 0.4;"></div>
-                <p style="font-family:'Playfair Display'; font-style:italic; font-size:20px; margin-bottom:50px; line-height:1.6; color:var(--text-soft);">
+                <p style="font-family:'Orbitron'; font-size:10px; letter-spacing:10px; color:var(--gold-dark); margin-bottom:25px; font-weight: 900;">PRIVATE ARCHIVE</p>
+                <h1 style="font-family:'Cinzel Decorative'; font-size:clamp(50px, 12vw, 85px); font-weight:900; color:var(--gold-deep); line-height:0.9;">REWIND</h1>
+                <div class="gold-line"></div>
+                <p style="font-family:'Playfair Display'; font-style:italic; font-size:22px; margin-bottom:50px; line-height:1.7; color:var(--text-soft);">
                     "Kuch yaadein purani hain,<br>Magar dosti abhi nibhani hai."
                 </p>
-                <button class="btn-enter" onclick="EliteVault.Actions.open()">Enter the Archive</button>
+                <button class="btn-enter" onclick="EliteVault.Actions.open()">Access the Moments</button>
             </div>
         </section>
 
-        <!-- MAIN VAULT DASHBOARD -->
-        <div id="main-page">
-            <nav class="top-bar">
-                <button onclick="EliteVault.Actions.close()" style="background: none; border: 1.5px solid var(--gold); color: var(--gold-dark); padding: 10px 25px; border-radius: 50px; font-family: 'Cinzel'; font-weight: 900; cursor: pointer; font-size: 11px; letter-spacing: 2px;">EXIT VAULT</button>
+        <!-- Main Dashboard -->
+        <div id="app-content">
+            <nav class="elite-header">
+                <button onclick="EliteVault.Actions.close()" style="background: none; border: 1.5px solid var(--gold); color: var(--gold-dark); padding: 10px 30px; border-radius: 50px; font-family: 'Cinzel'; font-weight: 900; cursor: pointer; font-size: 11px; letter-spacing: 2px;">EXIT VAULT</button>
                 <div class="nav-status">
-                    <span class="live-indicator"></span>
-                    <span style="color:var(--gold-deep); font-weight:900; font-size:10px; letter-spacing:2px;">VAULT BY AC </span>
-                    <div style="font-family:'Cinzel'; font-size:10px; color:var(--gold-dark); margin-top:3px;">EST. 2026</div>
+                    <span class="live-tag">Vault Live Sync</span>
+                    <div style="font-family:'Cinzel'; font-size:10px; color:var(--gold-dark); margin-top:4px; font-weight: 700;">BATCH OF 2026</div>
                 </div>
             </nav>
 
-            <header style="text-align:center; padding:80px 20px 40px;">
-                <h1 class="gold-title" style="font-family:'Cinzel Decorative'; font-size:clamp(45px, 9vw, 90px); font-weight:900; color:var(--gold-deep); letter-spacing: -2px;">DIGITAL GALLERY</h1>
-                <p style="font-family:'Playfair Display'; font-style:italic; font-size:20px; color:var(--gold-dark); margin-top:10px; opacity: 0.8;">A legacy stitched in time and memories.</p>
+            <header style="text-align:center; padding:90px 20px 50px;">
+                <h1 class="gold-title" style="font-family:'Cinzel Decorative'; font-size:clamp(45px, 10vw, 95px); font-weight:900; color:var(--gold-deep); letter-spacing: -2px;">DIGITAL GALLERY</h1>
+                <p style="font-family:'Playfair Display'; font-style:italic; font-size:22px; color:var(--gold-dark); margin-top:12px; opacity: 0.85;">A legacy stitched in time and memories.</p>
             </header>
 
-            <!-- UPLOAD INTERFACE -->
-            <div class="upload-section" onclick="document.getElementById('file-input').click()">
-                <div id="upload-idle">
-                    <h3 style="font-family:'Cinzel'; color:var(--gold-dark); font-weight:900; font-size: 16px; letter-spacing: 3px;">+ DEPOSIT NEW MEMORY</h3>
-                    <p style="font-family:'DM Sans'; font-size: 11px; margin-top: 8px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px;">Accepts High-Resolution JPEGs & PNGs</p>
+            <!-- Upload Engine (Policy Compliant) -->
+            <div class="upload-chamber" onclick="document.getElementById('file-input').click()">
+                <div id="idle-ui">
+                    <h3 style="font-family:'Cinzel'; color:var(--gold-dark); font-weight:900; font-size: 16px; letter-spacing: 4px;">+ DEPOSIT NEW MEMORY</h3>
+                    <p style="font-family:'DM Sans'; font-size: 10px; margin-top: 10px; opacity: 0.5; text-transform: uppercase; letter-spacing: 2px;">Requires .JPG format for vault encryption</p>
                 </div>
-                <div id="upload-loader">
-                    <div class="spinner"></div>
-                    <p style="font-family:'Orbitron'; font-size:10px; margin-top:15px; letter-spacing:4px; color:var(--gold-dark);">ENCRYPTING DATA...</p>
+                <div id="chamber-loader">
+                    <div class="ring-loader"></div>
+                    <p style="font-family:'Orbitron'; font-size:10px; margin-top:20px; letter-spacing:5px; color:var(--gold-dark);">SYNCING ARCHIVE...</p>
                 </div>
-                <input type="file" id="file-input" accept="image/*" style="display:none;" onchange="EliteVault.Data.upload(event)">
+                <input type="file" id="file-input" accept=".jpg,.jpeg" style="display:none;" onchange="EliteVault.Network.upload(event)">
             </div>
 
-            <!-- THE GRID -->
-            <div class="gallery-grid" id="main-grid">
-                <!-- Data Hydration via JavaScript -->
+            <!-- The Grid Engine -->
+            <div class="main-gallery" id="vault-grid">
+                <!-- Dynamically Hydrated -->
             </div>
 
-            <footer style="text-align:center; padding:150px 20px 100px; border-top:1px solid var(--border);">
-                <div style="font-family:'Cinzel Decorative'; font-size:55px; color:var(--gold); opacity: 0.4;">2026</div>
-                <p style="font-family:'Orbitron'; font-size:9px; letter-spacing:6px; margin-top:20px; color: var(--gold-dark); font-weight: 700;">DESIGNED BY ABHINAV CHAUHAN</p>
-                <p style="font-family:'DM Sans'; font-size:10px; margin-top:40px; opacity: 0.3;">GOLDEN TIME &bull; CO DEVELOPER JIVITMURDA </p>
+            <footer style="text-align:center; padding:180px 20px 120px; border-top:1px solid var(--border);">
+                <div style="font-family:'Cinzel Decorative'; font-size:60px; color:var(--gold); opacity: 0.4;">2026</div>
+                <p style="font-family:'Orbitron'; font-size:10px; letter-spacing:8px; margin-top:25px; color: var(--gold-dark); font-weight: 900;">DESIGNED BY ABHINAV CHAUHAN</p>
+                <p style="font-family:'DM Sans'; font-size:10px; margin-top:50px; opacity: 0.3;">DIGITAL HERITAGE &bull; PERMANENT COLLECTION</p>
             </footer>
         </div>
     </div>
 
-    <!-- LIGHTBOX COMPONENT -->
-    <div id="lightbox">
-        <div class="lb-close" onclick="EliteVault.Lightbox.close()">CLOSE [X]</div>
-        <div class="lb-stage">
-            <button class="nav-btn prev-btn" onclick="EliteVault.Lightbox.navigate(-1)">&#8249;</button>
-            <img id="lb-img" src="" alt="Full Vault Memory">
-            <button class="nav-btn next-btn" onclick="EliteVault.Lightbox.navigate(1)">&#8250;</button>
+    <!-- Lightbox Architecture -->
+    <div id="vault-lightbox">
+        <div class="lb-close-btn" onclick="EliteVault.UI.closeLB()">CLOSE [X]</div>
+        <div class="lb-canvas">
+            <button class="nav-arrow prev-arrow" onclick="EliteVault.UI.navigate(-1)">&#8249;</button>
+            <img id="lb-image" src="" alt="Vault Memory Fragment">
+            <button class="nav-arrow next-arrow" onclick="EliteVault.UI.navigate(1)">&#8250;</button>
         </div>
     </div>
 
     <script>
         /**
          * ============================================================
-         * ELITE VAULT CORE ARCHITECTURE 2026
-         * Engineered for High-Performance Memory Archival
+         * ELITE VAULT CORE ENGINE v5.0
          * ============================================================
          */
 
         const EliteVault = (() => {
             
-            // SUPABASE CONFIGURATION
-            const SB_URL = 'https://znptyheexlkuvielzjtd.supabase.co';
-            const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpucHR5heexlkuvielzjtdIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MTA4MjgsImV4cCI6MjA5MDA4NjgyOH0.r2mgPh4clcW00NRAexcvS0p65tzZD5A9RPqfYFGtGH4';
-            const _supabase = supabase.createClient(SB_URL, SB_KEY);
+            // 1. PROJECT IDENTITY & AUTH
+            const SUPABASE_URL = 'https://znptyheexlkuvielzjtd.supabase.co';
+            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpucHR5heexlkuvielzjtdIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MTA4MjgsImV4cCI6MjA5MDA4NjgyOH0.r2mgPh4clcW00NRAexcvS0p65tzZD5A9RPqfYFGtGH4';
+            const _client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            // GLOBAL STATE
+            // 2. GLOBAL STATE REPOSITORY
             let state = {
-                items: [],
-                currentIndex: 0,
-                isSyncing: false,
-                audioStarted: false
+                archive: [],
+                currentIdx: 0,
+                isBooted: false,
+                syncActive: false
             };
 
-            // AUDIO ARCHIVE (23 TRACKS)
+            // 3. JUKEBOX MODULE (23 Track Logic)
             const audioTracks = Array.from({length: 23}, (_, i) => `AUDIO/audio${i+1}.${i === 11 ? 'mp4' : 'mpeg'}`);
             let playlist = [];
-            const audioElem = document.getElementById('bg-audio');
+            const aud = document.getElementById('bg-audio');
 
             /**
-             * PARTICLE ENGINE
+             * ATMOSPHERE SYSTEM
              */
-            const initParticles = () => {
-                const canvas = document.getElementById('dust');
-                const ctx = canvas.getContext('2d');
+            const initAtmosphere = () => {
+                const c = document.getElementById('dust-canvas');
+                const ctx = c.getContext('2d');
                 let pts = [];
 
-                const resize = () => {
-                    canvas.width = window.innerWidth;
-                    canvas.height = window.innerHeight;
+                const fit = () => {
+                    c.width = window.innerWidth;
+                    c.height = window.innerHeight;
                 };
+                window.addEventListener('resize', fit);
+                fit();
 
-                window.addEventListener('resize', resize);
-                resize();
-
-                for(let i=0; i<70; i++) {
+                for(let i=0; i<80; i++) {
                     pts.push({
-                        x: Math.random() * canvas.width,
-                        y: Math.random() * canvas.height,
-                        s: Math.random() * 1.2,
-                        vx: (Math.random() - 0.5) * 0.4,
-                        vy: (Math.random() - 0.5) * 0.4,
-                        o: Math.random()
+                        x: Math.random() * c.width,
+                        y: Math.random() * c.height,
+                        s: Math.random() * 1.5,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5
                     });
                 }
 
-                function loop() {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    ctx.fillStyle = "rgba(201,168,76,0.35)";
-                    
+                function draw() {
+                    ctx.clearRect(0, 0, c.width, c.height);
+                    ctx.fillStyle = "rgba(201,168,76,0.3)";
                     pts.forEach(p => {
-                        p.x += p.vx;
-                        p.y += p.vy;
-                        
-                        if(p.x < 0) p.x = canvas.width;
-                        if(p.x > canvas.width) p.x = 0;
-                        if(p.y < 0) p.y = canvas.height;
-                        if(p.y > canvas.height) p.y = 0;
-
-                        ctx.beginPath();
-                        ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
-                        ctx.fill();
+                        p.x += p.vx; p.y += p.vy;
+                        if(p.x < 0) p.x = c.width;
+                        if(p.x > c.width) p.x = 0;
+                        if(p.y < 0) p.y = c.height;
+                        if(p.y > c.height) p.y = 0;
+                        ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
                     });
-                    requestAnimationFrame(loop);
+                    requestAnimationFrame(draw);
                 }
-                loop();
+                draw();
             };
 
             /**
-             * DATA LAYER
+             * ACTIONS MODULE
              */
-            const loadGallery = async () => {
-                const { data, error } = await _supabase
-                    .from('photos')
-                    .select('*')
-                    .order('id', { ascending: false });
+            const Actions = {
+                open: () => {
+                    if (!state.isBooted) {
+                        playlist = [...audioTracks].sort(() => Math.random() - 0.5);
+                        aud.src = playlist.pop();
+                        aud.play().catch(() => console.warn("Interactivity required"));
+                        aud.onended = () => {
+                            if(playlist.length === 0) playlist = [...audioTracks].sort(() => Math.random() - 0.5);
+                            aud.src = playlist.pop(); aud.play();
+                        };
+                        state.isBooted = true;
+                    }
 
-                if (!error) {
-                    state.items = data;
-                    renderUI();
+                    document.getElementById('entry').classList.add('gone');
+                    document.getElementById('app-content').style.display = 'block';
+                    gsap.to('#app-content', { opacity: 1, duration: 1.2 });
+                    Network.refresh();
+                },
+                close: () => {
+                    gsap.to('#app-content', { opacity: 0, duration: 0.8, onComplete: () => {
+                        document.getElementById('app-content').style.display = 'none';
+                        document.getElementById('entry').classList.remove('gone');
+                        aud.pause();
+                        state.isBooted = false;
+                    }});
                 }
             };
 
-            const renderUI = () => {
-                const grid = document.getElementById('main-grid');
-                grid.innerHTML = '';
+            /**
+             * NETWORK MODULE (Supabase Logic)
+             */
+            const Network = {
+                refresh: async () => {
+                    const { data, error } = await _client
+                        .from('photos')
+                        .select('*')
+                        .order('id', { ascending: false });
 
-                state.items.forEach((item, idx) => {
-                    const card = document.createElement('div');
-                    card.className = 'photo-card';
-                    card.innerHTML = `
-                        <div class="delete-btn" onclick="EliteVault.Data.remove(event, ${item.id}, '${item.owner}', '${item.storage_path}')">&times;</div>
-                        <img src="${item.url}" loading="lazy" onclick="EliteVault.Lightbox.open(${idx})">
-                        <div class="card-caption">MEMORY FROM: ${item.owner}</div>
-                    `;
-                    grid.appendChild(card);
+                    if (!error) {
+                        state.archive = data;
+                        UI.hydrate();
+                    }
+                },
+
+                upload: async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    // POLICY: Must be JPG
+                    const ext = file.name.split('.').pop().toLowerCase();
+                    if(ext !== 'jpg' && ext !== 'jpeg') {
+                        alert("Policy Error: Only .JPG format is accepted for archival.");
+                        return;
+                    }
+
+                    const name = prompt("NAME OF CONTRIBUTOR:").trim().toUpperCase();
+                    if (!name) return;
+
+                    const loader = document.getElementById('chamber-loader');
+                    loader.style.display = 'flex';
+
+                    // POLICY COMPLIANT PATH: Folder must be 'public/'
+                    const bucket = 'memories';
+                    const targetPath = `public/${Date.now()}_${name.replace(/\s+/g, '_')}.jpg`;
+
+                    try {
+                        const { error: upErr } = await _client.storage
+                            .from(bucket)
+                            .upload(targetPath, file);
+
+                        if (upErr) throw upErr;
+
+                        const { data: { publicUrl } } = _client.storage
+                            .from(bucket)
+                            .getPublicUrl(targetPath);
+
+                        const { error: dbErr } = await _client
+                            .from('photos')
+                            .insert([{ 
+                                url: publicUrl, 
+                                owner: name, 
+                                storage_path: targetPath 
+                            }]);
+
+                        if (dbErr) throw dbErr;
+
+                        UI.toast("MEMORY ARCHIVED SUCCESSFULLY");
+                        Network.refresh();
+                    } catch (err) {
+                        alert("Vault Permission Denied: " + err.message);
+                    } finally {
+                        loader.style.display = 'none';
+                    }
+                },
+
+                erase: async (e, id, owner, path) => {
+                    e.stopPropagation();
+                    const confirmName = prompt(`Type "${owner}" to authorize erasure:`).trim().toUpperCase();
+                    
+                    if (confirmName === owner) {
+                        await _client.storage.from('memories').remove([path]);
+                        await _client.from('photos').delete().eq('id', id);
+                        UI.toast("DATA PERMANENTLY ERASED");
+                        Network.refresh();
+                    } else {
+                        UI.toast("SECURITY MISMATCH");
+                    }
+                }
+            };
+
+            /**
+             * UI MODULE
+             */
+            const UI = {
+                hydrate: () => {
+                    const grid = document.getElementById('vault-grid');
+                    grid.innerHTML = '';
+
+                    state.archive.forEach((item, idx) => {
+                        const card = document.createElement('div');
+                        card.className = 'archive-card';
+                        card.innerHTML = `
+                            <div class="erase-trigger" onclick="EliteVault.Network.erase(event, ${item.id}, '${item.owner}', '${item.storage_path}')">&times;</div>
+                            <img src="${item.url}" loading="lazy" onclick="EliteVault.UI.openLB(${idx})">
+                            <div class="owner-badge">FROM: ${item.owner}</div>
+                        `;
+                        grid.appendChild(card);
+                    });
+                },
+
+                openLB: (idx) => {
+                    state.currentIdx = idx;
+                    const img = document.getElementById('lb-image');
+                    img.src = state.archive[idx].url;
+                    document.getElementById('vault-lightbox').style.display = 'flex';
+                    gsap.from(img, { scale: 0.85, opacity: 0, duration: 0.5 });
+                },
+
+                closeLB: () => {
+                    document.getElementById('vault-lightbox').style.display = 'none';
+                },
+
+                navigate: (dir) => {
+                    state.currentIdx = (state.currentIdx + dir + state.archive.length) % state.archive.length;
+                    const img = document.getElementById('lb-image');
+                    img.src = state.archive[state.currentIdx].url;
+                },
+
+                toast: (msg) => {
+                    const t = document.getElementById('vault-toast');
+                    t.innerText = msg;
+                    t.style.display = 'block';
+                    setTimeout(() => t.style.display = 'none', 3000);
+                }
+            };
+
+            /**
+             * UTILITIES
+             */
+            const initSecurity = () => {
+                document.addEventListener("visibilitychange", () => {
+                    const shield = document.getElementById('sec-shield');
+                    if (document.hidden) {
+                        shield.style.display = 'flex';
+                        document.body.classList.add('locked');
+                    } else {
+                        setTimeout(() => {
+                            shield.style.display = 'none';
+                            document.body.classList.remove('locked');
+                        }, 500);
+                    }
+                });
+
+                window.addEventListener('blur', () => {
+                    document.getElementById('sec-shield').style.display = 'flex';
+                    document.body.classList.add('locked');
+                });
+
+                window.addEventListener('focus', () => {
+                    document.getElementById('sec-shield').style.display = 'none';
+                    document.body.classList.remove('locked');
                 });
             };
 
-            /**
-             * PUBLIC MODULES
-             */
+            const initRealtime = () => {
+                _client.channel('public-photos-channel')
+                    .on('postgres_changes', { event: '*', schema: 'public', table: 'photos' }, () => {
+                        Network.refresh();
+                        UI.toast("ARCHIVE SYNCHRONIZED");
+                    }).subscribe();
+            };
+
             return {
-                Actions: {
-                    open: () => {
-                        // Play Audio Logic
-                        if (!state.audioStarted) {
-                            playlist = [...audioTracks].sort(() => Math.random() - 0.5);
-                            audioElem.src = playlist.pop();
-                            audioElem.play().catch(() => console.log("User interaction required for audio"));
-                            audioElem.onended = () => {
-                                if(playlist.length === 0) playlist = [...audioTracks].sort(() => Math.random() - 0.5);
-                                audioElem.src = playlist.pop();
-                                audioElem.play();
-                            };
-                            state.audioStarted = true;
-                        }
-
-                        document.getElementById('entry').classList.add('gone');
-                        document.getElementById('main-page').style.display = 'block';
-                        gsap.to('#main-page', { opacity: 1, duration: 1 });
-                        loadGallery();
-                    },
-                    close: () => {
-                        gsap.to('#main-page', { opacity: 0, duration: 0.8, onComplete: () => {
-                            document.getElementById('main-page').style.display = 'none';
-                            document.getElementById('entry').classList.remove('gone');
-                            audioElem.pause();
-                            state.audioStarted = false;
-                        }});
-                    }
-                },
-
-                Data: {
-                    upload: async (e) => {
-                        const file = e.target.files[0];
-                        if (!file) return;
-
-                        const name = prompt("IDENTIFY YOURSELF (Your Name):").trim().toUpperCase();
-                        if (!name) return;
-
-                        const loader = document.getElementById('upload-loader');
-                        loader.style.display = 'flex';
-
-                        // PATH FIX: Use lowercase bucket name as shown in Supabase
-                        const bucketName = 'memories';
-                        const fileName = `${Date.now()}_${name.replace(/\s+/g, '_')}_${file.name}`;
-                        const filePath = `${fileName}`;
-
-                        try {
-                            const { error: uploadError } = await _supabase.storage
-                                .from(bucketName)
-                                .upload(filePath, file);
-
-                            if (uploadError) throw uploadError;
-
-                            const { data: { publicUrl } } = _supabase.storage
-                                .from(bucketName)
-                                .getPublicUrl(filePath);
-
-                            const { error: dbError } = await _supabase
-                                .from('photos')
-                                .insert([{ 
-                                    url: publicUrl, 
-                                    owner: name, 
-                                    storage_path: filePath 
-                                }]);
-
-                            if (dbError) throw dbError;
-
-                            EliteVault.Utils.toast("MEMORY SECURED IN VAULT");
-                            loadGallery();
-                        } catch (err) {
-                            alert("Vault Access Error: " + err.message);
-                        } finally {
-                            loader.style.display = 'none';
-                        }
-                    },
-
-                    remove: async (e, id, owner, path) => {
-                        e.stopPropagation();
-                        const verify = prompt(`TYPE "${owner}" TO ERASE THIS MEMORY:`).trim().toUpperCase();
-                        
-                        if (verify === owner) {
-                            await _supabase.storage.from('memories').remove([path]);
-                            await _supabase.from('photos').delete().eq('id', id);
-                            EliteVault.Utils.toast("MEMORY PERMANENTLY ERASED");
-                            loadGallery();
-                        } else {
-                            EliteVault.Utils.toast("IDENTITY MISMATCH");
-                        }
-                    }
-                },
-
-                Lightbox: {
-                    open: (idx) => {
-                        state.currentIndex = idx;
-                        const img = document.getElementById('lb-img');
-                        img.src = state.items[idx].url;
-                        document.getElementById('lightbox').style.display = 'flex';
-                        gsap.from(img, { scale: 0.9, opacity: 0, duration: 0.4 });
-                    },
-                    close: () => {
-                        document.getElementById('lightbox').style.display = 'none';
-                    },
-                    navigate: (dir) => {
-                        state.currentIndex = (state.currentIndex + dir + state.items.length) % state.items.length;
-                        const img = document.getElementById('lb-img');
-                        img.src = state.items[state.currentIndex].url;
-                    }
-                },
-
-                Utils: {
-                    toast: (msg) => {
-                        const t = document.getElementById('vault-toast');
-                        t.innerText = msg;
-                        t.style.display = 'block';
-                        setTimeout(() => t.style.display = 'none', 3000);
-                    },
-                    init: () => {
-                        initParticles();
-
-                        // REALTIME SYNC
-                        _supabase.channel('live-vault')
-                            .on('postgres_changes', { event: '*', schema: 'public', table: 'photos' }, () => {
-                                loadGallery();
-                                EliteVault.Utils.toast("VAULT UPDATED VIA LIVE SYNC");
-                            }).subscribe();
-
-                        // SECURITY BLUR
-                        document.addEventListener("visibilitychange", () => {
-                            const shield = document.getElementById('sec-shield');
-                            if (document.hidden) {
-                                shield.style.display = 'flex';
-                                document.body.classList.add('locked');
-                            } else {
-                                setTimeout(() => {
-                                    shield.style.display = 'none';
-                                    document.body.classList.remove('locked');
-                                }, 500);
-                            }
-                        });
-                        
-                        // INITIAL DATA LOAD
-                        loadGallery();
-                    }
+                Actions, Network, UI,
+                init: () => {
+                    initAtmosphere();
+                    initSecurity();
+                    initRealtime();
+                    Network.refresh();
                 }
             };
         })();
 
-        // INITIALIZE THE SYSTEM
-        EliteVault.Utils.init();
+        // BOOT THE ENGINE
+        EliteVault.init();
 
     </script>
 </body>
