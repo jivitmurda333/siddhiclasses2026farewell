@@ -7,87 +7,94 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>The Royal Archive | Abhinav Chauhan</title>
 
-    <!-- 
-        ============================================================
-        ELITE ASSET REPOSITORY
-        ============================================================
-    -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;700&family=Orbitron:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&display=swap" rel="stylesheet"/>
 
-    <!-- Professional Core Engines -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <style>
-        /* 
-           ============================================================
-           ROYAL DESIGN SYSTEM: CORE VARIABLES
-           ============================================================
-        */
         :root {
-            --royal-gold: #C9A84C; 
-            --royal-gold-bright: #F5E3A6; 
-            --royal-gold-dark: #8A6D2E; 
+            --royal-gold: #C9A84C;
+            --royal-gold-bright: #F5E3A6;
+            --royal-gold-dim: #E2C05A;
+            --royal-gold-dark: #8A6D2E;
             --royal-gold-deep: #4A3A16;
-            
             --onyx-black: #0A0A0A;
             --silk-cream: #FDF8F0;
+            --silk-cream-dark: #F2E8D4;
             --paper-white: #FAF9F6;
-            
+            --warm-brown: #2E2200;
+            --soft-brown: #4A3810;
             --text-main: #1A1A1A;
-            --text-muted: #555555;
-            
-            --border-royal: 1px solid rgba(138, 109, 46, 0.3);
+            --text-muted: #6B5B3A;
+            --border-royal: 1px solid rgba(138,109,46,0.3);
             --shadow-royal: 0 30px 60px rgba(0,0,0,0.12);
-            --shadow-inner: inset 0 2px 4px rgba(0,0,0,0.05);
-            
-            --safe-top: env(safe-area-inset-top);
-            --transition-smooth: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+            --transition-smooth: all 0.7s cubic-bezier(0.19,1,0.22,1);
         }
 
-        /* 
-           ============================================================
-           GLOBAL RESET & LAYOUT ENGINE
-           ============================================================
-        */
-        *, *::before, *::after { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
-            -webkit-tap-highlight-color: transparent; 
+        *, *::before, *::after {
+            box-sizing: border-box; margin: 0; padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
+
+        html { scroll-behavior: smooth; }
 
         body {
-            background-color: var(--silk-cream); 
+            background: linear-gradient(160deg, #FDF8F0 0%, #F2E8D4 60%, #E8DCC4 100%);
             font-family: 'DM Sans', sans-serif;
             color: var(--text-main);
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ── GRAIN TEXTURE OVERLAY ── */
+        body::before {
+            content: '';
+            position: fixed; inset: 0; z-index: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+            pointer-events: none;
+            opacity: 0.6;
         }
 
         canvas#dust-canvas {
-            position: fixed; top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            pointer-events: none; z-index: 1; 
-            opacity: 0.5;
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; z-index: 1; opacity: 0.6;
         }
 
-        /* 
-           ============================================================
-           SECURITY: SHIELD & ANTI-COPY
-           ============================================================
-        */
-        #sec-shield {
-            position: fixed; inset: 0; z-index: 1000000; 
-            background: var(--onyx-black); 
-            display: none; align-items: center; justify-content: center;
-            backdrop-filter: blur(20px);
+        /* ── SCREENSHOT / SCREEN-REC BLOCKER ── */
+        #capture-shield {
+            position: fixed; inset: 0; z-index: 9999999;
+            background: #0A0A0A;
+            display: none;
+            align-items: center; justify-content: center;
+            flex-direction: column; gap: 20px;
         }
-        .shield-content p {
+        #capture-shield.active { display: flex; }
+        #capture-shield p {
+            font-family: 'Orbitron';
+            color: var(--royal-gold);
+            letter-spacing: 6px;
+            font-size: 11px;
+            text-transform: uppercase;
+            animation: pulseShield 2s infinite;
+        }
+        #capture-shield .shield-icon {
+            font-size: 48px; opacity: 0.6;
+        }
+
+        /* ── SECURITY SHIELD (tab switch) ── */
+        #sec-shield {
+            position: fixed; inset: 0; z-index: 1000000;
+            background: rgba(10,10,10,0.97);
+            display: none; align-items: center; justify-content: center;
+            backdrop-filter: blur(30px);
+            flex-direction: column; gap: 20px;
+        }
+        #sec-shield p {
             color: var(--royal-gold);
             font-family: 'Orbitron';
             letter-spacing: 8px;
@@ -95,536 +102,1094 @@
             font-size: 10px;
             animation: pulseShield 2.5s infinite ease-in-out;
         }
-        @keyframes pulseShield { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+        #sec-shield .lock-ring {
+            width: 60px; height: 60px;
+            border: 2px solid rgba(201,168,76,0.3);
+            border-top: 2px solid var(--royal-gold);
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes pulseShield { 0%,100%{opacity:1;} 50%{opacity:0.15;} }
+        @keyframes spin { 100%{transform:rotate(360deg);} }
 
         .vault-locked #app-content { filter: blur(30px); opacity: 0.3; pointer-events: none; }
 
-        /* 
-           ============================================================
-           COMPONENT: THE ROYAL ENTRANCE
-           ============================================================
-        */
+        /* ── TOAST ── */
+        .toast {
+            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+            background: var(--onyx-black); color: var(--royal-gold);
+            padding: 15px 40px; font-family: 'Orbitron'; font-size: 10px;
+            border: 1px solid var(--royal-gold); letter-spacing: 4px;
+            z-index: 3000000; display: none;
+            animation: toastIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        @keyframes toastIn { from{transform:translateX(-50%) translateY(20px);opacity:0;} to{transform:translateX(-50%) translateY(0);opacity:1;} }
+
+        /* ── ENTRY GATE ── */
         #entry-gate {
             position: fixed; inset: 0; z-index: 99999;
-            background: var(--silk-cream);
+            background: linear-gradient(160deg, #FDF8F0 0%, #F2E8D4 60%, #E8DCC4 100%);
             display: flex; align-items: center; justify-content: center;
-            transition: transform 1.8s cubic-bezier(0.85, 0, 0.15, 1);
+            transition: transform 1.8s cubic-bezier(0.85,0,0.15,1);
+            overflow: hidden;
+        }
+        #entry-gate::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 50% 50%, rgba(201,168,76,0.08) 0%, transparent 70%);
         }
         #entry-gate.vanish { transform: translateY(-100%); }
 
+        .gate-corner {
+            position: absolute; width: 60px; height: 60px;
+            border-color: var(--royal-gold-dark); border-style: solid; opacity: 0.5;
+        }
+        .gate-corner.tl { top: 30px; left: 30px; border-width: 2px 0 0 2px; }
+        .gate-corner.tr { top: 30px; right: 30px; border-width: 2px 2px 0 0; }
+        .gate-corner.bl { bottom: 30px; left: 30px; border-width: 0 0 2px 2px; }
+        .gate-corner.br { bottom: 30px; right: 30px; border-width: 0 2px 2px 0; }
+
         .gate-frame {
-            width: 90%; max-width: 800px;
-            padding: 80px 40px;
+            width: 90%; max-width: 820px;
+            padding: 90px 50px;
             text-align: center;
             border: 1px solid var(--royal-gold-dark);
             position: relative;
-            background: var(--paper-white);
-            box-shadow: var(--shadow-royal);
+            background: rgba(250,249,246,0.95);
+            box-shadow: 0 40px 100px rgba(74,58,22,0.15), inset 0 1px 0 rgba(255,255,255,0.8);
         }
         .gate-frame::after {
             content: ''; position: absolute; inset: 10px;
-            border: 1px solid var(--royal-gold-dark); opacity: 0.2;
+            border: 1px solid var(--royal-gold-dark); opacity: 0.15; pointer-events: none;
         }
 
-        .gold-crest {
-            width: 60px; height: 1px; background: var(--royal-gold-dark);
-            margin: 30px auto; position: relative;
+        .gate-ornament {
+            display: flex; align-items: center; justify-content: center;
+            gap: 16px; margin-bottom: 30px;
         }
-        .gold-crest::before {
-            content: '◆'; position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%); background: var(--paper-white);
-            padding: 0 10px; color: var(--royal-gold-dark); font-size: 12px;
+        .gate-ornament-line {
+            height: 1px; width: 60px;
+            background: linear-gradient(90deg, transparent, var(--royal-gold-dark));
+        }
+        .gate-ornament-line.r { background: linear-gradient(90deg, var(--royal-gold-dark), transparent); }
+        .gate-ornament-gem {
+            width: 10px; height: 10px; background: var(--royal-gold);
+            transform: rotate(45deg);
+            box-shadow: 0 0 12px rgba(201,168,76,0.5);
+        }
+
+        .gate-year-badge {
+            display: inline-block;
+            font-family: 'Orbitron'; font-size: 9px; letter-spacing: 8px;
+            color: var(--royal-gold-dark); margin-bottom: 24px;
+            border: 1px solid rgba(138,109,46,0.3); padding: 6px 20px;
+        }
+
+        .gate-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(55px, 12vw, 110px);
+            font-weight: 900;
+            color: var(--warm-brown);
+            line-height: 1; margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            text-shadow: 0 2px 0 rgba(255,255,255,0.7), 0 4px 20px rgba(74,58,22,0.1);
+        }
+
+        .gate-sub {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(18px, 2.8vw, 26px);
+            font-style: italic; color: var(--royal-gold-dark);
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+        }
+
+        .gate-quote {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px; font-style: italic;
+            color: var(--soft-brown); line-height: 1.7;
+            margin: 30px 0 40px;
+            padding: 20px 30px; border-left: 2px solid var(--royal-gold);
+            text-align: left; letter-spacing: 0.5px;
         }
 
         .btn-royal {
             background: var(--onyx-black);
             color: var(--royal-gold);
             border: 1px solid var(--royal-gold);
-            padding: 20px 60px;
-            font-family: 'Cinzel';
-            font-weight: 700;
-            letter-spacing: 4px;
-            cursor: pointer;
+            padding: 22px 70px;
+            font-family: 'Cinzel'; font-weight: 700;
+            letter-spacing: 5px; cursor: pointer;
             transition: var(--transition-smooth);
-            text-transform: uppercase;
-            font-size: 12px;
-            margin-top: 40px;
-            position: relative;
-            z-index: 5;
+            text-transform: uppercase; font-size: 12px;
+            position: relative; overflow: hidden;
         }
+        .btn-royal::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(245,227,166,0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.8s ease;
+        }
+        .btn-royal:hover::after { transform: translateX(100%); }
         .btn-royal:hover {
             background: var(--royal-gold);
             color: var(--onyx-black);
-            box-shadow: 0 10px 30px rgba(201, 168, 76, 0.3);
+            box-shadow: 0 15px 40px rgba(201,168,76,0.35);
+            letter-spacing: 7px;
         }
 
-        /* 
-           ============================================================
-           MAIN ARCHITECTURE
-           ============================================================
-        */
-        #app-content { visibility: hidden; opacity: 0; }
+        /* ── MAIN APP ── */
+        #app-content { visibility: hidden; opacity: 0; position: relative; z-index: 2; }
 
+        /* ── NAVIGATION ── */
         .royal-nav {
             position: sticky; top: 0; z-index: 1000;
-            height: 100px; display: flex; align-items: center;
+            height: 90px; display: flex; align-items: center;
             justify-content: space-between; padding: 0 6%;
-            background: rgba(253, 248, 240, 0.9);
-            backdrop-filter: blur(15px);
-            border-bottom: var(--border-royal);
+            background: rgba(253,248,240,0.92);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(201,168,76,0.25);
+            box-shadow: 0 4px 30px rgba(74,58,22,0.08);
         }
 
         .nav-logo {
             font-family: 'Cinzel Decorative'; font-weight: 900;
-            font-size: 24px; color: var(--royal-gold-deep);
+            font-size: 20px; color: var(--royal-gold-deep);
+            letter-spacing: 2px;
+        }
+        .nav-logo span {
+            font-family: 'Cormorant Garamond', serif; font-style: italic;
+            font-size: 13px; display: block;
+            color: var(--text-muted); letter-spacing: 3px; margin-top: -2px;
         }
 
-        .nav-meta { text-align: right; }
-        .live-status {
-            font-family: 'Orbitron'; font-size: 8px; color: #2ecc71;
-            letter-spacing: 2px; font-weight: 900;
+        .nav-center {
+            display: flex; gap: 50px;
         }
-
-        /* 
-           ============================================================
-           GALLERY ENGINE
-           ============================================================
-        */
-        .archive-section { padding: 80px 6%; max-width: 1800px; margin: 0 auto; }
-
-        .archive-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 60px;
+        .nav-center a {
+            font-family: 'Cinzel'; font-size: 9px; letter-spacing: 3px;
+            color: var(--royal-gold-dark); text-decoration: none; text-transform: uppercase;
+            transition: color 0.3s; position: relative; padding-bottom: 4px;
         }
+        .nav-center a::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 0; height: 1px; background: var(--royal-gold);
+            transition: width 0.4s ease;
+        }
+        .nav-center a:hover::after { width: 100%; }
+        .nav-center a:hover { color: var(--royal-gold-deep); }
 
-        .royal-card {
-            background: white;
-            padding: 15px;
-            border-bottom: 3px solid var(--royal-gold);
-            box-shadow: var(--shadow-royal);
-            transition: var(--transition-smooth);
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .live-dot {
+            width: 6px; height: 6px; background: #2ecc71;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(46,204,113,0.6);
+            animation: livePulse 2s infinite;
+        }
+        @keyframes livePulse {
+            0%,100%{box-shadow:0 0 8px rgba(46,204,113,0.6);}
+            50%{box-shadow:0 0 18px rgba(46,204,113,1);}
+        }
+        .live-status { font-family: 'Orbitron'; font-size: 8px; color: #2ecc71; letter-spacing: 3px; }
+        .nav-close-btn {
+            background: none; border: 1px solid rgba(138,109,46,0.4);
+            color: var(--royal-gold-dark); padding: 8px 20px;
+            font-family: 'Cinzel'; font-size: 9px; cursor: pointer;
+            transition: 0.3s; letter-spacing: 2px;
+        }
+        .nav-close-btn:hover { background: var(--royal-gold-deep); color: var(--royal-gold-bright); }
+
+        /* ── HERO HEADER ── */
+        .vault-hero {
+            text-align: center; padding: 100px 20px 70px;
             position: relative;
-            cursor: pointer;
         }
-        .royal-card:hover { transform: translateY(-15px); }
-
-        .card-image-wrap {
-            width: 100%; height: 450px;
-            overflow: hidden; border: 1px solid #eee;
-            position: relative;
+        .vault-hero::before {
+            content: '';
+            position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 1px; height: 50px; background: linear-gradient(180deg, transparent, var(--royal-gold-dark));
         }
-        .card-image-wrap img {
-            width: 100%; height: 100%; object-fit: cover;
-            transition: transform 1.5s ease;
+        .vault-eyebrow {
+            font-family: 'Cormorant Garamond', serif; font-style: italic;
+            font-size: 18px; letter-spacing: 5px;
+            color: var(--royal-gold-dark); text-transform: none;
+            margin-bottom: 20px; opacity: 0.9;
         }
-        .royal-card:hover img { transform: scale(1.08); }
-
-        .card-info {
-            padding: 25px 0 10px;
-            text-align: center;
-        }
-        .card-owner {
-            font-family: 'Cinzel'; font-weight: 700;
-            letter-spacing: 3px; font-size: 14px;
-            color: var(--royal-gold-deep);
+        .vault-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(42px, 9vw, 95px);
+            font-weight: 900;
+            color: var(--soft-brown);
+            line-height: 1.1; margin-bottom: 16px;
             text-transform: uppercase;
+            letter-spacing: -2px;
+            text-shadow: 0 2px 0 rgba(255,255,255,0.8), 0 6px 30px rgba(74,58,22,0.15);
+        }
+        .vault-desc {
+            font-family: 'Cormorant Garamond', serif; font-style: italic;
+            font-size: 24px; color: var(--royal-gold-dark);
+            letter-spacing: 4px;
+            margin-bottom: 40px;
+        }
+        .gold-divider {
+            display: flex; align-items: center; justify-content: center; gap: 14px; margin: 0 auto;
+        }
+        .gd-line {
+            height: 1px; width: 100px;
+            background: linear-gradient(90deg, transparent, var(--royal-gold));
+        }
+        .gd-line.r { background: linear-gradient(90deg, var(--royal-gold), transparent); }
+        .gd-gem {
+            width: 9px; height: 9px; background: var(--royal-gold-dim);
+            transform: rotate(45deg);
+            box-shadow: 0 0 10px rgba(201,168,76,0.6);
+            animation: gemGlow 2.5s ease-in-out infinite alternate;
+        }
+        @keyframes gemGlow {
+            from{box-shadow:0 0 6px var(--royal-gold);}
+            to{box-shadow:0 0 20px var(--royal-gold-bright), 0 0 50px rgba(201,168,76,0.5);}
         }
 
-        .erase-btn {
-            position: absolute; top: 25px; right: 25px;
-            width: 35px; height: 35px; background: white;
-            border: 1px solid #ff4d4d; color: #ff4d4d;
-            border-radius: 50%; display: flex; align-items: center;
-            justify-content: center; font-weight: 900;
-            opacity: 0; transition: 0.3s; z-index: 10;
+        /* ── STATS BAR ── */
+        .stats-bar {
+            display: flex; justify-content: center; gap: 60px;
+            padding: 40px 6%; margin: 10px auto;
+            max-width: 800px; flex-wrap: wrap;
         }
-        .royal-card:hover .erase-btn { opacity: 1; }
+        .stat-item { text-align: center; }
+        .stat-number {
+            font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 900;
+            color: var(--soft-brown); line-height: 1;
+        }
+        .stat-label {
+            font-family: 'Cormorant Garamond', serif; font-style: italic;
+            font-size: 15px; letter-spacing: 3px;
+            color: var(--text-muted); margin-top: 6px;
+        }
+        .stat-divider {
+            width: 1px; background: linear-gradient(180deg, transparent, var(--royal-gold-dark), transparent);
+            opacity: 0.4;
+        }
 
-        /* 
-           ============================================================
-           THE UPLOAD CHAMBER
-           ============================================================
-        */
-        .royal-deposit {
+        /* ── UPLOAD ZONE ── */
+        .upload-wrapper {
             margin: 60px auto; width: 90%; max-width: 1000px;
-            border: 2px dashed var(--royal-gold-dark);
-            padding: 80px 40px; text-align: center;
-            background: rgba(201, 168, 76, 0.03);
-            cursor: pointer; transition: var(--transition-smooth);
+            position: relative;
         }
+        .upload-heading {
+            text-align: center; margin-bottom: 24px;
+        }
+        .upload-heading span {
+            font-family: 'Cinzel Decorative'; font-size: 22px; letter-spacing: 5px;
+            color: var(--royal-gold-dark); text-transform: uppercase;
+        }
+            color: var(--royal-gold-dark); text-transform: uppercase;
+        }
+        .royal-deposit {
+            border: 1px solid rgba(138,109,46,0.35);
+            padding: 70px 40px; text-align: center;
+            background: rgba(250,249,246,0.7);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            position: relative; overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        .royal-deposit::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .royal-deposit .dep-corner {
+            position: absolute; width: 20px; height: 20px;
+            border-color: var(--royal-gold); border-style: solid; opacity: 0.5;
+            transition: 0.4s;
+        }
+        .royal-deposit .dep-corner.tl { top: 12px; left: 12px; border-width: 2px 0 0 2px; }
+        .royal-deposit .dep-corner.tr { top: 12px; right: 12px; border-width: 2px 2px 0 0; }
+        .royal-deposit .dep-corner.bl { bottom: 12px; left: 12px; border-width: 0 0 2px 2px; }
+        .royal-deposit .dep-corner.br { bottom: 12px; right: 12px; border-width: 0 2px 2px 0; }
+        .royal-deposit:hover .dep-corner { opacity: 1; width: 28px; height: 28px; }
         .royal-deposit:hover {
-            background: rgba(201, 168, 76, 0.08);
-            border-style: solid;
+            background: rgba(201,168,76,0.06);
+            border-color: var(--royal-gold);
+            box-shadow: 0 0 60px rgba(201,168,76,0.1), inset 0 0 60px rgba(201,168,76,0.04);
+        }
+        .dep-icon {
+            font-size: 32px; margin-bottom: 16px; opacity: 0.4;
+            display: block;
+        }
+        .dep-title {
+            font-family: 'Cinzel'; letter-spacing: 4px; font-weight: 700;
+            color: var(--royal-gold-dark); font-size: 13px;
+        }
+        .dep-subtitle {
+            font-size: 10px; text-transform: uppercase; margin-top: 10px;
+            opacity: 0.5; letter-spacing: 1px; color: var(--text-muted);
+            font-family: 'Orbitron';
+        }
+
+        /* ── PROGRESS BAR ── */
+        .upload-progress {
+            display: none; margin-top: 20px;
+            background: rgba(138,109,46,0.1); height: 2px; position: relative; overflow: hidden;
+        }
+        .upload-progress-bar {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--royal-gold-dark), var(--royal-gold-bright));
+            transition: width 0.3s ease;
         }
 
         .loader-wrap {
-            display: none; flex-direction: column; align-items: center;
+            display: none; flex-direction: column; align-items: center; gap: 20px;
         }
         .royal-spinner {
-            width: 40px; height: 40px;
-            border: 2px solid rgba(138, 109, 46, 0.1);
+            width: 44px; height: 44px;
+            border: 2px solid rgba(138,109,46,0.1);
             border-top: 2px solid var(--royal-gold);
             border-radius: 50%; animation: spin 1s linear infinite;
         }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        /* 
-           ============================================================
-           RESPONSIVE REFINEMENT
-           ============================================================
-        */
-        @media (max-width: 768px) {
-            .archive-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-            .card-image-wrap { height: 240px; }
-            .royal-card { padding: 8px; }
-            .royal-nav { height: 80px; padding: 0 20px; }
-            .archive-section { padding: 40px 15px; }
+        .loader-text {
+            font-family: 'Orbitron'; font-size: 9px; letter-spacing: 4px;
+            color: var(--royal-gold-dark); animation: pulseShield 2s infinite;
         }
 
-        /* 
-           ============================================================
-           LIGHTBOX & TOAST
-           ============================================================
-        */
+        /* ── FILTER BAR ── */
+        .filter-bar {
+            display: flex; align-items: center; justify-content: center;
+            gap: 16px; padding: 0 6% 50px; flex-wrap: wrap;
+        }
+        .filter-search {
+            border: 1px solid rgba(138,109,46,0.3);
+            background: rgba(250,249,246,0.8);
+            padding: 12px 24px;
+            font-family: 'DM Sans'; font-size: 14px;
+            color: var(--text-main); outline: none;
+            width: 300px; max-width: 90vw;
+            transition: 0.3s; backdrop-filter: blur(10px);
+        }
+        .filter-search::placeholder { color: var(--text-muted); font-style: italic; }
+        .filter-search:focus { border-color: var(--royal-gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
+        .count-pill {
+            font-family: 'Orbitron'; font-size: 9px; letter-spacing: 3px;
+            color: var(--text-muted); border: 1px solid var(--border-royal);
+            padding: 8px 18px; background: rgba(255,255,255,0.6);
+        }
+
+        /* ── GRID ── */
+        .archive-section { padding: 10px 6% 80px; max-width: 1800px; margin: 0 auto; }
+        .archive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 50px;
+        }
+
+        /* ── CARD ── */
+        .royal-card {
+            background: white; padding: 14px;
+            border-bottom: 3px solid var(--royal-gold);
+            box-shadow: var(--shadow-royal);
+            transition: var(--transition-smooth);
+            position: relative; cursor: pointer;
+            animation: cardIn 0.6s cubic-bezier(0.22,1,0.36,1) both;
+        }
+        @keyframes cardIn { from{opacity:0;transform:translateY(30px) scale(0.95);} to{opacity:1;transform:translateY(0) scale(1);} }
+        .royal-card::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(201,168,76,0.04) 0%, transparent 50%);
+            pointer-events: none; z-index: 1;
+        }
+        .royal-card::after {
+            content: ''; position: absolute;
+            top: 8px; left: 8px; right: 8px;
+            height: 1px; background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent);
+            opacity: 0; transition: 0.4s;
+        }
+        .royal-card:hover::after { opacity: 1; }
+        .royal-card:hover {
+            transform: translateY(-16px);
+            box-shadow: 0 40px 80px rgba(74,58,22,0.18), 0 0 0 1px rgba(201,168,76,0.2);
+        }
+
+        .card-badge {
+            position: absolute; top: 24px; left: 24px; z-index: 5;
+            font-family: 'Orbitron'; font-size: 7px; letter-spacing: 3px;
+            background: linear-gradient(90deg, var(--royal-gold-dark), var(--royal-gold));
+            color: var(--warm-brown); padding: 4px 12px; opacity: 0;
+            transition: 0.4s;
+        }
+        .royal-card:hover .card-badge { opacity: 1; }
+
+        .card-image-wrap {
+            width: 100%; height: 420px;
+            overflow: hidden; position: relative;
+            background: linear-gradient(160deg, #EDE3CC, #D8C8A0);
+        }
+        .card-image-wrap img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 1.8s cubic-bezier(0.19,1,0.22,1);
+        }
+        .royal-card:hover img { transform: scale(1.1); }
+        .card-image-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(180deg, transparent 50%, rgba(26,18,0,0.5) 100%);
+            opacity: 0; transition: 0.5s; z-index: 2;
+        }
+        .royal-card:hover .card-image-overlay { opacity: 1; }
+        .card-view-hint {
+            position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%) translateY(10px);
+            font-family: 'Cinzel'; font-size: 9px; letter-spacing: 4px;
+            color: var(--royal-gold-bright); z-index: 3;
+            opacity: 0; transition: 0.5s; white-space: nowrap;
+        }
+        .royal-card:hover .card-view-hint { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        .card-info {
+            padding: 18px 6px 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            background: linear-gradient(135deg, var(--warm-brown), var(--soft-brown));
+            border-top: 3px solid var(--royal-gold-bright);
+        }
+        .card-owner {
+            font-family: 'Cinzel Decorative';
+            letter-spacing: 1.5px; font-size: 13px;
+            color: var(--royal-gold-bright); text-transform: uppercase;
+        }
+        .card-date {
+            font-family: 'Orbitron'; font-size: 8px; letter-spacing: 2px;
+            color: var(--text-muted); opacity: 0.6;
+        }
+
+        .erase-btn {
+            position: absolute; top: 24px; right: 24px;
+            width: 34px; height: 34px;
+            background: rgba(255,255,255,0.95);
+            border: 1px solid rgba(255,77,77,0.4); color: #cc3333;
+            border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; font-weight: 900; font-size: 18px;
+            opacity: 0; transition: 0.3s; z-index: 10; cursor: pointer;
+        }
+        .royal-card:hover .erase-btn { opacity: 1; }
+        .erase-btn:hover { background: #ff4d4d; color: white; border-color: #ff4d4d; transform: scale(1.1); }
+
+        /* ── LIGHTBOX ── */
         #royal-lightbox {
             position: fixed; inset: 0; z-index: 2000000;
             background: rgba(10,10,10,0.98);
             display: none; align-items: center; justify-content: center;
+            backdrop-filter: blur(10px);
         }
-        #lb-img { max-width: 90%; max-height: 85%; border: 1px solid var(--royal-gold); }
+        .lb-container { position: relative; display: flex; align-items: center; justify-content: center; }
+        #lb-img {
+            max-width: 88vw; max-height: 85vh;
+            border: 1px solid rgba(201,168,76,0.4);
+            box-shadow: 0 0 100px rgba(201,168,76,0.1);
+        }
+        .lb-close {
+            position: fixed; top: 24px; right: 24px;
+            width: 46px; height: 46px; border-radius: 50%;
+            border: 1px solid rgba(201,168,76,0.5);
+            background: rgba(0,0,0,0.7); color: var(--royal-gold);
+            font-size: 20px; cursor: pointer; display: flex;
+            align-items: center; justify-content: center;
+            transition: 0.3s; backdrop-filter: blur(8px);
+        }
+        .lb-close:hover { background: var(--royal-gold); color: #000; }
+        .lb-hint {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            font-family: 'Orbitron'; font-size: 9px; letter-spacing: 4px;
+            color: rgba(201,168,76,0.3);
+        }
 
-        .toast {
-            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
-            background: var(--onyx-black); color: var(--royal-gold);
-            padding: 15px 40px; font-family: 'Orbitron'; font-size: 10px;
-            border-radius: 4px; border: 1px solid var(--royal-gold);
-            z-index: 3000000; display: none;
+        /* ── EMPTY STATE ── */
+        .empty-vault {
+            grid-column: 1/-1; text-align: center; padding: 100px 20px;
+        }
+        .empty-vault-icon { font-size: 48px; opacity: 0.2; margin-bottom: 20px; }
+        .empty-vault p {
+            font-family: 'Cormorant Garamond', serif; font-style: italic;
+            font-size: 26px; color: var(--text-muted); letter-spacing: 2px;
+        }
+
+        .royal-footer {
+            padding: 100px 20px 60px; text-align: center;
+            background: linear-gradient(180deg, transparent, rgba(74,58,22,0.04));
+            border-top: 1px solid rgba(138,109,46,0.15);
+            position: relative; z-index: 2;
+        }
+        .footer-logo { font-family: 'Playfair Display', serif; font-size: 52px; font-weight: 900; color: var(--royal-gold); opacity: 0.2; text-transform: uppercase; letter-spacing: -2px; }
+        .footer-year { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 20px; color: var(--text-muted); margin-top: 14px; letter-spacing: 4px; }
+        .footer-credit {
+            font-family: 'Cinzel Decorative'; font-size: 9px; letter-spacing: 5px;
+            color: var(--royal-gold-dark); margin-top: 30px;
+        }
+        .footer-enc { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; margin-top: 30px; color: rgba(138,109,46,0.45); letter-spacing: 2px; }
+
+        /* ── SCROLL INDICATOR ── */
+        .scroll-indicator {
+            position: fixed; right: 30px; top: 50%; transform: translateY(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+            z-index: 500;
+        }
+        .scroll-dot {
+            width: 4px; height: 4px; border-radius: 50%;
+            background: var(--royal-gold-dark); opacity: 0.3; transition: 0.3s;
+            cursor: pointer;
+        }
+        .scroll-dot.active { opacity: 1; background: var(--royal-gold); transform: scale(1.5); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .nav-center { display: none; }
+            .archive-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+            .card-image-wrap { height: 260px; }
+            .royal-card { padding: 8px; }
+            .stats-bar { gap: 30px; }
+            .stat-number { font-size: 28px; }
+        }
+        @media (max-width: 500px) {
+            .archive-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .card-image-wrap { height: 200px; }
+            .archive-section { padding: 10px 3% 60px; }
+            .royal-nav { height: 75px; padding: 0 20px; }
+            .nav-logo { font-size: 18px; }
         }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-    <!-- Security Layer -->
-    <div id="sec-shield"><div class="shield-content"><p>Royal Security Active</p></div></div>
-    <div id="toast-notify" class="toast">SYSTEM UPDATE SUCCESS</div>
+    <!-- Capture Shield -->
+    <div id="capture-shield">
+        <div class="shield-icon">🔒</div>
+        <p>Screen Capture Restricted</p>
+    </div>
 
-    <!-- Atmospheric Particles -->
+    <!-- Security Shield (tab switch) -->
+    <div id="sec-shield">
+        <div class="lock-ring"></div>
+        <p>Royal Security Active</p>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast-notify" class="toast"></div>
+
+    <!-- Particles -->
     <canvas id="dust-canvas"></canvas>
 
-    <!-- Audio Archive -->
+    <!-- Audio -->
     <audio id="archive-audio"></audio>
 
-    <!-- The Entrance Gate -->
+    <!-- Entry Gate -->
     <section id="entry-gate">
+        <div class="gate-corner tl"></div>
+        <div class="gate-corner tr"></div>
+        <div class="gate-corner bl"></div>
+        <div class="gate-corner br"></div>
         <div class="gate-frame">
-            <p style="font-family:'Orbitron'; font-size:10px; letter-spacing:8px; color:var(--royal-gold-dark); margin-bottom:20px;">DIGITAL HERITAGE</p>
-            <h1 style="font-family:'Cinzel Decorative'; font-size: clamp(40px, 10vw, 80px); color: var(--royal-gold-deep);">REWIND</h1>
-            <div class="gold-crest"></div>
-            <p style="font-family:'Cormorant Garamond'; font-size: 24px; font-style: italic; color: var(--text-muted);">
-                "A collection of timeless whispers and captured light."
-            </p>
+            <div class="gate-ornament">
+                <div class="gate-ornament-line"></div>
+                <div class="gate-ornament-gem"></div>
+                <div class="gate-ornament-line r"></div>
+            </div>
+            <div class="gate-year-badge">DIGITAL HERITAGE · MMXXVI</div>
+            <h1 class="gate-title">REWIND</h1>
+            <p class="gate-sub">Immortalizing the Batch of 2026</p>
+            <blockquote class="gate-quote">
+                "A collection of timeless whispers and captured light — preserved for those who dare to remember."
+            </blockquote>
             <button class="btn-royal" onclick="EliteVault.Core.initiate()">Enter Archive</button>
         </div>
     </section>
 
-    <!-- Main Vault Content -->
+    <!-- Main Content -->
     <main id="app-content">
+
+        <!-- Navigation -->
         <nav class="royal-nav">
-            <button onclick="EliteVault.Core.exit()" style="background:none; border:1px solid var(--royal-gold); color:var(--royal-gold-dark); padding:8px 20px; font-family:'Cinzel'; font-size:10px; cursor:pointer;">CLOSE ARCHIVE</button>
-            <div class="nav-logo">AC</div>
-            <div class="nav-meta">
-                <div class="live-status">ARCHIVE STABLE</div>
-                <div style="font-family:'Cinzel'; font-size:9px; color:var(--royal-gold-dark); letter-spacing:1px;">BY ABHINAV CHAUHAN</div>
+            <button class="nav-close-btn" onclick="EliteVault.Core.exit()">✕ CLOSE</button>
+            <div class="nav-logo">
+                AC
+                <span>Royal Archive</span>
+            </div>
+            <div class="nav-center">
+                <a href="#" onclick="document.getElementById('vault-grid').scrollIntoView({behavior:'smooth'})">Gallery</a>
+                <a href="#" onclick="document.querySelector('.royal-deposit').scrollIntoView({behavior:'smooth'})">Deposit</a>
+            </div>
+            <div class="nav-right">
+                <div class="live-dot"></div>
+                <div class="live-status">STABLE</div>
             </div>
         </nav>
 
-        <header style="text-align:center; padding:100px 20px 60px;">
-            <h2 style="font-family:'Cinzel Decorative'; font-size: clamp(30px, 6vw, 60px); color: var(--royal-gold-deep);">THE ROYAL VAULT</h2>
-            <div class="gold-crest"></div>
+        <!-- Hero -->
+        <header class="vault-hero">
+            <div class="vault-eyebrow">Est. 2026 · By Abhinav Chauhan</div>
+            <h2 class="vault-title">The Royal Vault</h2>
+            <p class="vault-desc">Immortalizing the Batch of 2026</p>
+            <div class="gold-divider">
+                <div class="gd-line"></div>
+                <div class="gd-gem"></div>
+                <div class="gd-line r"></div>
+            </div>
         </header>
 
-        <!-- Fixed Upload Component -->
-        <section class="royal-deposit" onclick="document.getElementById('file-upload').click()">
-            <div id="deposit-idle">
-                <span style="font-family:'Cinzel'; letter-spacing:4px; font-weight:700; color:var(--royal-gold-dark);">+ DEPOSIT NEW MEMORY</span>
-                <p style="font-size:10px; text-transform:uppercase; margin-top:10px; opacity:0.6; letter-spacing:1px;">Only Archival .JPG formats accepted</p>
+        <!-- Stats -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number" id="stat-count">0</div>
+                <div class="stat-label">Memories</div>
             </div>
-            <div id="deposit-loading" class="loader-wrap">
-                <div class="royal-spinner"></div>
-                <p style="font-family:'Orbitron'; font-size:9px; margin-top:20px; letter-spacing:3px;">SYNCHRONIZING WITH VAULT...</p>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <div class="stat-number">2026</div>
+                <div class="stat-label">Archive Year</div>
             </div>
-            <input type="file" id="file-upload" accept=".jpg,.jpeg" style="display:none" onchange="EliteVault.Storage.upload(event)">
-        </section>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <div class="stat-number" id="stat-contributors">0</div>
+                <div class="stat-label">Contributors</div>
+            </div>
+        </div>
 
-        <!-- Memory Grid -->
+        <!-- Upload Zone -->
+        <div class="upload-wrapper">
+            <div class="upload-heading">
+                <span>· Deposit Chamber ·</span>
+            </div>
+            <div class="royal-deposit" onclick="document.getElementById('file-upload').click()">
+                <div class="dep-corner tl"></div>
+                <div class="dep-corner tr"></div>
+                <div class="dep-corner bl"></div>
+                <div class="dep-corner br"></div>
+                <div id="deposit-idle">
+                    <span class="dep-icon">⬡</span>
+                    <div class="dep-title">+ DEPOSIT NEW MEMORY</div>
+                    <div class="dep-subtitle">Only Archival .JPG formats accepted</div>
+                </div>
+                <div id="deposit-loading" class="loader-wrap">
+                    <div class="royal-spinner"></div>
+                    <div class="loader-text">SYNCHRONIZING WITH VAULT...</div>
+                </div>
+                <input type="file" id="file-upload" accept=".jpg,.jpeg" style="display:none" onchange="EliteVault.Storage.upload(event)">
+            </div>
+            <div class="upload-progress" id="upload-progress">
+                <div class="upload-progress-bar" id="upload-progress-bar"></div>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <input type="text" class="filter-search" placeholder="Search memories by name..." id="filter-search" oninput="EliteVault.UI.filter(this.value)">
+            <div class="count-pill" id="count-pill">0 MEMORIES</div>
+        </div>
+
+        <!-- Grid -->
         <section class="archive-section">
-            <div class="archive-grid" id="vault-grid">
-                <!-- Injected via JavaScript -->
-            </div>
+            <div class="archive-grid" id="vault-grid"></div>
         </section>
 
-        <footer style="padding:150px 20px 80px; text-align:center; background: white;">
-            <div style="font-family:'Cinzel Decorative'; font-size:40px; color:var(--royal-gold); opacity:0.3;">2026</div>
-            <p style="font-family:'Orbitron'; font-size:9px; letter-spacing:6px; color:var(--royal-gold-dark); margin-top:20px;">CREATED BY ABHINAV CHAUHAN</p>
-            <p style="font-family:'DM Sans'; font-size:10px; margin-top:40px; color: #aaa;">PROTECTED BY JIVITMURDA ENCRYPTION</p>
+        <!-- Footer -->
+        <footer class="royal-footer">
+            <div class="footer-logo">AC</div>
+            <div class="footer-year">MMXXVI · THE ROYAL ARCHIVE</div>
+            <div class="footer-credit">CREATED BY ABHINAV CHAUHAN</div>
+            <div class="footer-enc">PROTECTED BY JIVITMURDA ENCRYPTION</div>
         </footer>
     </main>
 
     <!-- Lightbox -->
     <div id="royal-lightbox" onclick="EliteVault.UI.closeLightbox()">
-        <img id="lb-img" src="" alt="Full Resolution">
+        <div class="lb-container">
+            <img id="lb-img" src="" alt="">
+        </div>
+        <button class="lb-close" onclick="EliteVault.UI.closeLightbox()">✕</button>
+        <div class="lb-hint">CLICK ANYWHERE TO CLOSE · ESC</div>
     </div>
 
     <script>
-        /**
-         * ============================================================
-         * ELITE VAULT CORE ENGINE 6.0
-         * Architect: Abhinav Chauhan
-         * Implementation: Jivitmurda
-         * ============================================================
-         */
+    /**
+     * ============================================================
+     * ELITE VAULT CORE ENGINE 7.0
+     * Architect: Abhinav Chauhan
+     * ============================================================
+     */
 
-        const EliteVault = (() => {
+    // ── BACK / RELOAD REDIRECT ──────────────────────────────────
+    (function() {
+        // Push a state so back button is interceptable
+        history.pushState({ page: 'vault' }, '', window.location.href);
+        history.pushState({ page: 'vault' }, '', window.location.href);
 
-            // Supabase Configuration
-            const DB_URL = 'https://znptyheexlkuvielzjtd.supabase.co';
-            const DB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpucHR5heexlkuvielzjtdIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MTA4MjgsImV4cCI6MjA5MDA4NjgyOH0.r2mgPh4clcW00NRAexcvS0p65tzZD5A9RPqfYFGtGH4';
-            const _sb = supabase.createClient(DB_URL, DB_KEY);
+        window.addEventListener('popstate', function(e) {
+            window.location.href = 'page 3.html';
+        });
 
-            // Internal State
-            let state = {
-                memories: [],
-                active: false,
-                playlist: []
-            };
+        // Reload detection: beforeunload redirect
+        window.addEventListener('beforeunload', function(e) {
+            // We set a sessionStorage flag; on reload, page 3 is loaded
+            sessionStorage.setItem('reloaded', 'true');
+        });
 
-            // Audio Assets (23 Tracks)
-            const audioLib = Array.from({length: 23}, (_, i) => `AUDIO/audio${i+1}.${i === 11 ? 'mp4' : 'mpeg'}`);
+        // On page load, check if we got here via reload
+        window.addEventListener('load', function() {
+            if (sessionStorage.getItem('reloaded') === 'true') {
+                sessionStorage.removeItem('reloaded');
+                window.location.replace('page 3.html');
+            }
+        });
+    })();
 
-            /**
-             * STORAGE MODULE (Crucial Path Fix Included)
-             */
-            const Storage = {
-                fetch: async () => {
-                    const { data, error } = await _sb.from('photos').select('*').order('id', { ascending: false });
-                    if(!error) {
-                        state.memories = data;
-                        UI.render();
+    const EliteVault = (() => {
+
+        const DB_URL = 'https://znptyheexlkuvielzjtd.supabase.co';
+        const DB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpucHR5aGVleGxrdXZpZWx6anRkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MTA4MjgsImV4cCI6MjA5MDA4NjgyOH0.r2mgPh4clcW00NRAexcvS0p65tzZD5A9RPqfYFGtGH4';
+        const _sb = supabase.createClient(DB_URL, DB_KEY);
+
+        let state = { memories: [], active: false, playlist: [], allMemories: [] };
+        const audioLib = Array.from({length: 23}, (_, i) => `AUDIO/audio${i+1}.${i === 11 ? 'mp4' : 'mpeg'}`);
+
+        // ── SCREENSHOT / SCREEN-REC BLOCKER ──────────────────────
+        const CaptureBlocker = {
+            init() {
+                // Block PrintScreen via keydown
+                document.addEventListener('keydown', (e) => {
+                    const blocked = [
+                        e.key === 'PrintScreen',
+                        e.key === 'F12',
+                        (e.ctrlKey && e.shiftKey && e.key === 'I'),
+                        (e.ctrlKey && e.shiftKey && e.key === 'C'),
+                        (e.ctrlKey && e.shiftKey && e.key === 'J'),
+                        (e.ctrlKey && e.key === 'U'),
+                        (e.ctrlKey && e.shiftKey && e.key === 'S'), // Save as
+                        (e.metaKey && e.shiftKey && ['3','4','5'].includes(e.key)), // Mac screenshot
+                        (e.metaKey && e.ctrlKey && e.shiftKey && ['3','4'].includes(e.key)),
+                    ];
+                    if (blocked.some(Boolean)) {
+                        e.preventDefault(); e.stopPropagation();
+                        CaptureBlocker.flash();
+                        return false;
                     }
-                },
+                }, true);
 
-                upload: async (e) => {
-                    const file = e.target.files[0];
-                    if(!file) return;
-
-                    // Format Policy
-                    const ext = file.name.split('.').pop().toLowerCase();
-                    if(ext !== 'jpg' && ext !== 'jpeg') {
-                        UI.notify("ERROR: ONLY .JPG ALLOWED");
-                        return;
-                    }
-
-                    const donor = prompt("NAME OF CONTRIBUTOR:").toUpperCase();
-                    if(!donor) return;
-
-                    UI.toggleLoader(true);
-
-                    /**
-                     * FIXED: targetPath does NOT include 'public/' 
-                     * This matches the Supabase Storage object structure requirement.
-                     */
-                    const bucket = 'memories';
-                    const fileName = `${Date.now()}_${donor.replace(/\s+/g, '_')}.jpg`;
-                    const targetPath = fileName; 
-
-                    try {
-                        const { error: upErr } = await _sb.storage.from(bucket).upload(targetPath, file);
-                        if(upErr) throw upErr;
-
-                        const { data: { publicUrl } } = _sb.storage.from(bucket).getPublicUrl(targetPath);
-
-                        const { error: dbErr } = await _sb.from('photos').insert([{
-                            url: publicUrl,
-                            owner: donor,
-                            storage_path: targetPath
-                        }]);
-
-                        if(dbErr) throw dbErr;
-
-                        UI.notify("ARCHIVE SYNCHRONIZED");
-                        Storage.fetch();
-                    } catch (err) {
-                        console.error(err);
-                        alert("Vault Security Rejection: " + err.message);
-                    } finally {
-                        UI.toggleLoader(false);
-                    }
-                },
-
-                delete: async (e, id, owner, path) => {
-                    e.stopPropagation();
-                    const auth = prompt(`Type "${owner}" to authorize deletion:`).toUpperCase();
-                    if(auth === owner) {
-                        await _sb.storage.from('memories').remove([path]);
-                        await _sb.from('photos').delete().eq('id', id);
-                        UI.notify("DATA ERASED");
-                        Storage.fetch();
-                    } else {
-                        UI.notify("AUTHORIZATION FAILED");
-                    }
-                }
-            };
-
-            /**
-             * USER INTERFACE MODULE
-             */
-            const UI = {
-                render: () => {
-                    const grid = document.getElementById('vault-grid');
-                    grid.innerHTML = '';
-                    
-                    state.memories.forEach(item => {
-                        const el = document.createElement('div');
-                        el.className = 'royal-card';
-                        el.innerHTML = `
-                            <div class="erase-btn" onclick="EliteVault.Storage.delete(event, ${item.id}, '${item.owner}', '${item.storage_path}')">&times;</div>
-                            <div class="card-image-wrap" onclick="EliteVault.UI.openLightbox('${item.url}')">
-                                <img src="${item.url}" loading="lazy">
-                            </div>
-                            <div class="card-info">
-                                <span class="card-owner">${item.owner}</span>
-                            </div>
-                        `;
-                        grid.appendChild(el);
-                    });
-                },
-
-                toggleLoader: (show) => {
-                    document.getElementById('deposit-idle').style.display = show ? 'none' : 'block';
-                    document.getElementById('deposit-loading').style.display = show ? 'flex' : 'none';
-                },
-
-                openLightbox: (url) => {
-                    const lb = document.getElementById('royal-lightbox');
-                    document.getElementById('lb-img').src = url;
-                    lb.style.display = 'flex';
-                    gsap.from('#lb-img', { scale: 0.9, opacity: 0, duration: 0.4 });
-                },
-
-                closeLightbox: () => {
-                    document.getElementById('royal-lightbox').style.display = 'none';
-                },
-
-                notify: (msg) => {
-                    const t = document.getElementById('toast-notify');
-                    t.innerText = msg;
-                    t.style.display = 'block';
-                    setTimeout(() => t.style.display = 'none', 3000);
-                }
-            };
-
-            /**
-             * ATMOSPHERE & CORE LOGIC
-             */
-            const Core = {
-                initiate: () => {
-                    state.active = true;
-                    document.getElementById('entry-gate').classList.add('vanish');
-                    document.getElementById('app-content').style.visibility = 'visible';
-                    gsap.to('#app-content', { opacity: 1, duration: 2, delay: 0.5 });
-                    
-                    // Start Music
-                    state.playlist = [...audioLib].sort(() => Math.random() - 0.5);
-                    const aud = document.getElementById('archive-audio');
-                    const playNext = () => {
-                        if(state.playlist.length === 0) state.playlist = [...audioLib].sort(() => Math.random() - 0.5);
-                        aud.src = state.playlist.pop();
-                        aud.play();
-                    };
-                    playNext();
-                    aud.onended = playNext;
-                    
-                    Storage.fetch();
-                },
-
-                exit: () => {
-                    gsap.to('#app-content', { opacity: 0, duration: 1, onComplete: () => {
-                        window.location.reload();
-                    }});
-                },
-
-                setupParticles: () => {
-                    const canvas = document.getElementById('dust-canvas');
-                    const ctx = canvas.getContext('2d');
-                    let parts = [];
-
-                    const resize = () => {
-                        canvas.width = window.innerWidth;
-                        canvas.height = window.innerHeight;
-                    };
-                    window.addEventListener('resize', resize);
-                    resize();
-
-                    for(let i=0; i<60; i++) {
-                        parts.push({
-                            x: Math.random() * canvas.width,
-                            y: Math.random() * canvas.height,
-                            r: Math.random() * 1.5,
-                            vx: (Math.random() - 0.5) * 0.3,
-                            vy: (Math.random() - 0.5) * 0.3
-                        });
-                    }
-
-                    const animate = () => {
-                        ctx.clearRect(0,0,canvas.width, canvas.height);
-                        ctx.fillStyle = "rgba(201, 168, 76, 0.2)";
-                        parts.forEach(p => {
-                            p.x += p.vx; p.y += p.vy;
-                            if(p.x < 0) p.x = canvas.width;
-                            if(p.y < 0) p.y = canvas.height;
-                            if(p.x > canvas.width) p.x = 0;
-                            if(p.y > canvas.height) p.y = 0;
-                            ctx.beginPath();
-                            ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-                            ctx.fill();
-                        });
-                        requestAnimationFrame(animate);
-                    };
-                    animate();
-                },
-
-                security: () => {
-                    // Prevent common inspection tools & protect privacy
-                    document.addEventListener('visibilitychange', () => {
-                        const shield = document.getElementById('sec-shield');
-                        if(document.hidden) {
-                            shield.style.display = 'flex';
-                            document.body.classList.add('vault-locked');
-                        } else {
-                            setTimeout(() => {
-                                shield.style.display = 'none';
-                                document.body.classList.remove('vault-locked');
-                            }, 400);
+                // Hide content during potential screenshot (visibility API trick)
+                // Use CSS filter on screenshot key up
+                document.addEventListener('keyup', (e) => {
+                    if (e.key === 'PrintScreen') {
+                        CaptureBlocker.flash();
+                        // Overwrite clipboard with blank
+                        if (navigator.clipboard) {
+                            navigator.clipboard.writeText('').catch(() => {});
                         }
+                    }
+                });
+
+                // Detect Screen Capture API
+                if (navigator.mediaDevices) {
+                    const orig = navigator.mediaDevices.getDisplayMedia;
+                    navigator.mediaDevices.getDisplayMedia = function() {
+                        CaptureBlocker.flash();
+                        return Promise.reject(new Error('Screen capture is not permitted.'));
+                    };
+                }
+
+                // CSS media print block
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    @media print {
+                        body * { visibility: hidden !important; }
+                        body::after {
+                            content: 'This archive is protected.';
+                            visibility: visible !important;
+                            position: fixed; inset: 0;
+                            display: flex; align-items: center; justify-content: center;
+                            font-size: 24px; color: black;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            },
+
+            flash() {
+                const shield = document.getElementById('capture-shield');
+                shield.classList.add('active');
+                setTimeout(() => shield.classList.remove('active'), 1500);
+            }
+        };
+
+        // ── STORAGE ──────────────────────────────────────────────
+        const Storage = {
+            fetch: async () => {
+                const { data, error } = await _sb.from('photos').select('*').order('id', { ascending: false });
+                if (!error) {
+                    state.memories = data;
+                    state.allMemories = data;
+                    UI.render(data);
+                    UI.updateStats(data);
+                }
+            },
+
+            upload: async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const ext = file.name.split('.').pop().toLowerCase();
+                if (ext !== 'jpg' && ext !== 'jpeg') {
+                    UI.notify("ERROR: ONLY .JPG ALLOWED");
+                    return;
+                }
+                const donor = prompt("NAME OF CONTRIBUTOR:");
+                if (!donor || !donor.trim()) return;
+                const donorName = donor.trim().toUpperCase();
+
+                UI.toggleLoader(true);
+                document.getElementById('upload-progress').style.display = 'block';
+
+                const bucket = 'memories';
+                const fileName = `${Date.now()}_${donorName.replace(/\s+/g,'_')}.jpg`;
+                const targetPath = fileName;
+
+                try {
+                    // Simulate progress
+                    let prog = 0;
+                    const interval = setInterval(() => {
+                        prog = Math.min(prog + Math.random() * 15, 85);
+                        document.getElementById('upload-progress-bar').style.width = prog + '%';
+                    }, 200);
+
+                    const { error: upErr } = await _sb.storage.from(bucket).upload(targetPath, file);
+                    if (upErr) throw upErr;
+
+                    clearInterval(interval);
+                    document.getElementById('upload-progress-bar').style.width = '100%';
+
+                    const { data: { publicUrl } } = _sb.storage.from(bucket).getPublicUrl(targetPath);
+                    const { error: dbErr } = await _sb.from('photos').insert([{
+                        url: publicUrl, owner: donorName, storage_path: targetPath
+                    }]);
+                    if (dbErr) throw dbErr;
+
+                    UI.notify("ARCHIVE SYNCHRONIZED");
+                    setTimeout(() => {
+                        document.getElementById('upload-progress').style.display = 'none';
+                        document.getElementById('upload-progress-bar').style.width = '0%';
+                    }, 1000);
+                    Storage.fetch();
+                } catch (err) {
+                    console.error(err);
+                    alert("Vault Security Rejection: " + err.message);
+                    document.getElementById('upload-progress').style.display = 'none';
+                } finally {
+                    UI.toggleLoader(false);
+                    e.target.value = '';
+                }
+            },
+
+            delete: async (e, id, owner, path) => {
+                e.stopPropagation();
+                const auth = prompt(`Type "${owner}" to authorize deletion:`);
+                if (auth && auth.toUpperCase() === owner.toUpperCase()) {
+                    await _sb.storage.from('memories').remove([path]);
+                    await _sb.from('photos').delete().eq('id', id);
+                    UI.notify("MEMORY ERASED FROM VAULT");
+                    Storage.fetch();
+                } else {
+                    UI.notify("AUTHORIZATION FAILED");
+                }
+            }
+        };
+
+        // ── UI ────────────────────────────────────────────────────
+        const UI = {
+            render: (items) => {
+                const grid = document.getElementById('vault-grid');
+                grid.innerHTML = '';
+                if (!items || !items.length) {
+                    grid.innerHTML = `<div class="empty-vault">
+                        <div class="empty-vault-icon">◇</div>
+                        <p>The vault awaits its first memory.</p>
+                    </div>`;
+                    document.getElementById('count-pill').textContent = '0 MEMORIES';
+                    return;
+                }
+                document.getElementById('count-pill').textContent = items.length + ' MEMORIES';
+                items.forEach((item, i) => {
+                    const el = document.createElement('div');
+                    el.className = 'royal-card';
+                    el.style.animationDelay = (i * 0.07) + 's';
+                    const safeOwner = (item.owner || '').replace(/'/g, "\\'").replace(/\\/g, '\\\\');
+                    const safePath = (item.storage_path || '').replace(/'/g, "\\'").replace(/\\/g, '\\\\');
+                    const safeUrl = (item.url || '').replace(/'/g, "\\'");
+                    el.innerHTML = `
+                        <div class="card-badge">ARCHIVE</div>
+                        <button class="erase-btn" onclick="EliteVault.Storage.delete(event, ${item.id}, '${safeOwner}', '${safePath}')">×</button>
+                        <div class="card-image-wrap" onclick="EliteVault.UI.openLightbox('${safeUrl}')">
+                            <img src="${item.url}" loading="lazy" alt="${item.owner}">
+                            <div class="card-image-overlay"></div>
+                            <div class="card-view-hint">VIEW FULL RESOLUTION</div>
+                        </div>
+                        <div class="card-info">
+                            <span class="card-owner">${item.owner}</span>
+                            <span class="card-date">${item.id ? '#' + String(item.id).padStart(4, '0') : ''}</span>
+                        </div>
+                    `;
+                    grid.appendChild(el);
+                });
+            },
+
+            filter: (q) => {
+                const filtered = q
+                    ? state.allMemories.filter(m => m.owner && m.owner.toLowerCase().includes(q.toLowerCase()))
+                    : state.allMemories;
+                UI.render(filtered);
+            },
+
+            updateStats: (data) => {
+                // Animate count
+                const target = data.length;
+                const contributors = new Set(data.map(d => d.owner)).size;
+                UI.animateNumber('stat-count', target);
+                UI.animateNumber('stat-contributors', contributors);
+            },
+
+            animateNumber: (id, target) => {
+                const el = document.getElementById(id);
+                let current = 0;
+                const step = Math.max(1, Math.floor(target / 30));
+                const timer = setInterval(() => {
+                    current = Math.min(current + step, target);
+                    el.textContent = current;
+                    if (current >= target) clearInterval(timer);
+                }, 50);
+            },
+
+            toggleLoader: (show) => {
+                document.getElementById('deposit-idle').style.display = show ? 'none' : 'block';
+                document.getElementById('deposit-loading').style.display = show ? 'flex' : 'none';
+            },
+
+            openLightbox: (url) => {
+                const lb = document.getElementById('royal-lightbox');
+                document.getElementById('lb-img').src = url;
+                lb.style.display = 'flex';
+                gsap.fromTo('#lb-img', { scale: 0.88, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: 'power3.out' });
+            },
+
+            closeLightbox: () => {
+                gsap.to('#lb-img', { scale: 0.9, opacity: 0, duration: 0.3, onComplete: () => {
+                    document.getElementById('royal-lightbox').style.display = 'none';
+                }});
+            },
+
+            notify: (msg) => {
+                const t = document.getElementById('toast-notify');
+                t.textContent = msg;
+                t.style.display = 'block';
+                setTimeout(() => t.style.display = 'none', 3500);
+            }
+        };
+
+        // ── CORE ──────────────────────────────────────────────────
+        const Core = {
+            initiate: () => {
+                state.active = true;
+                document.getElementById('entry-gate').classList.add('vanish');
+                document.getElementById('app-content').style.visibility = 'visible';
+                gsap.to('#app-content', { opacity: 1, duration: 2, delay: 0.5 });
+
+                // Music
+                state.playlist = [...audioLib].sort(() => Math.random() - 0.5);
+                const aud = document.getElementById('archive-audio');
+                const playNext = () => {
+                    if (!state.playlist.length) state.playlist = [...audioLib].sort(() => Math.random() - 0.5);
+                    aud.src = state.playlist.pop();
+                    aud.play().catch(() => {});
+                };
+                playNext();
+                aud.onended = playNext;
+
+                Storage.fetch();
+            },
+
+            exit: () => {
+                gsap.to('#app-content', { opacity: 0, duration: 1, onComplete: () => {
+                    window.location.href = 'page 3.html';
+                }});
+            },
+
+            setupParticles: () => {
+                const canvas = document.getElementById('dust-canvas');
+                const ctx = canvas.getContext('2d');
+                let parts = [];
+                const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+                window.addEventListener('resize', resize);
+                resize();
+                for (let i = 0; i < 80; i++) {
+                    parts.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        r: Math.random() * 1.4 + 0.2,
+                        vx: (Math.random() - 0.5) * 0.25,
+                        vy: (Math.random() - 0.5) * 0.25,
+                        a: Math.random(),
+                        ap: Math.random() * 0.004 + 0.002,
+                        ad: Math.random() > 0.5 ? 1 : -1
                     });
                 }
-            };
+                const animate = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    parts.forEach(p => {
+                        p.x += p.vx; p.y += p.vy;
+                        p.a += p.ap * p.ad;
+                        if (p.a >= 1 || p.a <= 0) p.ad *= -1;
+                        if (p.x < 0) p.x = canvas.width;
+                        if (p.y < 0) p.y = canvas.height;
+                        if (p.x > canvas.width) p.x = 0;
+                        if (p.y > canvas.height) p.y = 0;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(180,140,40,${(p.a * 0.35).toFixed(2)})`;
+                        ctx.fill();
+                    });
+                    requestAnimationFrame(animate);
+                };
+                animate();
+            },
 
-            return {
-                Core, Storage, UI,
-                start: () => {
-                    Core.setupParticles();
-                    Core.security();
-                    Storage.fetch(); // Initial fetch
-                }
-            };
+            security: () => {
+                document.addEventListener('visibilitychange', () => {
+                    const shield = document.getElementById('sec-shield');
+                    if (document.hidden) {
+                        shield.style.display = 'flex';
+                        document.body.classList.add('vault-locked');
+                    } else {
+                        setTimeout(() => {
+                            shield.style.display = 'none';
+                            document.body.classList.remove('vault-locked');
+                        }, 400);
+                    }
+                });
+            }
+        };
 
-        })();
+        return {
+            Core, Storage, UI,
+            start: () => {
+                Core.setupParticles();
+                Core.security();
+                CaptureBlocker.init();
+                Storage.fetch();
+            }
+        };
 
-        // BOOT THE ROYAL SYSTEM
-        EliteVault.start();
+    })();
 
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') EliteVault.UI.closeLightbox();
+    });
+
+    // Boot
+    EliteVault.start();
     </script>
 </body>
 </html>
