@@ -5,397 +5,1233 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0,viewport-fit=cover"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="description" content="The Royal Archive — A premium digital preservation of legacy and memories by Abhinav Chauhan.">
-    <title> DIGITL GALLERY </title>
-
-    <!-- PREMIUM FONTS -->
+    <meta name="description" content="REWIND — Batch 2026 Digital Gallery. A premium archive of memories.">
+    <title>REWIND </title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;700&family=Orbitron:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&display=swap" rel="stylesheet"/>
-
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600;700&family=Orbitron:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
     <style>
+        /* ROOT — CODE 2 CREAM/MAHOGANY PALETTE */
         :root {
-            --royal-gold: #C9A84C;
-            --royal-gold-bright: #F5E3A6;
-            --midnight-blue: #0A192F; 
-            --mahogany: #2E1A1A; 
-            --silk-cream: #FDF8F0;
-            --silk-cream-dark: #F2E8D4;
-            --pure-white: #FFFFFF;
-            --text-muted: rgba(255, 255, 255, 0.6);
+            --gold:          #C9A84C;
+            --gold-bright:   #F5E3A6;
+            --gold-dim:      #9A7A2A;
+            --gold-glow:     rgba(201,168,76,0.3);
+            --mahogany:      #2E1A1A;
+            --mahogany-mid:  #3D2020;
+            --mahogany-dark: #1A0E0E;
+            --midnight:      #0A192F;
+            --cream:         #FDF8F0;
+            --cream-dark:    #F2E8D4;
+            --cream-mid:     #E8D9BC;
+            --onyx:          #0D0D0D;
+            --white:         #FFFFFF;
+            --muted:         rgba(46,26,26,0.55);
+            --muted-light:   rgba(46,26,26,0.35);
+            --card-border:   rgba(201,168,76,0.55);
+            --error:         #CC2222;
+            --success:       #2A7A3B;
         }
-
-        /* ── MASTER SECURITY CSS ── */
-        *, *::before, *::after { 
-            box-sizing: border-box; margin: 0; padding: 0; 
-            -webkit-tap-highlight-color: transparent; 
-            user-select: none; -webkit-user-select: none;
+        *, *::before, *::after {
+            box-sizing: border-box; margin: 0; padding: 0;
+            -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
         }
-        
+        html { scroll-behavior: smooth; }
         body {
-            background: var(--silk-cream);
+            background: var(--cream);
             font-family: 'DM Sans', sans-serif;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             min-height: 100vh;
+            color: var(--mahogany);
         }
-
-        /* ── SUPREME SECURITY SHIELDS ── */
-        #capture-shield, #sec-shield {
-            position: fixed; inset: 0; z-index: 100000000;
-            background: #000; display: none; align-items: center; justify-content: center;
-            flex-direction: column; gap: 30px; text-align: center;
-        }
-        .shield-text { font-family: 'Orbitron'; color: var(--royal-gold); letter-spacing: 8px; font-size: 11px; text-transform: uppercase; animation: pulse 2s infinite; }
-        #sec-shield { backdrop-filter: blur(100px); background: rgba(0,0,0,1); }
-        .lock-ring { width: 60px; height: 60px; border: 3px solid rgba(201,168,76,0.1); border-top: 2px solid var(--royal-gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
-        
-        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.2; transform: scale(0.95); } }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        /* HIDE ON PRINT */
         @media print { body { display: none !important; } }
 
-        /* ── VISUAL DECOR ── */
+        /* TEXTURE */
         body::before {
-            content: ''; position: fixed; inset: 0; z-index: 0;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
-            pointer-events: none; opacity: 0.8;
+            content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+            opacity: 0.04;
         }
-        canvas#dust-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.5; }
+        canvas#dust-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.45; }
 
-        /* ── ENTRY GATE ── */
+        /* ANIMATIONS */
+        @keyframes spin       { 100% { transform: rotate(360deg); } }
+        @keyframes fadeInUp   { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shimmer    { 0%,100% { opacity: 0.65; } 50% { opacity: 1; } }
+        @keyframes float      { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-9px); } }
+        @keyframes pulseGold  { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+        @keyframes cardReveal { from { opacity: 0; transform: translateY(36px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes stampIn    { from { opacity: 0; transform: scale(0.6) rotate(-8deg); } to { opacity: 1; transform: scale(1) rotate(-3deg); } }
+
+        /* SECURITY SHIELDS */
+        #capture-shield, #sec-shield {
+            position: fixed; inset: 0; z-index: 100000000;
+            background: rgba(0,0,0,0.99);
+            display: none; align-items: center; justify-content: center;
+            flex-direction: column; gap: 24px; text-align: center;
+            backdrop-filter: blur(60px);
+        }
+        .shield-icon  { font-size: 42px; }
+        .shield-title { font-family: 'Orbitron'; color: var(--gold); letter-spacing: 7px; font-size: 11px; text-transform: uppercase; animation: shimmer 2s infinite; }
+        .shield-sub   { font-family: 'Cormorant Garamond'; color: rgba(255,255,255,0.5); font-size: 16px; font-style: italic; }
+        .lock-ring    { width: 52px; height: 52px; border: 2px solid rgba(201,168,76,0.12); border-top: 2px solid var(--gold); border-radius: 50%; animation: spin 0.9s linear infinite; }
+
+        /* ENTRY GATE — CREAM THEME */
         #entry-gate {
             position: fixed; inset: 0; z-index: 999999;
-            background: linear-gradient(135deg, var(--silk-cream) 0%, var(--silk-cream-dark) 100%);
+            background: linear-gradient(135deg, var(--cream) 0%, var(--cream-dark) 60%, var(--cream-mid) 100%);
             display: flex; align-items: center; justify-content: center;
-            transition: transform 1s cubic-bezier(0.85, 0, 0.15, 1);
+            transition: transform 1.2s cubic-bezier(0.85,0,0.15,1), opacity 0.8s ease;
         }
-        #entry-gate.vanish { transform: translateY(-100%); }
-        .gate-frame { width: 90%; max-width: 650px; padding: 60px 30px; text-align: center; border: 1.5px solid var(--royal-gold); background: #fff; box-shadow: 0 50px 100px rgba(0,0,0,0.1); }
-        .gate-title { font-family: 'Cinzel Decorative'; font-size: clamp(40px, 10vw, 85px); font-weight: 900; color: var(--mahogany); line-height: 1; margin-bottom: 20px; }
-        .gate-shayari { font-family: 'Cormorant Garamond'; font-size: 22px; font-style: italic; color: var(--soft-brown); margin-bottom: 40px; }
-        .btn-access { background: var(--onyx); color: var(--royal-gold); border: 1.5px solid var(--royal-gold); padding: 18px 60px; font-family: 'Cinzel'; font-weight: 700; letter-spacing: 5px; cursor: pointer; text-transform: uppercase; border-radius: 4px; transition: 0.3s; }
-        .btn-access:hover { background: var(--royal-gold); color: #000; }
+        #entry-gate.vanish { transform: translateY(-100%); opacity: 0; }
+        .gate-frame {
+            width: min(92vw, 620px);
+            border: 1.5px solid var(--gold);
+            padding: clamp(44px,8vw,80px) clamp(28px,6vw,64px);
+            text-align: center; position: relative;
+            background: var(--white);
+            box-shadow: 0 50px 120px rgba(46,26,26,0.12), 0 0 0 6px rgba(201,168,76,0.06);
+        }
+        .gate-frame::before, .gate-frame::after,
+        .gate-corner-bl, .gate-corner-br {
+            content: ''; position: absolute; width: 22px; height: 22px;
+            border-color: var(--gold); border-style: solid;
+        }
+        .gate-frame::before  { top: -1px; left: -1px;  border-width: 2px 0 0 2px; }
+        .gate-frame::after   { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
+        .gate-corner-bl      { bottom: -1px; left: -1px;  border-width: 0 0 2px 2px; }
+        .gate-corner-br      { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+        .gate-eyebrow {
+            font-family: 'Orbitron'; font-size: 8px; letter-spacing: 5px;
+            color: var(--gold); text-transform: uppercase; margin-bottom: 22px;
+            animation: shimmer 2.5s ease infinite;
+        }
+        .gate-title {
+            font-family: 'Cinzel Decorative'; font-weight: 900;
+            font-size: clamp(52px,14vw,96px);
+            color: var(--mahogany); line-height: 0.9; margin-bottom: 10px;
+        }
+        .gate-year {
+            font-family: 'Orbitron'; font-size: clamp(10px,2.5vw,13px);
+            letter-spacing: 9px; color: var(--gold); margin-bottom: 30px; display: block;
+        }
+        .gate-line { width: 80px; height: 1px; background: var(--gold); margin: 0 auto 32px; opacity: 0.6; }
+        .gate-shayari {
+            font-family: 'Cormorant Garamond'; font-size: clamp(16px,4vw,21px);
+            font-style: italic; color: var(--muted); line-height: 1.75; margin-bottom: 44px;
+        }
+        .btn-enter {
+            display: inline-block; position: relative;
+            background: var(--onyx); border: 1.5px solid var(--gold);
+            color: var(--gold-bright); padding: 17px 56px;
+            font-family: 'Cinzel'; font-weight: 700; font-size: 11px;
+            letter-spacing: 6px; text-transform: uppercase; cursor: pointer;
+            transition: all 0.38s ease; overflow: hidden; border-radius: 3px;
+        }
+        .btn-enter::before {
+            content: ''; position: absolute; inset: 0;
+            background: var(--gold); transform: scaleX(0); transform-origin: left;
+            transition: transform 0.38s ease; z-index: 0;
+        }
+        .btn-enter:hover::before { transform: scaleX(1); }
+        .btn-enter:hover { color: var(--mahogany); }
+        .btn-enter span { position: relative; z-index: 1; }
 
-        /* ── NAVIGATION ── */
-        #app-content { visibility: hidden; opacity: 0; position: relative; z-index: 2; }
-        .royal-nav { 
-            position: sticky; top: 0; z-index: 1000; height: 80px; 
-            display: flex; align-items: center; justify-content: space-between; padding: 0 6%; 
-            background: var(--midnight-blue); border-bottom: 3.5px solid var(--royal-gold); 
-        }
-        .nav-logo { font-family: 'Cinzel Decorative'; font-weight: 900; font-size: 18px; color: var(--royal-gold-bright); }
-        .nav-logo span { font-family: 'Orbitron'; font-size: 7px; display: block; color: var(--pure-white); letter-spacing: 2px; }
-        .btn-exit { background: none; border: 1px solid var(--royal-gold); color: var(--royal-gold-bright); padding: 8px 18px; border-radius: 50px; font-family: 'Orbitron'; font-size: 8px; cursor: pointer; font-weight: 700; }
+        /* APP */
+        #app-content { visibility: hidden; opacity: 0; position: relative; z-index: 3; }
 
-        .vault-hero { text-align: center; padding: 50px 20px 20px; }
-        .hero-title { font-family: 'Cinzel Decorative'; font-size: clamp(26px, 7vw, 50px); font-weight: 900; color: var(--mahogany); text-transform: uppercase; }
+        /* NAV — MIDNIGHT/GOLD */
+        .royal-nav {
+            position: sticky; top: 0; z-index: 500;
+            height: 78px; display: flex; align-items: center;
+            justify-content: space-between; padding: 0 5%;
+            background: var(--midnight);
+            border-bottom: 3.5px solid var(--gold);
+            backdrop-filter: blur(20px);
+        }
+        .nav-brand { text-align: center; }
+        .nav-brand-title { font-family: 'Cinzel Decorative'; font-size: clamp(12px,3vw,17px); color: var(--gold-bright); font-weight: 900; letter-spacing: 2px; }
+        .nav-brand-sub { font-family: 'Orbitron'; font-size: 7px; color: rgba(255,255,255,0.5); letter-spacing: 3px; display: block; margin-top: 3px; }
+        .nav-side { display: flex; align-items: center; gap: 10px; }
+        .btn-nav {
+            background: transparent; border: 1px solid rgba(201,168,76,0.45);
+            color: var(--gold); padding: 7px 16px;
+            font-family: 'Orbitron'; font-size: 8px; letter-spacing: 2px;
+            cursor: pointer; transition: all 0.3s; border-radius: 50px;
+        }
+        .btn-nav:hover { background: rgba(201,168,76,0.12); border-color: var(--gold); }
+        .btn-nav.danger { border-color: rgba(200,50,50,0.4); color: #EE8888; }
+        .btn-nav.danger:hover { background: rgba(200,50,50,0.1); border-color: #CC2222; }
+        .music-status {
+            font-family: 'Orbitron'; font-size: 7px; color: rgba(255,255,255,0.5);
+            letter-spacing: 1px; display: flex; align-items: center; gap: 6px;
+        }
+        .music-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: pulseGold 1.5s infinite; }
+        .music-dot.paused { animation: none; background: rgba(255,255,255,0.2); }
 
-        .deposit-zone { 
-            margin: 20px auto; width: 90%; max-width: 800px; 
-            border: 1.5px dashed var(--royal-gold); padding: 40px 20px; text-align: center; 
-            background: rgba(229, 220, 199, 0.3); border-radius: 8px; cursor: pointer; 
+        /* HERO — CREAM BG */
+        .vault-hero {
+            text-align: center; padding: clamp(44px,8vw,80px) 20px clamp(28px,5vw,48px);
+            background: var(--cream); position: relative;
         }
-        .deposit-text { font-family: 'Cinzel'; font-weight: 900; letter-spacing: 3px; color: var(--royal-gold-dark); font-size: 13px; }
+        .hero-eyebrow { font-family: 'Orbitron'; font-size: 9px; letter-spacing: 6px; color: var(--gold); margin-bottom: 16px; opacity: 0.8; }
+        .hero-title   { font-family: 'Cinzel Decorative'; font-size: clamp(30px,7vw,58px); font-weight: 900; color: var(--mahogany); line-height: 1.1; }
+        .hero-title span { color: var(--gold); }
+        .hero-sub     { font-family: 'Cormorant Garamond'; font-size: clamp(15px,3.5vw,20px); font-style: italic; color: var(--muted); margin-top: 14px; }
+        .hero-divider { width: 120px; height: 1.5px; background: linear-gradient(90deg,transparent,var(--gold),transparent); margin: 28px auto 0; }
 
-        /* GALLERY SECTION */
-        .gallery-wrapper { background: var(--midnight-blue); padding: 60px 5% 100px; border-top: 4.5px solid var(--royal-gold); margin-top: 60px; }
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 35px; max-width: 1600px; margin: 0 auto; }
-        
-        .archive-card { background: #fff; padding: 10px; border: 1.5px solid var(--royal-gold); box-shadow: 0 25px 50px rgba(0,0,0,0.5); transition: 0.4s; position: relative; }
-        .archive-card:hover { transform: translateY(-10px); }
-        .card-img-container { width: 100%; height: 350px; overflow: hidden; background: #000; border: 1px solid var(--royal-gold); cursor: zoom-in; }
-        .card-img-container img { width: 100%; height: 100%; object-fit: cover; }
+        /* STATS */
+        .stats-bar {
+            display: flex; justify-content: center; gap: clamp(28px,7vw,72px);
+            padding: 26px 5%;
+            background: var(--cream-dark);
+            border-top: 1px solid rgba(201,168,76,0.25);
+            border-bottom: 1px solid rgba(201,168,76,0.25);
+        }
+        .stat-item { text-align: center; }
+        .stat-value { font-family: 'Orbitron'; font-size: clamp(20px,5vw,30px); color: var(--gold); font-weight: 700; }
+        .stat-label { font-family: 'Cinzel'; font-size: 8px; letter-spacing: 2px; color: var(--muted); margin-top: 4px; text-transform: uppercase; }
 
-        .card-meta { background: var(--midnight-blue); padding: 12px 10px; margin-top: 10px; border: 1px solid var(--royal-gold); text-align: center; }
-        .card-author { font-family: 'Cinzel'; font-weight: 900; color: var(--royal-gold-bright); letter-spacing: 1px; font-size: 10px; }
-        .card-no { font-family: 'Orbitron'; font-size: 7px; color: var(--pure-white); display: block; margin-top: 4px; opacity: 0.8; }
+        /* UPLOAD ZONE */
+        .upload-section { padding: 40px 5%; background: var(--cream); }
+        .upload-zone {
+            max-width: 720px; margin: 0 auto;
+            border: 1.5px dashed rgba(201,168,76,0.55);
+            border-radius: 5px; padding: clamp(32px,6vw,60px) 20px;
+            text-align: center; cursor: pointer;
+            background: rgba(201,168,76,0.03);
+            transition: all 0.38s ease; position: relative; overflow: hidden;
+        }
+        .upload-zone::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at center, rgba(201,168,76,0.07) 0%, transparent 70%);
+            opacity: 0; transition: opacity 0.38s;
+        }
+        .upload-zone:hover, .upload-zone.drag-over { border-color: var(--gold); border-style: solid; background: rgba(201,168,76,0.06); }
+        .upload-zone:hover::before, .upload-zone.drag-over::before { opacity: 1; }
+        .upload-icon  { font-size: 38px; margin-bottom: 16px; animation: float 3s ease infinite; display: block; }
+        .upload-title { font-family: 'Cinzel'; font-weight: 900; font-size: clamp(12px,3vw,15px); letter-spacing: 4px; color: var(--mahogany); text-transform: uppercase; margin-bottom: 10px; }
+        .upload-sub   { font-family: 'Cormorant Garamond'; font-size: 16px; color: var(--muted); font-style: italic; }
+        .upload-tip   { font-family: 'Orbitron'; font-size: 8px; letter-spacing: 2px; color: var(--muted-light); margin-top: 16px; }
 
-        .btn-delete { position: absolute; top: 15px; right: 15px; width: 28px; height: 28px; background: #fff; border: 1px solid #ff4444; color: #ff4444; border-radius: 50%; font-weight: 900; cursor: pointer; z-index: 10; font-size: 14px; }
+        /* DISCLAIMER */
+        .disclaimer {
+            background: rgba(201,168,76,0.07); border-top: 1px solid rgba(201,168,76,0.2);
+            border-bottom: 1px solid rgba(201,168,76,0.2); padding: 13px 5%;
+        }
+        .disclaimer p {
+            max-width: 700px; margin: 0 auto;
+            font-family: 'Cormorant Garamond'; font-size: 13.5px; font-style: italic;
+            color: rgba(140,100,20,0.8); text-align: center; letter-spacing: 0.3px;
+        }
 
-        /* ── PROFESSIONAL SEO FOOTER ── */
-        .vault-footer { 
-            background: var(--midnight-blue); 
-            padding: 80px 6% 40px; 
-            border-top: 5px solid var(--royal-gold); 
-            color: var(--pure-white);
-            text-align: left;
+        /* GALLERY — DARK BG */
+        .gallery-wrapper {
+            background: var(--midnight);
+            border-top: 4.5px solid var(--gold);
+            padding: 0 4% 90px;
+            margin-top: 30px;
         }
-        .footer-content { 
-            max-width: 1400px; margin: 0 auto; 
-            display: grid; 
-            grid-template-columns: 2fr 1fr 1fr; 
-            gap: 50px;
+        .gallery-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 34px 0 26px; flex-wrap: wrap; gap: 16px;
         }
-        .footer-brand .sig-text { 
-            font-family: 'Cinzel Decorative'; font-size: 32px; color: var(--royal-gold); 
-            font-weight: 900; letter-spacing: 2px; margin-bottom: 15px; display: block;
+        .gallery-header-title { font-family: 'Cinzel'; font-weight: 900; font-size: clamp(13px,3vw,18px); letter-spacing: 3px; color: var(--gold-bright); text-transform: uppercase; }
+        .gallery-header-count { font-family: 'Orbitron'; font-size: 8px; color: rgba(255,255,255,0.4); letter-spacing: 2px; margin-top: 4px; }
+        .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; }
+        .filter-btn {
+            background: transparent; border: 1px solid rgba(201,168,76,0.22);
+            color: rgba(255,255,255,0.45); padding: 7px 18px;
+            font-family: 'Orbitron'; font-size: 8px; letter-spacing: 2px;
+            cursor: pointer; transition: all 0.3s; border-radius: 50px;
         }
-        .footer-brand p { 
-            font-family: 'Cormorant Garamond'; font-size: 16px; color: var(--text-muted); 
-            line-height: 1.6; max-width: 400px;
+        .filter-btn.active, .filter-btn:hover { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.09); }
+
+        /* GALLERY GRID */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(clamp(260px,28vw,360px), 1fr));
+            gap: clamp(18px,3vw,35px);
         }
-        .footer-col h4 { 
-            font-family: 'Orbitron'; font-size: 11px; color: var(--royal-gold-bright); 
-            letter-spacing: 3px; margin-bottom: 25px; text-transform: uppercase; 
+
+        /* ARCHIVE CARD — white paper on dark */
+        .archive-card {
+            position: relative;
+            background: var(--white);
+            border: 1.5px solid var(--gold);
+            padding: 10px;
+            box-shadow: 0 22px 55px rgba(0,0,0,0.55);
+            transition: transform 0.45s cubic-bezier(0.23,1,0.32,1), box-shadow 0.45s ease;
+            animation: cardReveal 0.6s ease both;
+            cursor: default;
         }
+        .archive-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 38px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(201,168,76,0.6);
+        }
+        .card-number-badge {
+            position: absolute; top: 20px; left: 20px; z-index: 20;
+            background: rgba(10,25,47,0.88); border: 1px solid rgba(201,168,76,0.6);
+            padding: 4px 10px; backdrop-filter: blur(8px);
+        }
+        .card-number-badge span { font-family: 'Orbitron'; font-size: 8px; color: var(--gold); letter-spacing: 1px; }
+        .owner-stamp {
+            position: absolute; top: 18px; right: 16px; z-index: 25;
+            background: var(--gold); color: var(--mahogany);
+            padding: 4px 9px; border-radius: 2px;
+            font-family: 'Orbitron'; font-size: 7px; font-weight: 700; letter-spacing: 1px;
+            animation: stampIn 0.5s ease both;
+            transform: rotate(-2deg);
+        }
+        .card-img-container {
+            width: 100%; height: 320px; overflow: hidden;
+            background: var(--mahogany-dark); cursor: zoom-in;
+            border: 1px solid rgba(201,168,76,0.3);
+            position: relative;
+        }
+        .card-img-container img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.65s cubic-bezier(0.23,1,0.32,1), filter 0.4s;
+            filter: brightness(0.95) saturate(0.92);
+            display: block;
+        }
+        .archive-card:hover .card-img-container img { transform: scale(1.07); filter: brightness(1.02) saturate(1.05); }
+        .card-img-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(0deg, rgba(10,25,47,0.65) 0%, transparent 55%);
+            opacity: 0; transition: opacity 0.38s;
+            display: flex; align-items: flex-end; padding: 14px;
+            pointer-events: none;
+        }
+        .archive-card:hover .card-img-overlay { opacity: 1; }
+        .card-img-overlay-text { font-family: 'Cormorant Garamond'; font-size: 13px; font-style: italic; color: rgba(255,255,255,0.85); }
+        .card-meta {
+            background: var(--midnight); border: 1px solid var(--gold);
+            padding: 12px 14px; margin-top: 8px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .card-meta-inner { flex: 1; min-width: 0; }
+        .card-from-label { font-family: 'Orbitron'; font-size: 7px; letter-spacing: 2px; color: rgba(255,255,255,0.35); margin-bottom: 3px; }
+        .card-author      { font-family: 'Cinzel'; font-weight: 900; font-size: clamp(10px,2.5vw,13px); color: var(--gold-bright); letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-date        { font-family: 'Orbitron'; font-size: 7px; color: rgba(255,255,255,0.3); margin-top: 3px; letter-spacing: 0.8px; }
+        .card-no          { font-family: 'Orbitron'; font-size: 7px; color: rgba(255,255,255,0.3); letter-spacing: 1px; margin-top: 2px; }
+        .card-actions { display: flex; gap: 8px; flex-shrink: 0; margin-left: 10px; }
+        .btn-card-action {
+            width: 34px; height: 34px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.28s; font-size: 14px;
+            background: transparent; border: 1px solid rgba(255,255,255,0.12);
+        }
+        .btn-zoom   { color: var(--gold); }
+        .btn-zoom:hover   { background: rgba(201,168,76,0.15); border-color: var(--gold); transform: scale(1.12); }
+        .btn-delete { color: #FF5555; }
+        .btn-delete:hover { background: rgba(255,68,68,0.15); border-color: #FF4444; transform: scale(1.12); }
+
+        /* EMPTY STATE */
+        .empty-state { text-align: center; padding: 90px 20px; grid-column: 1/-1; }
+        .empty-icon  { font-size: 50px; margin-bottom: 22px; opacity: 0.35; }
+        .empty-title { font-family: 'Cinzel'; font-size: 17px; letter-spacing: 3px; color: rgba(255,255,255,0.4); margin-bottom: 12px; }
+        .empty-sub   { font-family: 'Cormorant Garamond'; font-size: 17px; color: rgba(255,255,255,0.2); font-style: italic; }
+
+        /* TOAST */
+        #toast-container { position: fixed; bottom: 28px; right: 18px; z-index: 9999999; display: flex; flex-direction: column; gap: 10px; }
+        .toast {
+            background: var(--midnight); border: 1px solid rgba(201,168,76,0.5);
+            padding: 14px 20px; border-radius: 3px; font-family: 'Orbitron'; font-size: 9px;
+            letter-spacing: 1.5px; color: var(--gold-bright);
+            animation: fadeInUp 0.4s ease; min-width: 200px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.45); transition: opacity 0.4s;
+        }
+        .toast.error   { border-color: rgba(200,50,50,0.55); color: #FF8888; }
+        .toast.success { border-color: rgba(44,180,80,0.45); color: #88EE99; }
+
+        /* LOADING */
+        #loading-overlay {
+            position: fixed; inset: 0; z-index: 99999999;
+            background: rgba(10,25,47,0.94); backdrop-filter: blur(20px);
+            display: none; align-items: center; justify-content: center; flex-direction: column; gap: 22px;
+        }
+        .loading-spinner { width: 50px; height: 50px; border: 2px solid rgba(201,168,76,0.1); border-top: 2px solid var(--gold); border-radius: 50%; animation: spin 0.85s linear infinite; }
+        .loading-text    { font-family: 'Orbitron'; font-size: 10px; letter-spacing: 5px; color: var(--gold); animation: pulseGold 1.5s infinite; }
+
+        /* NAME MODAL */
+        #name-modal {
+            position: fixed; inset: 0; z-index: 9999998;
+            background: rgba(4,10,20,0.95); backdrop-filter: blur(30px);
+            display: none; align-items: center; justify-content: center;
+        }
+        #name-modal.open { display: flex; }
+        .modal-box {
+            width: min(90vw,480px); border: 1.5px solid rgba(201,168,76,0.5);
+            padding: 46px 38px; background: var(--cream);
+            text-align: center; border-radius: 4px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+        }
+        .modal-title { font-family: 'Cinzel'; font-size: 16px; letter-spacing: 4px; color: var(--mahogany); margin-bottom: 8px; text-transform: uppercase; font-weight: 900; }
+        .modal-sub   { font-family: 'Cormorant Garamond'; font-size: 16px; font-style: italic; color: var(--muted); margin-bottom: 30px; }
+        .modal-input {
+            width: 100%; background: var(--white);
+            border: 1.5px solid rgba(201,168,76,0.4); border-radius: 3px;
+            padding: 14px 18px; color: var(--mahogany);
+            font-family: 'Cinzel'; font-size: 13px; letter-spacing: 2px;
+            text-transform: uppercase; text-align: center;
+            transition: border-color 0.3s; outline: none; margin-bottom: 22px;
+        }
+        .modal-input:focus { border-color: var(--gold); }
+        .modal-input::placeholder { color: rgba(46,26,26,0.3); font-style: italic; font-family: 'Cormorant Garamond'; text-transform: none; font-size: 14px; }
+        .modal-btn-row { display: flex; gap: 12px; }
+        .btn-modal {
+            flex: 1; padding: 14px; font-family: 'Cinzel'; font-size: 11px;
+            letter-spacing: 3px; cursor: pointer; transition: all 0.3s; border-radius: 3px;
+            text-transform: uppercase; font-weight: 700;
+        }
+        .btn-modal-primary { background: var(--mahogany); color: var(--gold-bright); border: none; }
+        .btn-modal-primary:hover { background: var(--gold); color: var(--mahogany); }
+        .btn-modal-cancel  { background: transparent; border: 1px solid rgba(46,26,26,0.25); color: var(--muted); }
+        .btn-modal-cancel:hover { border-color: rgba(46,26,26,0.5); color: var(--mahogany); }
+
+        /* LIGHTBOX */
+        #lightbox {
+            position: fixed; inset: 0; z-index: 9999999;
+            background: rgba(4,8,18,0.98); backdrop-filter: blur(40px);
+            display: none; align-items: center; justify-content: center; flex-direction: column;
+        }
+        #lightbox.open { display: flex; }
+        .lb-header {
+            position: absolute; top: 0; left: 0; right: 0; height: 72px;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 26px; border-bottom: 1px solid rgba(201,168,76,0.25);
+            background: rgba(10,25,47,0.85); backdrop-filter: blur(20px);
+        }
+        .lb-from    { font-family: 'Orbitron'; font-size: 8px; letter-spacing: 2px; color: var(--gold); }
+        .lb-counter { font-family: 'Orbitron'; font-size: 8px; color: rgba(255,255,255,0.4); margin-top: 4px; }
+        .lb-close-btn {
+            background: transparent; border: 1px solid rgba(201,168,76,0.4);
+            color: var(--gold); padding: 8px 18px;
+            font-family: 'Orbitron'; font-size: 9px; letter-spacing: 3px;
+            cursor: pointer; transition: all 0.3s; border-radius: 50px;
+        }
+        .lb-close-btn:hover { background: rgba(201,168,76,0.1); }
+        .lb-img-wrap {
+            max-width: min(94vw, 1000px); max-height: 82vh;
+            display: flex; align-items: center; justify-content: center;
+            margin-top: 72px; position: relative;
+        }
+        #lb-img {
+            max-width: 100%; max-height: 100%;
+            border: 1.5px solid rgba(201,168,76,0.35);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.7);
+            object-fit: contain; transition: opacity 0.3s; display: block;
+        }
+        .lb-nav {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(10,25,47,0.85); border: 1px solid rgba(201,168,76,0.45);
+            color: var(--gold); width: 50px; height: 50px; border-radius: 50%;
+            cursor: pointer; font-size: 20px;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s; backdrop-filter: blur(10px);
+        }
+        .lb-nav:hover { background: rgba(201,168,76,0.15); border-color: var(--gold); }
+        .lb-prev { left: clamp(8px,3vw,30px); }
+        .lb-next { right: clamp(8px,3vw,30px); }
+        .lb-dots { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
+        .lb-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(201,168,76,0.28); transition: all 0.3s; cursor: pointer; }
+        .lb-dot.active { background: var(--gold); transform: scale(1.5); }
+
+        /* REFRESH */
+        .btn-refresh {
+            background: transparent; border: 1px solid rgba(201,168,76,0.4);
+            color: var(--gold); padding: 7px 16px;
+            font-family: 'Orbitron'; font-size: 8px; letter-spacing: 2px;
+            cursor: pointer; transition: all 0.3s; border-radius: 50px;
+        }
+        .btn-refresh:hover { background: rgba(201,168,76,0.1); border-color: var(--gold); }
+        .btn-refresh.spinning { pointer-events: none; opacity: 0.5; }
+
+        /* FOOTER */
+        .vault-footer {
+            background: var(--midnight);
+            border-top: 5px solid var(--gold);
+            padding: 70px 6% 40px;
+            color: var(--white);
+        }
+        .footer-grid {
+            max-width: 1300px; margin: 0 auto;
+            display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 52px;
+        }
+        .footer-brand .brand-name { font-family: 'Cinzel Decorative'; font-size: 28px; color: var(--gold); font-weight: 900; margin-bottom: 14px; display: block; letter-spacing: 1px; }
+        .footer-brand p { font-family: 'Cormorant Garamond'; font-size: 16px; color: rgba(255,255,255,0.5); line-height: 1.7; max-width: 380px; }
+        .footer-col h4 { font-family: 'Orbitron'; font-size: 9px; color: var(--gold-bright); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 22px; }
         .footer-col ul { list-style: none; }
-        .footer-col ul li { 
-            font-family: 'DM Sans'; font-size: 13px; color: var(--text-muted); 
-            margin-bottom: 12px; letter-spacing: 1px;
-        }
-        .developer-credit { 
-            margin-top: 60px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1);
+        .footer-col li { font-family: 'DM Sans'; font-size: 13px; color: rgba(255,255,255,0.45); margin-bottom: 11px; }
+        .footer-bottom {
+            max-width: 1300px; margin: 50px auto 0; padding-top: 26px;
+            border-top: 1px solid rgba(255,255,255,0.07);
             display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 12px;
         }
-        .developer-credit p { font-family: 'Orbitron'; font-size: 9px; letter-spacing: 2px; color: var(--pure-white); }
-        .developer-credit span { font-weight: 400; color: var(--text-muted); }
-
-        /* LIGHTBOX SLIDER */
-        #lightbox { 
-            position: fixed; inset: 0; z-index: 999999999; background: rgba(0,0,0,0.99); 
-            display: none; align-items: center; justify-content: center; backdrop-filter: blur(40px); 
-        }
-        #lb-img { max-width: 95vw; max-height: 85vh; border: 1.5px solid var(--royal-gold); }
-        .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(10,25,47,0.8); border: 1px solid var(--royal-gold); color: var(--royal-gold); width: 45px; height: 45px; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
-        .lb-prev { left: 20px; } .lb-next { right: 20px; }
-        .lb-close { position: absolute; top: 30px; right: 30px; color: #fff; font-family: 'Orbitron'; cursor: pointer; padding: 10px; border: 1px solid var(--royal-gold); font-size: 10px; }
+        .footer-copy { font-family: 'Orbitron'; font-size: 8px; letter-spacing: 2px; color: rgba(255,255,255,0.25); }
+        .footer-dev  { font-family: 'Orbitron'; font-size: 8px; letter-spacing: 2px; color: rgba(255,255,255,0.25); }
+        .footer-dev span { color: var(--gold); }
 
         @media (max-width: 768px) {
-            .footer-content { grid-template-columns: 1fr; gap: 40px; text-align: center; }
-            .footer-brand p { margin: 0 auto; }
-            .developer-credit { flex-direction: column; gap: 15px; }
-            .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .card-img-container { height: 180px; }
+            .footer-grid { grid-template-columns: 1fr; gap: 36px; }
+            .footer-bottom { justify-content: center; text-align: center; }
+            .gallery-grid { grid-template-columns: repeat(2,1fr); gap: 12px; }
+            .card-img-container { height: 190px; }
             .archive-card { padding: 6px; }
+        }
+        @media (max-width: 420px) {
+            .gallery-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-    <div id="capture-shield"><div class="shield-text">PROTOCOL: CAPTURE BLOCKED</div></div>
-    <div id="sec-shield"><div class="lock-ring"></div><div class="shield-text">ENCRYPTED VAULT ACTIVE</div></div>
+    <div id="capture-shield">
+        <div class="shield-icon"></div>
+        <div class="shield-title">Screenshot Blocked</div>
+        <div class="shield-sub">This archive is protected</div>
+    </div>
+    <div id="sec-shield">
+        <div class="lock-ring"></div>
+        <div class="shield-title">Encrypted Vault Active</div>
+    </div>
+    <div id="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">PRESERVING MEMORY...</div>
+    </div>
+    <div id="toast-container"></div>
 
     <canvas id="dust-canvas"></canvas>
-    <audio id="vault-audio"></audio>
+    <audio id="vault-audio" preload="none"></audio>
 
+    <!-- ENTRY GATE -->
     <section id="entry-gate">
         <div class="gate-frame">
+            <div class="gate-corner-bl"></div>
+            <div class="gate-corner-br"></div>
+            <div class="gate-eyebrow"> Batch 2026  Siddhi Classes </div>
             <h1 class="gate-title">REWIND</h1>
-            <p class="gate-shayari">"Kuch yaadein purani hain,<br>Magar dosti abhi nibhani hai."</p>
-            <button class="btn-access" onclick="MasterVault.launch()">Enter Archive</button>
+            <span class="gate-year">2026</span>
+            <div class="gate-line"></div>
+            <p class="gate-shayari">
+                "Kuch yaadein purani hain,<br>
+                Magar dosti abhi nibhani hai."
+            </p>
+            <button class="btn-enter" id="enter-btn"><span>✦ Enter Archive ✦</span></button>
         </div>
     </section>
 
+    <!-- APP -->
     <main id="app-content">
         <nav class="royal-nav">
-            <button class="btn-exit" onclick="MasterVault.exit()"> LEAVE</button>
-            <div class="nav-logo">BATCH 2026 <span>DIGITAL GALLERY </span></div>
-            <div style="font-family:'Orbitron'; font-size:9px; color:var(--royal-gold-bright); font-weight:900;">AC</div>
+            <div class="nav-side">
+                <button class="btn-nav danger" id="btn-leave">← LEAVE</button>
+            </div>
+            <div class="nav-brand">
+                <div class="nav-brand-title">CREW</div>
+                <span class="nav-brand-sub">Digital Memory Archive</span>
+            </div>
+            <div class="nav-side">
+                <div class="music-status">
+                    <div class="music-dot" id="music-dot"></div>
+                    <span id="music-label">PLAYING</span>
+                </div>
+                <button class="btn-nav" id="btn-music-toggle">⏸</button>
+            </div>
         </nav>
 
         <header class="vault-hero">
-            <h2 class="hero-title">Gallery Vault</h2>
+            <div class="hero-eyebrow">◆ Archive ◆</div>
+            <h2 class="hero-title">Gallery <span>Vault</span></h2>
+            <p class="hero-sub">Where every moment becomes eternal</p>
+            <div class="hero-divider"></div>
         </header>
 
-        <div class="deposit-zone" onclick="document.getElementById('file-input').click()">
-            <div class="deposit-text">+ DEPOSIT MEMORY</div>
-            <input type="file" id="file-input" accept="image/*" style="display:none;" onchange="MasterVault.handleUpload(event)">
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value" id="stat-count">0</div>
+                <div class="stat-label">Memories</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="stat-contributors">0</div>
+                <div class="stat-label">Contributors</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">2026</div>
+                <div class="stat-label">Batch</div>
+            </div>
+        </div>
+
+        <div class="upload-section">
+            <div class="upload-zone" id="upload-zone">
+                <span class="upload-icon"></span>
+                <div class="upload-title">Deposit Your Memory</div>
+                <div class="upload-sub">Tap to select or drag & drop images</div>
+                <div class="upload-tip">JPG · PNG · WEBP · All devices welcome · Multiple files OK</div>
+            </div>
+            <input type="file" id="file-input" accept="image/*" style="display:none;" multiple>
+        </div>
+
+        <div class="disclaimer">
+            <p> Thank You For Memeories </p>
         </div>
 
         <section class="gallery-wrapper">
-            <div class="gallery-grid" id="main-grid"></div>
+            <div class="gallery-header">
+                <div>
+                    <div class="gallery-header-title">Memory Archive</div>
+                    <div class="gallery-header-count" id="gallery-count">Loading...</div>
+                </div>
+                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                    <div class="filter-bar">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="mine">Mine</button>
+                    </div>
+                    <button class="btn-refresh" id="btn-refresh">SYNC</button>
+                </div>
+            </div>
+            <div class="gallery-grid" id="main-grid">
+                <div class="empty-state">
+                    <div class="empty-icon">✦</div>
+                    <div class="empty-title">Loading Archive...</div>
+                </div>
+            </div>
         </section>
 
-        <!-- PROFESSIONAL SEO FOOTER -->
         <footer class="vault-footer">
-            <div class="footer-content">
+            <div class="footer-grid">
                 <div class="footer-brand">
-                    <span class="sig-text">BY JIVITMURDA</span>
-                    <p>Crafted as a timeless space where moments are not just stored but also remembered. </p>
+                    <span class="brand-name">BY JIVITMURDA</span>
+                    <p>Crafted as a timeless digital space where the moments of Batch 2026 are not just stored, but forever remembered and celebrated.</p>
                 </div>
                 <div class="footer-col">
-                   <h4>Information</h4>
-<ul>
-    <li>Established: 2026</li>
-    <li>Format: Secure Digital Archive</li>
-    <li>Access Level: Private</li>
-</ul>
-            
+                    <h4>Archive Info</h4>
+                    <ul>
+                        <li>Established: 2026</li>
+                        <li>Format: Cloud Archive</li>
+                        <li>Access: Shared Gallery</li>
+                        <li>Visibility: All Members</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>How It Works</h4>
+                    <ul>
+                        <li>Upload from any device</li>
+                        <li>Shared instantly</li>
+                        <li>Delete only your own</li>
+                        <li>Forever preserved</li>
+                    </ul>
+                </div>
             </div>
-            <div class="developer-credit">
-                <p>© 2026 SIDDHI CLASSES . ALL RIGHTS RESERVED.</p>
-                <p><span>CO-DEVELOPER</span> ABHINAV CHAUHAN </p>
+            <div class="footer-bottom">
+                <div class="footer-copy">© 2026 SIDDHI CLASSES — ALL RIGHTS RESERVED</div>
+                <div class="footer-dev">CO-DEVELOPER <span>ABHINAV CHAUHAN</span></div>
             </div>
         </footer>
     </main>
 
+    <!-- NAME MODAL -->
+    <div id="name-modal">
+        <div class="modal-box">
+            <div class="modal-title">NAME OF CONTRIBUTER?</div>
+            <div class="modal-sub">Enter your name for this memory</div>
+            <input type="text" class="modal-input" id="name-input" placeholder="Your name..." maxlength="30" autocomplete="off">
+            <div class="modal-btn-row">
+                <button class="btn-modal btn-modal-cancel" id="modal-cancel">Cancel</button>
+                <button class="btn-modal btn-modal-primary" id="modal-confirm">Upload</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LIGHTBOX -->
     <div id="lightbox">
-        <div class="lb-close" onclick="MasterVault.UI.closeLB()">CLOSE [X]</div>
-        <button class="lb-nav lb-prev" onclick="MasterVault.UI.moveSlide(-1)">&#10094;</button>
-        <img id="lb-img" src="">
-        <button class="lb-nav lb-next" onclick="MasterVault.UI.moveSlide(1)">&#10095;</button>
+        <div class="lb-header">
+            <div class="lb-info">
+                <div class="lb-from" id="lb-from">FROM: —</div>
+                <div class="lb-counter" id="lb-counter">1 / 1</div>
+            </div>
+            <button class="lb-close-btn" id="lb-close">CLOSE</button>
+        </div>
+        <div class="lb-img-wrap">
+            <img id="lb-img" src="" alt="Memory">
+        </div>
+        <button class="lb-nav lb-prev" id="lb-prev">❮</button>
+        <button class="lb-nav lb-next" id="lb-next">❯</button>
+        <div class="lb-dots" id="lb-dots"></div>
     </div>
 
     <script>
-    const MasterVault = (() => {
-        let state = {
-            memories: JSON.parse(localStorage.getItem('rv_seo_final_v1')) || [],
-            playlist: [],
-            lastPlayed: null,
-            currentIndex: 0
-        };
+    /* ═══════════════════════════════════════════════════
+IDHAAAAR KO BHAIIIIIIIIIIIIIIIIIIIIIIIII , SUNO IDHAR BAS RUKO PADH LO BHAI AUR KARDO KAM PLEASE 
+________________________________________________________________________________________________________________________________
+JM BHAI SALAAM 
+toh ab thoda sa time idhar bhi invest kar do
+system pura ready hai, bas ye setup wala part aapka hai
+pata hai busy ho… life, kaam aur (naam nahi lunga samajh jao)
+ par bhai 10-15 min nikal ke ye kar de
+warna mai roz yaad dilata rahunga… respectfully 
+tu kar de bas, tu hi last hope hai iss project ki 
+    ═══════════════════════════════════════════════════ */
 
-        const AUDIO_POOL = Array.from({length: 25}, (_, i) => {
-            let n = i + 1;
-            let ext = (n === 1 || n === 12) ? 'mp4' : 'mpeg';
-            return { path: `AUDIO/audio${n}.${ext}`, id: n };
+    /* ── CONFIG ─────────────────────────────────── */
+    const JSONBIN_BIN_ID           = 'YOUR_BIN_ID_HERE';
+    const JSONBIN_API_KEY          = 'YOUR_API_KEY_HERE';
+    const CLOUDINARY_CLOUD_NAME    = 'YOUR_CLOUD_NAME';
+    const CLOUDINARY_UPLOAD_PRESET = 'YOUR_PRESET';
+
+    const USE_JSONBIN    = JSONBIN_BIN_ID    !== 'YOUR_BIN_ID_HERE';
+    const USE_CLOUDINARY = CLOUDINARY_CLOUD_NAME !== 'YOUR_CLOUD_NAME';
+
+    const AUDIO_FILES = [
+        'AUDIO/audio1.mp4','AUDIO/audio2.mpeg','AUDIO/audio3.mpeg',
+        'AUDIO/audio4.mpeg','AUDIO/audio5.mpeg','AUDIO/audio6.mpeg',
+        'AUDIO/audio7.mpeg','AUDIO/audio8.mpeg','AUDIO/audio9.mpeg',
+        'AUDIO/audio10.mpeg','AUDIO/audio11.mpeg','AUDIO/audio12.mp4',
+        'AUDIO/audio13.mpeg','AUDIO/audio14.mpeg','AUDIO/audio15.mpeg',
+        'AUDIO/audio16.mpeg','AUDIO/audio17.mpeg','AUDIO/audio18.mpeg',
+        'AUDIO/audio19.mpeg','AUDIO/audio20.mpeg','AUDIO/audio21.mpeg',
+        'AUDIO/audio22.mpeg','AUDIO/audio23.mpeg',
+        'AUDIO/audio24.mpeg','AUDIO/audio24.mpeg','AUDIO/audio24.mpeg',
+        'AUDIO/audio25.mpeg','AUDIO/audio25.mpeg','AUDIO/audio25.mpeg'
+    ];
+
+    /* ── OWNER ID ───────────────────────────────── */
+    let OWNER_ID = localStorage.getItem('rv_owner_id');
+    if (!OWNER_ID) {
+        OWNER_ID = 'usr_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+        localStorage.setItem('rv_owner_id', OWNER_ID);
+    }
+
+    /* ── STATE ──────────────────────────────────── */
+    const state = {
+        memories: [],
+        filteredMemories: [],
+        lbIndex: 0,
+        lastAudioIndex: -1,
+        pendingFiles: [],
+        filter: 'all',
+        musicPlaying: false,
+        hasLaunched: false,
+        isLoading: false
+    };
+
+    /* ── UTILS ──────────────────────────────────── */
+    function toast(msg, type, duration) {
+        type = type || '';
+        duration = duration || 3200;
+        var tc = document.getElementById('toast-container');
+        var el = document.createElement('div');
+        el.className = 'toast' + (type ? ' ' + type : '');
+        el.textContent = msg;
+        tc.appendChild(el);
+        setTimeout(function() {
+            el.style.opacity = '0';
+            setTimeout(function() { if (el.parentNode) el.remove(); }, 400);
+        }, duration);
+    }
+
+    function showLoading(v) {
+        document.getElementById('loading-overlay').style.display = v ? 'flex' : 'none';
+    }
+
+    function formatDate(ts) {
+        if (!ts) return '2026';
+        return new Date(ts).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+    }
+
+    function escapeHTML(str) {
+        if (typeof str !== 'string') return '';
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+
+    /* ── PARTICLES ──────────────────────────────── */
+    function initParticles() {
+        var canvas = document.getElementById('dust-canvas');
+        var ctx = canvas.getContext('2d');
+        var dots = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize);
+        resize();
+        for (var i = 0; i < 55; i++) {
+            dots.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                r: Math.random() * 1.4 + 0.3,
+                vx: (Math.random() - 0.5) * 0.09,
+                vy: (Math.random() - 0.5) * 0.09,
+                o: Math.random() * 0.25 + 0.08
+            });
+        }
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (var j = 0; j < dots.length; j++) {
+                var d = dots[j];
+                d.x += d.vx; d.y += d.vy;
+                if (d.x < 0 || d.x > canvas.width) d.vx *= -1;
+                if (d.y < 0 || d.y > canvas.height) d.vy *= -1;
+                ctx.beginPath();
+                ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(201,168,76,' + d.o + ')';
+                ctx.fill();
+            }
+            requestAnimationFrame(draw);
+        }
+        draw();
+    }
+
+    /* ── SECURITY ───────────────────────────────── */
+    function initSecurity() {
+        setInterval(function() { try { (function(){}).constructor("debugger")(); } catch(e){} }, 800);
+
+        document.addEventListener('visibilitychange', function() {
+            var s = document.getElementById('sec-shield');
+            if (document.hidden) {
+                s.style.display = 'flex';
+            } else {
+                setTimeout(function() { s.style.display = 'none'; }, 500);
+            }
         });
 
-        return {
-            launch() {
-                document.getElementById('entry-gate').classList.add('vanish');
-                document.getElementById('app-content').style.visibility = 'visible';
-                gsap.to('#app-content', { opacity: 1, duration: 1 });
-                this.initAudio();
-                this.initSecurity();
-                this.initParticles();
-                this.render();
-            },
+        document.addEventListener('keydown', function(e) {
+            var blocked = (e.key === 'PrintScreen') ||
+                (e.ctrlKey && ['s','u','p','S','U','P'].includes(e.key)) ||
+                (e.key === 'F12');
+            if (blocked) { e.preventDefault(); flashShield('capture-shield', 2000); }
+        });
 
-            initAudio() {
-                const aud = document.getElementById('vault-audio');
-                let pool = [];
-                AUDIO_POOL.forEach(t => {
-                    let w = (t.id === 24 || t.id === 25) ? 6 : 1;
-                    for(let i=0; i<w; i++) pool.push(t);
-                });
-                const play = () => {
-                    let filtered = pool.filter(t => t.id !== state.lastPlayed);
-                    let next = filtered[Math.floor(Math.random() * filtered.length)];
-                    state.lastPlayed = next.id;
-                    aud.src = next.path;
-                    aud.play().catch(() => {});
-                };
-                aud.onended = play;
-                play();
-            },
+        window.addEventListener('blur', function() { flashShield('capture-shield', 1400); });
 
-            initSecurity() {
-                document.addEventListener('visibilitychange', () => {
-                    const s = document.getElementById('sec-shield');
-                    if (document.hidden) s.style.display = 'flex';
-                    else setTimeout(() => { s.style.display = 'none'; }, 400);
-                });
-                window.addEventListener('keydown', (e) => {
-                    if (e.key === 'PrintScreen' || (e.ctrlKey && (e.key === 's' || e.key === 'u' || e.key === 'p'))) {
-                        e.preventDefault();
-                        const cs = document.getElementById('capture-shield');
-                        cs.style.display = 'flex';
-                        setTimeout(() => cs.style.display = 'none', 2000);
-                    }
-                });
-                // Anti-DevTools Trick
-                setInterval(() => { (function(){}).constructor("debugger")(); }, 500);
-            },
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length >= 3) flashShield('capture-shield', 1500);
+        }, { passive: true });
+    }
 
-            initParticles() {
-                const canvas = document.getElementById('dust-canvas');
-                const ctx = canvas.getContext('2d');
-                let dots = [];
-                const res = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
-                window.addEventListener('resize', res); res();
-                for(let i=0; i<40; i++) dots.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*1.2, vx:Math.random()*0.1-0.05, vy:Math.random()*0.1-0.05});
-                const draw = () => {
-                    ctx.clearRect(0,0,canvas.width,canvas.height);
-                    dots.forEach(d => {
-                        d.x+=d.vx; d.y+=d.vy;
-                        if(d.x<0||d.x>canvas.width) d.vx*=-1;
-                        if(d.y<0||d.y>canvas.height) d.vy*=-1;
-                        ctx.beginPath(); ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
-                        ctx.fillStyle = "rgba(201,168,76,0.2)"; ctx.fill();
-                    });
-                    requestAnimationFrame(draw);
-                };
-                draw();
-            },
+    function flashShield(id, duration) {
+        var el = document.getElementById(id);
+        el.style.display = 'flex';
+        setTimeout(function() { el.style.display = 'none'; }, duration || 2000);
+    }
 
-            handleUpload(e) {
-                const file = e.target.files[0];
-                if (!file) return;
-                const author = prompt("Contributor Name:").toUpperCase();
-                if (!author) return;
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    const img = new Image();
+    /* ── MUSIC ──────────────────────────────────── */
+    function initMusic() {
+        var aud = document.getElementById('vault-audio');
+        var dot = document.getElementById('music-dot');
+        var lbl = document.getElementById('music-label');
+        var btn = document.getElementById('btn-music-toggle');
+
+        function setPlayingUI(playing) {
+            state.musicPlaying = playing;
+            if (playing) {
+                dot.classList.remove('paused'); lbl.textContent = 'PLAYING'; btn.textContent = '⏸';
+            } else {
+                dot.classList.add('paused'); lbl.textContent = 'PAUSED'; btn.textContent = '▶';
+            }
+        }
+
+        function playNext() {
+            if (!AUDIO_FILES.length) return;
+            var idx;
+            do { idx = Math.floor(Math.random() * AUDIO_FILES.length); }
+            while (idx === state.lastAudioIndex && AUDIO_FILES.length > 1);
+            state.lastAudioIndex = idx;
+            aud.src = AUDIO_FILES[idx];
+            var p = aud.play();
+            if (p && p.then) p.then(function() { setPlayingUI(true); }).catch(function() { setPlayingUI(false); });
+        }
+
+        aud.addEventListener('ended', playNext);
+        aud.addEventListener('error', function() { setTimeout(playNext, 1200); });
+
+        btn.addEventListener('click', function() {
+            if (aud.paused) {
+                if (!aud.src || aud.ended) { playNext(); }
+                else { var p = aud.play(); if (p && p.then) p.then(function() { setPlayingUI(true); }).catch(function(){}); }
+            } else {
+                aud.pause(); setPlayingUI(false);
+            }
+        });
+
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden && state.hasLaunched && state.musicPlaying && aud.paused) {
+                aud.play().catch(function(){});
+            }
+        });
+
+        playNext();
+    }
+
+    /* ── CLOUD ──────────────────────────────────── */
+    async function loadFromCloud() {
+        if (!USE_JSONBIN) {
+            var saved = localStorage.getItem('rv_memories_v3');
+            state.memories = saved ? JSON.parse(saved) : [];
+            return;
+        }
+        try {
+            var r = await fetch('https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID + '/latest', {
+                headers: { 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Meta': 'false' }
+            });
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            var data = await r.json();
+            state.memories = (data.record && data.record.memories) ? data.record.memories : [];
+        } catch(e) {
+            console.warn('Cloud load failed', e);
+            var fallback = localStorage.getItem('rv_memories_v3');
+            state.memories = fallback ? JSON.parse(fallback) : [];
+            toast('Cloud unavailable — showing local data', 'error');
+        }
+    }
+
+    async function saveToCloud() {
+        try { localStorage.setItem('rv_memories_v3', JSON.stringify(state.memories)); } catch(e) {}
+        if (!USE_JSONBIN) return;
+        try {
+            var r = await fetch('https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY },
+                body: JSON.stringify({ memories: state.memories })
+            });
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+        } catch(e) {
+            console.warn('Cloud save failed', e);
+            toast('Saved locally — cloud sync failed', 'error');
+        }
+    }
+
+    /* ── IMAGE UPLOAD ───────────────────────────── */
+    async function uploadToCloudinary(file) {
+        if (!USE_CLOUDINARY) {
+            return new Promise(function(res, rej) {
+                var reader = new FileReader();
+                reader.onerror = function() { rej(new Error('File read failed')); };
+                reader.onload = function(ev) {
+                    var img = new Image();
+                    img.onerror = function() { rej(new Error('Image decode failed')); };
                     img.src = ev.target.result;
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 700;
-                        const scale = MAX_WIDTH / img.width;
-                        canvas.width = MAX_WIDTH;
-                        canvas.height = img.height * scale;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        const entry = { id: Date.now(), url: canvas.toDataURL('image/jpeg', 0.7), owner: author };
-                        state.memories.unshift(entry);
-                        localStorage.setItem('rv_seo_final_v1', JSON.stringify(state.memories));
-                        this.render();
+                    img.onload = function() {
+                        var c = document.createElement('canvas');
+                        var MAX = 900;
+                        var scale = Math.min(1, MAX / img.width, MAX / img.height);
+                        c.width  = Math.round(img.width  * scale);
+                        c.height = Math.round(img.height * scale);
+                        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+                        res(c.toDataURL('image/jpeg', 0.78));
                     };
                 };
                 reader.readAsDataURL(file);
-            },
+            });
+        }
+        var fd = new FormData();
+        fd.append('file', file);
+        fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+        var r = await fetch('https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD_NAME + '/image/upload', { method: 'POST', body: fd });
+        if (!r.ok) throw new Error('Cloudinary error ' + r.status);
+        var data = await r.json();
+        if (!data.secure_url) throw new Error('No URL from Cloudinary');
+        return data.secure_url;
+    }
 
-            render() {
-                const grid = document.getElementById('main-grid');
-                grid.innerHTML = '';
-                state.memories.forEach((item, index) => {
-                    const div = document.createElement('div');
-                    div.className = 'archive-card';
-                    div.innerHTML = `
-                        <button class="btn-delete" onclick="MasterVault.delete(${item.id})">×</button>
-                        <div class="card-img-container" onclick="MasterVault.UI.openLB(${index})">
-                            <img src="${item.url}" loading="lazy">
-                        </div>
-                        <div class="card-meta">
-                            <span class="card-author">FROM: ${item.owner}</span>
-                            <span class="card-no">MEMORIA NO. ${state.memories.length - index}</span>
-                        </div>
-                    `;
-                    grid.appendChild(div);
-                });
-            },
+    /* ── UPLOAD FLOW ────────────────────────────── */
+    function openUpload(files) {
+        if (!files || !files.length) return;
+        var valid = Array.from(files).filter(function(f) { return f.type.startsWith('image/'); });
+        if (!valid.length) { toast('Please select image files only', 'error'); return; }
+        if (valid.length < files.length) toast((files.length - valid.length) + ' non-image file(s) skipped', '');
+        state.pendingFiles = valid;
+        document.getElementById('name-input').value = localStorage.getItem('rv_last_name') || '';
+        document.getElementById('name-modal').classList.add('open');
+        setTimeout(function() { document.getElementById('name-input').focus(); }, 180);
+    }
 
-            delete(id) {
-                if(confirm("Erase from archive?")) {
-                    state.memories = state.memories.filter(m => m.id !== id);
-                    localStorage.setItem('rv_seo_final_v1', JSON.stringify(state.memories));
-                    this.render();
-                }
-            },
+    async function confirmUpload() {
+        var raw = document.getElementById('name-input').value.trim();
+        if (!raw) { toast('Please enter your name!', 'error'); return; }
+        var name = raw.toUpperCase();
+        localStorage.setItem('rv_last_name', name);
+        document.getElementById('name-modal').classList.remove('open');
+        showLoading(true);
 
-            exit() { window.location.replace('page 3.html'); },
-
-            UI: {
-                openLB(index) { 
-                    state.currentIndex = index;
-                    document.getElementById('lb-img').src = state.memories[state.currentIndex].url; 
-                    document.getElementById('lightbox').style.display = 'flex'; 
-                },
-                closeLB() { document.getElementById('lightbox').style.display = 'none'; },
-                moveSlide(dir) {
-                    state.currentIndex = (state.currentIndex + dir + state.memories.length) % state.memories.length;
-                    document.getElementById('lb-img').src = state.memories[state.currentIndex].url;
-                }
+        var successCount = 0;
+        for (var i = 0; i < state.pendingFiles.length; i++) {
+            var file = state.pendingFiles[i];
+            try {
+                var url = await uploadToCloudinary(file);
+                var entry = {
+                    id:      Date.now().toString(36) + Math.random().toString(36).slice(2),
+                    url:     url,
+                    owner:   name,
+                    ownerId: OWNER_ID,
+                    ts:      Date.now()
+                };
+                state.memories.unshift(entry);
+                successCount++;
+            } catch(e) {
+                console.error('Upload failed:', file.name, e);
+                toast('Failed to upload "' + file.name + '"', 'error');
             }
-        };
-    })();
+        }
 
-    window.addEventListener('popstate', () => MasterVault.exit());
-    history.pushState(null, null, window.location.href);
+        if (successCount > 0) {
+            await saveToCloud();
+            renderGallery();
+            toast('✦ ' + successCount + ' memor' + (successCount === 1 ? 'y' : 'ies') + ' deposited!', 'success');
+        }
+
+        showLoading(false);
+        state.pendingFiles = [];
+        document.getElementById('file-input').value = ''; // allow re-upload same file
+    }
+
+    async function deleteMemory(id) {
+        var mem = null;
+        for (var i = 0; i < state.memories.length; i++) {
+            if (state.memories[i].id === id) { mem = state.memories[i]; break; }
+        }
+        if (!mem) { toast('Memory not found', 'error'); return; }
+        if (mem.ownerId && mem.ownerId !== OWNER_ID) {
+            toast('You can only delete your own memories', 'error'); return;
+        }
+        if (!confirm('Remove this memory from the archive permanently?')) return;
+        state.memories = state.memories.filter(function(m) { return m.id !== id; });
+        await saveToCloud();
+        renderGallery();
+        toast('Memory removed from archive', '');
+    }
+
+    /* ── RENDER ─────────────────────────────────── */
+    function getFiltered() {
+        if (state.filter === 'mine') return state.memories.filter(function(m) { return m.ownerId === OWNER_ID; });
+        return state.memories;
+    }
+
+    function renderGallery() {
+        var grid     = document.getElementById('main-grid');
+        var filtered = getFiltered();
+        state.filteredMemories = filtered;
+
+        document.getElementById('stat-count').textContent = state.memories.length;
+        var contribSet = {};
+        state.memories.forEach(function(m) { if (m.owner) contribSet[m.owner] = 1; });
+        document.getElementById('stat-contributors').textContent = Object.keys(contribSet).length;
+        document.getElementById('gallery-count').textContent =
+            filtered.length + ' memor' + (filtered.length === 1 ? 'y' : 'ies') + ' in archive';
+
+        grid.innerHTML = '';
+
+        if (!filtered.length) {
+            grid.innerHTML =
+                '<div class="empty-state">' +
+                '<div class="empty-icon">✦</div>' +
+                '<div class="empty-title">' + (state.filter === 'mine' ? "You haven't uploaded yet" : 'The archive awaits') + '</div>' +
+                '<div class="empty-sub">' + (state.filter === 'mine' ? 'Be the first to deposit your memory' : 'Upload the first memory above') + '</div>' +
+                '</div>';
+            renderDots();
+            return;
+        }
+
+        filtered.forEach(function(item, index) {
+            var isOwner = !item.ownerId || item.ownerId === OWNER_ID;
+            var card = document.createElement('div');
+            card.className = 'archive-card';
+            card.style.animationDelay = (Math.min(index, 9) * 0.065) + 's';
+
+            card.innerHTML =
+                '<div class="card-number-badge"><span>NO. ' + (filtered.length - index) + '</span></div>' +
+                (isOwner ? '<div class="owner-stamp">MINE</div>' : '') +
+                '<div class="card-img-container" data-index="' + index + '">' +
+                '<img src="' + escapeHTML(item.url) + '" loading="lazy" alt="Memory by ' + escapeHTML(item.owner || 'Unknown') + '">' +
+                '<div class="card-img-overlay"><span class="card-img-overlay-text">Tap to view ✦</span></div>' +
+                '</div>' +
+                '<div class="card-meta">' +
+                '<div class="card-meta-inner">' +
+                '<div class="card-from-label">FROM</div>' +
+                '<div class="card-author">' + escapeHTML(item.owner || 'Unknown') + '</div>' +
+                '<div class="card-date">' + formatDate(item.ts) + '</div>' +
+                '<div class="card-no">MEMORIA NO. ' + (filtered.length - index) + '</div>' +
+                '</div>' +
+                '<div class="card-actions">' +
+                '<button class="btn-card-action btn-zoom" data-index="' + index + '" title="View">⤢</button>' +
+                (isOwner ? '<button class="btn-card-action btn-delete" data-id="' + escapeHTML(item.id) + '" title="Delete">×</button>' : '') +
+                '</div></div>';
+
+            grid.appendChild(card);
+        });
+
+        grid.querySelectorAll('.card-img-container').forEach(function(el) {
+            el.addEventListener('click', function() { openLightbox(parseInt(el.dataset.index)); });
+        });
+        grid.querySelectorAll('.btn-zoom').forEach(function(el) {
+            el.addEventListener('click', function(e) { e.stopPropagation(); openLightbox(parseInt(el.dataset.index)); });
+        });
+        grid.querySelectorAll('.btn-delete').forEach(function(el) {
+            el.addEventListener('click', function(e) { e.stopPropagation(); deleteMemory(el.dataset.id); });
+        });
+
+        renderDots();
+    }
+
+    /* ── LIGHTBOX ───────────────────────────────── */
+    function openLightbox(index) {
+        if (index < 0 || index >= state.filteredMemories.length) return;
+        state.lbIndex = index;
+        updateLightbox();
+        document.getElementById('lightbox').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    function updateLightbox() {
+        var mem = state.filteredMemories[state.lbIndex];
+        if (!mem) return;
+        var img = document.getElementById('lb-img');
+        img.style.opacity = '0';
+        img.onerror = function() { img.style.opacity = '0.3'; };
+        img.onload  = function() { img.style.opacity = '1'; };
+        img.src = mem.url;
+        document.getElementById('lb-from').textContent    = 'FROM: ' + (mem.owner || 'Unknown');
+        document.getElementById('lb-counter').textContent = (state.lbIndex + 1) + ' / ' + state.filteredMemories.length;
+        document.querySelectorAll('.lb-dot').forEach(function(d, i) { d.classList.toggle('active', i === state.lbIndex); });
+    }
+    function moveLightbox(dir) {
+        var len = state.filteredMemories.length;
+        if (!len) return;
+        state.lbIndex = (state.lbIndex + dir + len) % len;
+        updateLightbox();
+    }
+    function renderDots() {
+        var dotsEl = document.getElementById('lb-dots');
+        dotsEl.innerHTML = '';
+        var max = Math.min(state.filteredMemories.length, 14);
+        for (var i = 0; i < max; i++) {
+            var d = document.createElement('div');
+            d.className = 'lb-dot' + (i === state.lbIndex ? ' active' : '');
+            (function(idx) { d.addEventListener('click', function() { state.lbIndex = idx; updateLightbox(); }); })(i);
+            dotsEl.appendChild(d);
+        }
+    }
+
+    /* ── MANUAL REFRESH ─────────────────────────── */
+    async function manualRefresh() {
+        if (state.isLoading) return;
+        state.isLoading = true;
+        var btn = document.getElementById('btn-refresh');
+        btn.classList.add('spinning');
+        btn.textContent = '↻ SYNCING...';
+        await loadFromCloud();
+        renderGallery();
+        state.isLoading = false;
+        btn.classList.remove('spinning');
+        btn.textContent = '↻ SYNC';
+        toast('Gallery synced', 'success');
+    }
+
+    /* ── EVENT BINDINGS ─────────────────────────── */
+    var uploadZone = document.getElementById('upload-zone');
+    var fileInput  = document.getElementById('file-input');
+    uploadZone.addEventListener('click', function() { fileInput.click(); });
+    fileInput.addEventListener('change', function(e) { openUpload(e.target.files); });
+    uploadZone.addEventListener('dragover',  function(e) { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+    uploadZone.addEventListener('dragleave', function()  { uploadZone.classList.remove('drag-over'); });
+    uploadZone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        uploadZone.classList.remove('drag-over');
+        openUpload(e.dataTransfer.files);
+    });
+
+    document.getElementById('modal-confirm').addEventListener('click', confirmUpload);
+    document.getElementById('modal-cancel').addEventListener('click', function() {
+        document.getElementById('name-modal').classList.remove('open');
+        state.pendingFiles = [];
+    });
+    document.getElementById('name-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') confirmUpload();
+        if (e.key === 'Escape') { document.getElementById('name-modal').classList.remove('open'); state.pendingFiles = []; }
+    });
+
+    document.getElementById('lb-close').addEventListener('click', closeLightbox);
+    document.getElementById('lb-prev').addEventListener('click', function() { moveLightbox(-1); });
+    document.getElementById('lb-next').addEventListener('click', function() { moveLightbox(1); });
+    document.getElementById('lightbox').addEventListener('click', function(e) {
+        if (e.target === document.getElementById('lightbox')) closeLightbox();
+    });
+
+    var lbTouchX = null;
+    document.getElementById('lightbox').addEventListener('touchstart', function(e) { lbTouchX = e.touches[0].clientX; }, { passive: true });
+    document.getElementById('lightbox').addEventListener('touchend', function(e) {
+        if (lbTouchX === null) return;
+        var dx = e.changedTouches[0].clientX - lbTouchX;
+        if (Math.abs(dx) > 48) moveLightbox(dx < 0 ? 1 : -1);
+        lbTouchX = null;
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (!document.getElementById('lightbox').classList.contains('open')) return;
+        if (e.key === 'ArrowLeft')  moveLightbox(-1);
+        if (e.key === 'ArrowRight') moveLightbox(1);
+        if (e.key === 'Escape')     closeLightbox();
+    });
+
+    document.querySelectorAll('.filter-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            state.filter = btn.dataset.filter;
+            renderGallery();
+        });
+    });
+
+    document.getElementById('btn-refresh').addEventListener('click', manualRefresh);
+    document.getElementById('btn-leave').addEventListener('click', function() { window.location.replace('page 3.html'); });
+
+    /* ── BACK BUTTON ────────────────────────────── */
+    history.pushState({ page: 'gallery' }, '', window.location.href);
+    window.addEventListener('popstate', function() { window.location.replace('page 3.html'); });
+
+    /* ── ENTRY ──────────────────────────────────── */
+    document.getElementById('enter-btn').addEventListener('click', async function() {
+        if (state.hasLaunched) return;
+        state.hasLaunched = true;
+
+        var gate = document.getElementById('entry-gate');
+        gate.classList.add('vanish');
+        gate.addEventListener('transitionend', function() { if (gate.parentNode) gate.remove(); }, { once: true });
+
+        var app = document.getElementById('app-content');
+        app.style.visibility = 'visible';
+        gsap.to(app, { opacity: 1, duration: 1.1, delay: 0.25, ease: 'power2.out' });
+
+        initSecurity();
+        initMusic();
+
+        showLoading(true);
+        state.isLoading = true;
+        await loadFromCloud();
+        state.isLoading = false;
+        showLoading(false);
+        renderGallery();
+
+        setInterval(async function() {
+            if (document.hidden || state.isLoading) return;
+            await loadFromCloud();
+            renderGallery();
+        }, 30000);
+    });
+
+    /* ── PARTICLES INIT (runs on gate screen too) ─ */
+    initParticles();
+
+    /* ── SETUP WARNING ──────────────────────────── */
+    if (!USE_JSONBIN || !USE_CLOUDINARY) {
+        console.warn(
+
+        );
+    }
     </script>
 </body>
 </html>
