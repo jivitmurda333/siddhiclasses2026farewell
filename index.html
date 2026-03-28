@@ -3,16 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Farewell 2026 | Entrance</title>
+  <title>The Rewind | Entrance</title>
   
   <!-- Premium Fonts Pairing -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
+      /* Gold Accents */
       --gold:        #C9A84C;
       --gold-bright: #F5DFA0;
       --gold-dark:   #8A6510;
+      
+      /* Royal Midnight Blue Palette */
+      --royal-blue-deep:  #000814;
+      --royal-blue-mid:   #001D3D;
+      --royal-blue-light: #003566;
+      --text-white:       #FFFFFF;
+
       --bg-deep:     #0F0A00;
       --bg-gradient: linear-gradient(180deg, #1A1200 0%, #0F0A00 100%);
       --text-main:   #FAF6EE;
@@ -65,30 +73,41 @@
     }
  
     /* --------------------------------
-       TOP STRAP - ENHANCED & BIGGER
+       TOP STRAP - ROYAL MIDNIGHT BLUE
     -------------------------------- */
     .top-strap {
       position:relative; z-index:10;
       width:100%; 
-      height: clamp(80px, 12vh, 100px); /* Increased height */
-      background: linear-gradient(90deg, #4A3300, var(--gold-dark), var(--gold), var(--gold-bright), var(--gold), var(--gold-dark), #4A3300);
-      background-size: 200% auto;
-      border-bottom: 3px solid var(--gold-dark);
+      height: clamp(70px, 10vh, 90px);
+      /* Deep sapphire gradient for a velvet look */
+      background: linear-gradient(to right, #000814 0%, #001d3d 50%, #000814 100%);
+      /* Elegant gold border to separate from background */
+      border-bottom: 2px solid var(--gold);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
       display:flex; align-items:center; justify-content:center;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-      animation: strapDown 0.8s cubic-bezier(0.22,1,0.36,1) both, shimmer 4s infinite linear;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
       padding-top: env(safe-area-inset-top, 0);
     }
     
+    /* Thin highlight line at the very bottom of the strap */
+    .top-strap::after {
+      content: "";
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-bright), transparent);
+      opacity: 0.6;
+    }
+
     .top-strap span {
-      font-family:'Orbitron', sans-serif;
-      /* Significantly larger text */
-      font-size: clamp(18px, 5vw, 26px); 
-      font-weight: 900; 
-      letter-spacing: clamp(10px, 3vw, 20px);
-      color: #1A1200; 
+      font-family:'Cinzel', serif; /* Roman-style font for royalty */
+      font-size: clamp(16px, 4.5vw, 24px); 
+      font-weight: 700; 
+      letter-spacing: 12px;
+      color: var(--text-white); 
       text-transform: uppercase;
-      text-shadow: 0 2px 4px rgba(255,255,255,0.3);
+      /* Soft outer glow for the text */
+      text-shadow: 0 0 15px rgba(255,255,255,0.4), 0 2px 4px rgba(0,0,0,0.8);
       white-space: nowrap;
     }
  
@@ -118,7 +137,7 @@
     .main-title {
       font-family: 'Cinzel Decorative', cursive;
       font-weight: 900;
-      font-size: clamp(65px, 20vw, 180px); /* Bigger title */
+      font-size: clamp(60px, 18vw, 160px);
       color: var(--gold);
       letter-spacing: clamp(4px, 1.5vw, 25px);
       text-transform: uppercase;
@@ -129,7 +148,7 @@
       background: linear-gradient(to bottom, #FFF8E7 0%, var(--gold) 50%, var(--gold-dark) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 20px rgba(201, 168, 76, 0.4));
+      filter: drop-shadow(0 0 25px rgba(201, 168, 76, 0.5));
       opacity: 0;
       animation: titleIn 1.2s cubic-bezier(0.22,1,0.36,1) 0.3s forwards;
     }
@@ -172,12 +191,11 @@
       opacity: 0;
       animation: fadeUp 1s ease 1.1s forwards;
       cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
     }
  
-    .enter-btn:hover, .enter-btn:active {
+    .enter-btn:hover {
       background-position: right center;
-      transform: translateY(-5px) scale(1.05);
+      transform: translateY(-5px) scale(1.02);
       box-shadow: 0 20px 50px rgba(201, 168, 76, 0.5);
       letter-spacing: 10px;
     }
@@ -185,10 +203,6 @@
     /* --------------------------------
        ANIMATIONS
     -------------------------------- */
-    @keyframes strapDown {
-      from { transform:translateY(-100%); }
-      to   { transform:translateY(0); }
-    }
     @keyframes titleIn {
       from { opacity:0; transform:scale(0.8) translateY(50px); letter-spacing:40px; }
       to   { opacity:1; transform:scale(1) translateY(0); letter-spacing:clamp(4px,1.5vw,25px); }
@@ -197,16 +211,10 @@
       from { opacity:0; transform:translateY(30px); }
       to   { opacity:1; transform:translateY(0); }
     }
-    @keyframes shimmer {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 200% 50%; }
-    }
  
-    /* -- Strong Mobile Presence -- */
     @media (max-height: 700px) {
-      .top-strap { height: 70px; }
+      .top-strap { height: 60px; }
       .main-title { margin-bottom: 15px; }
-      .divider { margin-bottom: 30px; }
     }
   </style>
 </head>
@@ -221,6 +229,7 @@
   </video>
   <div class="video-overlay"></div>
 
+  <!-- Redesigned Strap -->
   <div class="top-strap">
     <span id="top-strap-text"></span>
   </div>
@@ -239,28 +248,13 @@
   </main>
 
   <script>
-    /* -- MOUSE / GYRO PARALLAX -- */
+    /* -- MOUSE PARALLAX FOR MAIN TITLE -- */
     const title = document.getElementById('main-title-text');
-    
-    // Desktop Mouse Parallax
     document.addEventListener('mousemove', (e) => {
-      const x = (window.innerWidth / 2 - e.pageX) / 40;
-      const y = (window.innerHeight / 2 - e.pageY) / 40;
-      title.style.transform = `rotateY(${x}deg) rotateX(${-y}deg) translateZ(30px)`;
+      const x = (window.innerWidth / 2 - e.pageX) / 45;
+      const y = (window.innerHeight / 2 - e.pageY) / 45;
+      title.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
     });
-
-    // Mobile "Floating" fallback logic
-    if (window.innerWidth < 1024) {
-      let angle = 0;
-      function animateMobile() {
-        angle += 0.02;
-        const x = Math.sin(angle) * 5;
-        const y = Math.cos(angle) * 5;
-        title.style.transform = `rotateY(${x}deg) rotateX(${y}deg) translateZ(20px)`;
-        requestAnimationFrame(animateMobile);
-      }
-      animateMobile();
-    }
 
     /* -- GOLD DUST PARTICLE SYSTEM -- */
     (function(){
@@ -303,9 +297,10 @@
     const CONFIG = {
       topBar:      "Batch of 2026",
       eyebrow:     "A Journey to Remember",
-      mainHeading: "THE END",
-      buttonText:  "CLICK TO UNLEASH",
+      mainHeading: "THE REWIND",
+      buttonText:  "CONTINUE → ",
       nextPageUrl: "farewell.html",
+      // Space/Dust video link
       videoLink:   "https://assets.mixkit.co/videos/preview/mixkit-stars-in-the-deep-space-1150-large.mp4"
     };
 
@@ -321,6 +316,7 @@
       }, 1200);
     }
 
+    // Set Text Content
     document.getElementById('top-strap-text').innerText = CONFIG.topBar;
     document.getElementById('eyebrow-text').innerText   = CONFIG.eyebrow;
     document.getElementById('main-title-text').innerText= CONFIG.mainHeading;
