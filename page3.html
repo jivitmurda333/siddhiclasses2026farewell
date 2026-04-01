@@ -5,20 +5,18 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0,viewport-fit=cover"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title> BATCH RECORD </title>
+    <title>BATCH RECORD</title>
 
-    <!-- -- PREMIUM TYPOGRAPHY -- -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@700;900&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Orbitron:wght@700;900&family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=DM+Sans:wght@400;500;700&family=MedievalSharp&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@700;900&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Orbitron:wght@700;900&family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
 
-    <!-- -- ANIMATION ENGINES -- -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <style>
         :root {
             --imperial-purple: #1A0F1F;
-            --royal-blue:      #0A192F; 
+            --royal-blue:      #0A192F;
             --gold:            #C9A84C;
             --gold-bright:     #F5E3A6;
             --gold-dark:       #8A6D2E;
@@ -29,22 +27,41 @@
             --pure-white:      #FFFFFF;
         }
 
-        /* -- MASTER RESET & SECURITY -- */
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
+        /* — MASTER RESET — */
+        *, *::before, *::after {
+            margin: 0; padding: 0; box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* — GPU-ACCELERATED SCROLL — */
+        html {
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
         body {
             background-color: var(--creme);
-            background-image: 
-                radial-gradient(circle at 50% 50%, transparent 0%, rgba(201, 168, 76, 0.05) 100%),
-                url('https://www.transparenttextures.com/patterns/natural-paper.png');
             font-family: 'DM Sans', sans-serif;
             overflow-x: hidden;
             color: var(--ink);
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            /* GPU compositing hint */
+            will-change: scroll-position;
         }
 
-        /* -- GOD-LEVEL REDIRECT (REWINDING) -- */
+        /* — PAPER TEXTURE (CSS-only, no network) — */
+        body::before {
+            content: '';
+            position: fixed; inset: 0; z-index: -1;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(201,168,76,0.03) 28px, rgba(201,168,76,0.03) 29px),
+                repeating-linear-gradient(90deg, transparent, transparent 28px, rgba(201,168,76,0.02) 28px, rgba(201,168,76,0.02) 29px);
+            pointer-events: none;
+        }
+
+        /* — PAGE LOADER — */
         #page-loader {
             position: fixed; inset: 0; z-index: 1000000;
             background: var(--royal-blue);
@@ -53,172 +70,340 @@
             border-right: 8px solid var(--gold);
             box-shadow: 20px 0 60px rgba(0,0,0,0.6);
             pointer-events: none;
+            will-change: transform;
         }
-        .loader-logo { 
-            font-family: 'Cinzel Decorative'; 
-            font-size: clamp(18px, 5vw, 45px); 
-            color: var(--gold); 
-            letter-spacing: 10px; 
+        .loader-logo {
+            font-family: 'Cinzel Decorative';
+            font-size: clamp(18px, 5vw, 45px);
+            color: var(--gold);
+            letter-spacing: 10px;
             font-weight: 900;
             text-shadow: 0 0 30px rgba(201, 168, 76, 0.6);
         }
 
-        /* -- SECURITY VAULT -- */
+        /* — SECURITY SHIELD — */
         #sec-shield {
             position: fixed; inset: 0; z-index: 10000000;
             background: #000; display: none; align-items: center; justify-content: center;
         }
-        .lock-ring { width: 70px; height: 70px; border: 4px solid rgba(201,168,76,0.1); border-top: 4px solid var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        .lock-ring {
+            width: 70px; height: 70px;
+            border: 4px solid rgba(201,168,76,0.15);
+            border-top: 4px solid var(--gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            will-change: transform;
+        }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* -- TOP IMPERIAL STRAP (Purple & Gold) -- */
+        /* — DUST CANVAS — */
+        #dust { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.4; }
+
+        /* — TOP STRAP — */
         .strap {
             position: sticky; top: 0; z-index: 1000; width: 100%;
             height: clamp(55px, 8vh, 65px);
             background: linear-gradient(90deg, #000 0%, var(--imperial-purple) 50%, #000 100%);
             display: flex; align-items: center; justify-content: center;
             border-bottom: 4px solid var(--gold);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
             padding-top: env(safe-area-inset-top, 0);
+            will-change: transform;
         }
-        .strap-text { font-family: 'Orbitron'; font-size: clamp(9px, 2.5vw, 11px); font-weight: 900; letter-spacing: clamp(2px, 1vw, 6px); color: var(--gold); text-transform: uppercase; }
+        .strap-text {
+            font-family: 'Orbitron';
+            font-size: clamp(9px, 2.5vw, 11px);
+            font-weight: 900;
+            letter-spacing: clamp(2px, 1vw, 6px);
+            color: var(--gold);
+            text-transform: uppercase;
+        }
 
-        /* -- SIDEBAR MENU -- */
+        /* — HAMBURGER — */
         .ham-btn {
             position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
-            width: 44px; height: 44px; display: flex; flex-direction: column; align-items:center; justify-content:center; gap:6px;
-            cursor: pointer; background:none; border:none; z-index: 2001;
-            /* larger tap target for mobile */
+            width: 44px; height: 44px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+            cursor: pointer; background: none; border: none; z-index: 2001;
         }
-        .ham-btn span { display: block; width: 22px; height: 2px; background: var(--gold); border-radius: 2px; transition: 0.3s; }
+        .ham-btn span {
+            display: block; width: 22px; height: 2px;
+            background: var(--gold); border-radius: 2px;
+            transition: transform 0.3s, opacity 0.3s;
+            will-change: transform;
+        }
         .ham-btn.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
         .ham-btn.open span:nth-child(2) { opacity: 0; }
         .ham-btn.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
-        .nav-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1500; display: none; backdrop-filter: blur(10px); }
+        /* — NAV DRAWER — */
+        .nav-backdrop {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1500; display: none;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
         .nav-drawer {
-            position: fixed; top: 0; left: 0; bottom: 0; width: 320px; max-width: 85%;
+            position: fixed; top: 0; left: 0; bottom: 0;
+            width: 320px; max-width: 85%;
             background: var(--royal-blue);
-            z-index: 2000; transform: translateX(-100%); transition: 0.6s cubic-bezier(0.77, 0, 0.18, 1);
+            z-index: 2000;
+            transform: translateX(-100%);
+            transition: transform 0.5s cubic-bezier(0.77, 0, 0.18, 1);
             border-right: 5px solid var(--gold);
             display: flex; flex-direction: column;
             overflow-y: auto;
+            will-change: transform;
         }
         .nav-drawer.open { transform: translateX(0); }
-        .nav-header { 
+        .nav-header {
             padding: clamp(50px, 8vh, 70px) 30px 25px;
-            border-bottom: 1px solid rgba(201,168,76,0.1);
+            border-bottom: 1px solid rgba(201,168,76,0.15);
             font-family: 'Cinzel Decorative'; color: var(--gold);
             font-size: clamp(18px, 5vw, 26px); font-weight: 900;
         }
         .nav-links { list-style: none; padding: clamp(25px, 5vh, 40px) 30px; flex-grow: 1; }
         .nav-links li { margin-bottom: clamp(22px, 4vh, 35px); }
-        .nav-links a { 
-            color: var(--gold-bright); text-decoration: none; font-family: 'Cinzel'; 
-            font-size: clamp(14px, 4vw, 18px); letter-spacing: 3px; font-weight: 700; transition: 0.3s;
+        .nav-links a {
+            color: var(--gold-bright); text-decoration: none;
+            font-family: 'Cinzel';
+            font-size: clamp(14px, 4vw, 18px); letter-spacing: 3px; font-weight: 700;
+            transition: color 0.2s, padding-left 0.2s, border-color 0.2s;
             display: flex; align-items: center; gap: 10px; padding: 8px 0;
             border-bottom: 1px solid rgba(201,168,76,0.1);
         }
         .nav-links a:hover { color: var(--pure-white); padding-left: 15px; border-bottom-color: rgba(201,168,76,0.4); }
         .nav-links a .nav-icon { font-size: 16px; opacity: 0.7; width: 20px; text-align: center; }
+        .nav-footer { padding: 20px 30px 40px; font-family: 'Orbitron'; font-size: 9px; color: var(--gold); letter-spacing: 3px; opacity: 0.6; line-height: 2; }
 
-        /* -- HERO -- */
-        .hero { text-align: center; padding: clamp(60px, 12vh, 120px) 5% clamp(40px, 8vh, 80px); position: relative; }
+        /* — HERO — */
+        .hero {
+            text-align: center;
+            padding: clamp(60px, 12vh, 120px) 5% clamp(40px, 8vh, 80px);
+            position: relative;
+        }
         .hero-title {
-            font-family: 'Playfair Display', serif; font-size: clamp(44px, 12vw, 110px);
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(44px, 12vw, 110px);
             font-weight: 900; letter-spacing: -2px; text-transform: uppercase;
             color: var(--mahogany); line-height: 0.85;
         }
-        .hero-title span { display: block; font-family: 'Cinzel Decorative'; font-size: 0.25em; color: var(--gold); letter-spacing: clamp(6px, 3vw, 18px); margin-top: 20px; }
+        .hero-title span {
+            display: block; font-family: 'Cinzel Decorative';
+            font-size: 0.25em; color: var(--gold);
+            letter-spacing: clamp(6px, 3vw, 18px); margin-top: 20px;
+        }
 
-        /* -- SECTION TITLES -- */
-        .section-title { font-family: 'Cinzel', serif; text-align: center; margin-top: clamp(60px, 10vh, 100px); color: var(--mahogany); font-size: clamp(16px, 4vw, 26px); letter-spacing: clamp(4px, 2vw, 10px); text-transform: uppercase; }
-        .ornament { width: 120px; height: 3px; background: var(--gold); margin: 20px auto 40px; position: relative; }
-        .ornament::before { content: '⚜'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--creme); padding: 0 10px; color: var(--gold); }
+        /* — SECTION — */
+        .section-title {
+            font-family: 'Cinzel', serif; text-align: center;
+            margin-top: clamp(60px, 10vh, 100px);
+            color: var(--mahogany);
+            font-size: clamp(16px, 4vw, 26px);
+            letter-spacing: clamp(4px, 2vw, 10px); text-transform: uppercase;
+        }
+        .ornament {
+            width: 120px; height: 3px; background: var(--gold);
+            margin: 20px auto 40px; position: relative;
+        }
+        .ornament::before {
+            content: '⚜'; position: absolute; top: -10px; left: 50%;
+            transform: translateX(-50%);
+            background: var(--creme); padding: 0 10px; color: var(--gold);
+        }
 
-        /* -- MENTOR CARDS -- */
-        .mentor-grid { display: flex; justify-content: center; gap: clamp(15px, 4vw, 40px); padding: 0 5%; flex-wrap: wrap; }
-        .mentor-card { 
+        /* — MENTOR CARDS — */
+        .mentor-grid {
+            display: flex; justify-content: center;
+            gap: clamp(15px, 4vw, 40px);
+            padding: 0 5%; flex-wrap: wrap;
+        }
+        .mentor-card {
             width: clamp(150px, 42vw, 320px);
-            background: var(--creme); 
-            border: clamp(4px, 1.5vw, 10px) solid var(--mahogany); 
+            background: var(--creme);
+            border: clamp(4px, 1.5vw, 10px) solid var(--mahogany);
             outline: 2px solid var(--gold);
-            padding: 10px; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 10px;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
             box-shadow: clamp(6px, 2vw, 15px) clamp(6px, 2vw, 15px) 0px var(--stone);
             cursor: pointer;
+            will-change: transform;
         }
-        .mentor-card:hover { transform: translateY(-12px); box-shadow: clamp(10px, 3vw, 25px) clamp(10px, 3vw, 25px) 0px var(--gold); }
-        .mentor-photo { width: 100%; aspect-ratio: 4/5; background: var(--royal-blue); border: 1px solid var(--gold); overflow: hidden; position: relative; }
-        .mentor-photo img { width: 100%; height: 100%; object-fit: cover; transition: 1s; }
-        
-        .mentor-info { text-align: center; padding-top: 14px; padding-bottom: 4px; }
-        .mentor-name { font-family: 'Cinzel'; font-size: clamp(10px, 2.5vw, 15px); font-weight: 900; color: var(--ink); letter-spacing: 1px; line-height: 1.3; }
-        .mentor-rank { font-family: 'MedievalSharp'; font-size: clamp(9px, 2vw, 11px); color: var(--gold-dark); letter-spacing: 3px; margin-top: 6px; text-transform: uppercase; }
+        .mentor-card:hover {
+            transform: translateY(-12px);
+            box-shadow: clamp(10px, 3vw, 25px) clamp(10px, 3vw, 25px) 0px var(--gold);
+        }
+        .mentor-photo {
+            width: 100%; aspect-ratio: 4/5;
+            background: var(--royal-blue);
+            border: 1px solid var(--gold);
+            overflow: hidden; position: relative;
+        }
+        .mentor-photo img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.8s ease;
+            display: block;
+        }
+        .mentor-card:hover .mentor-photo img { transform: scale(1.05); }
 
-        /* -- STUDENT GRID -- */
+        /* — MENTOR PLACEHOLDER — */
+        .mentor-placeholder {
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            background: linear-gradient(135deg, var(--royal-blue), var(--imperial-purple));
+        }
+        .mentor-placeholder-initial {
+            font-family: 'Cinzel'; font-size: clamp(40px, 10vw, 70px);
+            color: var(--gold); opacity: 0.6; line-height: 1;
+        }
+
+        .mentor-info { text-align: center; padding-top: 14px; padding-bottom: 4px; }
+        .mentor-name {
+            font-family: 'Cinzel'; font-size: clamp(10px, 2.5vw, 15px);
+            font-weight: 900; color: var(--ink); letter-spacing: 1px; line-height: 1.3;
+        }
+        .mentor-rank {
+            font-family: 'DM Sans'; font-size: clamp(9px, 2vw, 11px);
+            color: var(--gold-dark); letter-spacing: 3px; margin-top: 6px; text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        /* — SEARCH — */
         .search-wrap { padding: 40px 5% 30px; text-align: center; }
-        #search { 
-            width: 100%; max-width: 480px; padding: clamp(13px, 3vw, 18px) clamp(16px, 4vw, 25px); 
-            border: 2px solid var(--gold); background: var(--pure-white); 
-            font-family: 'Cinzel'; outline: none; font-size: clamp(0.9rem, 3vw, 1.1rem);
-            box-shadow: 10px 10px 30px rgba(0,0,0,0.05);
+        #search {
+            width: 100%; max-width: 480px;
+            padding: clamp(13px, 3vw, 18px) clamp(16px, 4vw, 25px);
+            border: 2px solid var(--gold); background: var(--pure-white);
+            font-family: 'Cinzel'; outline: none;
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            box-shadow: 8px 8px 24px rgba(0,0,0,0.06);
             border-radius: 2px;
+            transition: box-shadow 0.2s;
         }
         #search::placeholder { color: rgba(74,44,42,0.45); }
-        #search:focus { box-shadow: 0 0 0 3px rgba(201,168,76,0.2), 10px 10px 30px rgba(0,0,0,0.05); }
+        #search:focus { box-shadow: 0 0 0 3px rgba(201,168,76,0.25), 8px 8px 24px rgba(0,0,0,0.06); }
 
+        /* — STUDENT GRID — */
         .grid {
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(clamp(150px, 38vw, 280px), 1fr)); 
-            gap: clamp(12px, 3vw, 30px);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(10px, 2.5vw, 28px);
             padding: 0 clamp(12px, 4%, 6%) clamp(80px, 15vh, 150px);
             max-width: 1600px; margin: 0 auto;
         }
 
-        .card { 
-            background: var(--pure-white); border: 1px solid var(--stone); 
-            cursor: pointer; transition: 0.4s; position: relative;
-            overflow: hidden; border-radius: 2px;
+        /* Desktop: 4 cols */
+        @media (min-width: 900px) {
+            .grid { grid-template-columns: repeat(4, 1fr); }
         }
-        .card:hover { border-color: var(--gold); transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        /* Sweep Effect */
+        @media (min-width: 1200px) {
+            .grid { grid-template-columns: repeat(5, 1fr); }
+        }
+
+        .card {
+            background: var(--pure-white);
+            border: 1px solid var(--stone);
+            cursor: pointer;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s, box-shadow 0.35s;
+            position: relative; overflow: hidden;
+            border-radius: 16px;
+            will-change: transform;
+        }
+        .card:hover {
+            border-color: var(--gold);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        /* Shimmer on hover */
         .card::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.7), transparent);
-            transform: skewX(-25deg); transition: 0.6s; z-index: 5;
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%);
+            transform: translateX(-100%) skewX(-15deg);
+            transition: transform 0.6s ease;
+            z-index: 5; pointer-events: none;
         }
-        .card:hover::after { left: 150%; }
+        .card:hover::after { transform: translateX(200%) skewX(-15deg); }
 
-        .card-photo { 
-            width: 100%; aspect-ratio: 4/5; background: var(--royal-blue); 
-            position: relative; overflow: hidden; border-bottom: 2px solid var(--stone);
+        .card-photo {
+            width: 100%; aspect-ratio: 4/5;
+            background: var(--royal-blue);
+            position: relative; overflow: hidden;
+            border-bottom: 2px solid var(--stone);
+            border-radius: 16px 16px 0 0;
         }
-        .card-photo img { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; transition: 0.8s; }
-        .card:hover img { opacity: 1; transform: scale(1.08); }
-        .card-initial { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Cinzel'; font-size: clamp(48px, 14vw, 80px); color: var(--gold); opacity: 0.1; }
+        .card-photo img {
+            width: 100%; height: 100%; object-fit: cover;
+            opacity: 0.85;
+            transition: opacity 0.5s, transform 0.7s ease;
+            display: block;
+        }
+        .card:hover .card-photo img { opacity: 1; transform: scale(1.07); }
+        .card-initial {
+            position: absolute; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Cinzel'; font-size: clamp(48px, 14vw, 80px);
+            color: var(--gold); opacity: 0.12; user-select: none;
+        }
 
-        .card-info { padding: clamp(14px, 3vw, 22px) clamp(10px, 3vw, 15px); text-align: left; background: var(--creme); }
-        .card-name { font-family: 'Cinzel'; font-size: clamp(10px, 2.5vw, 14px); font-weight: 900; letter-spacing: 1px; color: var(--ink); text-transform: uppercase; line-height: 1.3; }
-        .card-meta { font-family: 'Cormorant Garamond'; font-size: clamp(9px, 2vw, 11px); font-weight: 700; color: var(--gold-dark); text-transform: uppercase; margin-top: 5px; letter-spacing: 2px; }
+        .card-info {
+            padding: clamp(14px, 3vw, 22px) clamp(10px, 3vw, 15px);
+            text-align: left; background: var(--creme);
+        }
+        .card-name {
+            font-family: 'Cinzel'; font-size: clamp(10px, 2.5vw, 14px);
+            font-weight: 900; letter-spacing: 1px; color: var(--ink);
+            text-transform: uppercase; line-height: 1.3;
+        }
+        .card-meta {
+            font-family: 'Cormorant Garamond'; font-size: clamp(9px, 2vw, 11px);
+            font-weight: 700; color: var(--gold-dark); text-transform: uppercase;
+            margin-top: 5px; letter-spacing: 2px;
+        }
 
-        /* -- FOOTER -- */
-        .footer { text-align: center; padding: clamp(60px, 12vh, 120px) 0; background: var(--mahogany); border-top: 6px solid var(--gold); }
-        .footer p { font-family: 'Cinzel Decorative'; font-size: clamp(9px, 2.5vw, 12px); letter-spacing: clamp(3px, 2vw, 6px); color: var(--gold-bright); opacity: 0.8; }
-        #dust { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.4; }
+        /* — EMPTY STATE — */
+        .empty-state {
+            grid-column: 1 / -1; text-align: center;
+            padding: 60px 20px;
+            font-family: 'Cinzel'; color: rgba(74,44,42,0.4);
+            letter-spacing: 3px; font-size: 14px;
+        }
 
-        /* -- MOBILE UI POLISH -- */
+        /* — FOOTER — */
+        .footer {
+            text-align: center;
+            padding: clamp(60px, 12vh, 120px) 0;
+            background: var(--mahogany);
+            border-top: 6px solid var(--gold);
+        }
+        .footer p {
+            font-family: 'Cinzel Decorative';
+            font-size: clamp(9px, 2.5vw, 12px);
+            letter-spacing: clamp(3px, 2vw, 6px);
+            color: var(--gold-bright); opacity: 0.8;
+        }
+
+        /* — TOUCH STATES — */
+        @media (hover: none) {
+            .card:active { transform: scale(0.97); border-color: var(--gold); }
+            .mentor-card:active { transform: scale(0.97); }
+            .ham-btn:active { opacity: 0.7; }
+        }
+
+        /* — RESPONSIVE — */
         @media (max-width: 480px) {
-            .grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-                padding: 0 10px 80px;
-            }
+            .grid { grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 8px 80px; }
+            .card { border-radius: 12px; }
+            .card-photo { border-radius: 12px 12px 0 0; }
+            .card-info { padding: 8px 6px 10px; }
+            .card-name { font-size: 8px; letter-spacing: 0.3px; }
+            .card-meta { font-size: 7px; letter-spacing: 0.5px; margin-top: 2px; }
             .hero { padding: 50px 4% 40px; }
             .mentor-grid { gap: 12px; padding: 0 12px; }
             .mentor-card { width: calc(50% - 6px); }
             .search-wrap { padding: 30px 12px 20px; }
             #search { font-size: 14px; padding: 13px 15px; }
-            .card-info { padding: 12px 10px; }
             .section-title { margin-top: 50px; }
             .nav-drawer { width: 280px; }
             .nav-header { padding: 55px 22px 20px; }
@@ -227,66 +412,57 @@
             .nav-links a { font-size: 13px; letter-spacing: 2px; }
         }
 
-        @media (min-width: 481px) and (max-width: 768px) {
-            .grid { grid-template-columns: repeat(2, 1fr); gap: 14px; padding: 0 16px 90px; }
+        @media (min-width: 481px) and (max-width: 899px) {
+            .grid { grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 14px 90px; }
             .mentor-card { width: calc(50% - 10px); }
-        }
-
-        /* Touch-friendly tap states */
-        @media (hover: none) {
-            .card:active { transform: scale(0.97); border-color: var(--gold); }
-            .mentor-card:active { transform: scale(0.97); }
-            .ham-btn:active { opacity: 0.7; }
         }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-    <!-- -- AUDIO SYSTEM -- -->
+    <!-- AUDIO -->
     <audio id="aoeClick" preload="auto">
         <source src="AUDIO/bigbutton.wav" type="audio/wav">
     </audio>
 
-    <!-- -- REWINDING REDIRECT OVERLAY -- -->
+    <!-- PAGE LOADER -->
     <div id="page-loader"><div class="loader-logo">REWINDING...</div></div>
 
-    <!-- -- SECURITY -- -->
+    <!-- SECURITY -->
     <div id="sec-shield"><div class="lock-ring"></div></div>
 
     <canvas id="dust"></canvas>
 
-    <!-- -- SIDEBAR MENU -- -->
+    <!-- SIDEBAR -->
     <div class="nav-backdrop" id="nav-backdrop" onclick="toggleNav()"></div>
     <nav class="nav-drawer" id="nav-drawer">
         <div class="nav-header">ACCESS PANEL</div>
         <ul class="nav-links">
             <li>
                 <a href="javascript:void(0)" onclick="navigateTo('index.html')">
-                    <span class="nav-icon"></span> HOME
+                    <span class="nav-icon">⌂</span> HOME
                 </a>
             </li>
             <li>
                 <a href="javascript:void(0)" onclick="navigateTo('page4.html')">
-                    <span class="nav-icon"></span> GALLERY
+                    <span class="nav-icon">◈</span> GALLERY
                 </a>
             </li>
             <li>
                 <a href="javascript:void(0)" onclick="scrollToMentors()">
-                    <span class="nav-icon"></span> HALL OF MENTORS
+                    <span class="nav-icon">✦</span> HALL OF MENTORS
                 </a>
             </li>
             <li>
                 <a href="javascript:void(0)" onclick="navigateTo('page5.html')">
-                    <span class="nav-icon"></span> VIDEO VAULT
+                    <span class="nav-icon">▶</span> VIDEO VAULT
                 </a>
             </li>
         </ul>
-        <div style="padding: 20px 30px 40px; font-family:'Orbitron'; font-size:9px; color:var(--gold); letter-spacing:3px; opacity:0.6; line-height:2;">
-            BY JIVITMURDA
-        </div>
+        <div class="nav-footer">BY JIVITMURDA</div>
     </nav>
 
-    <!-- -- TOP STRAP -- -->
+    <!-- TOP STRAP -->
     <div class="strap">
         <button class="ham-btn" id="ham-btn" onclick="toggleNav()" aria-label="Open menu">
             <span></span><span></span><span></span>
@@ -294,187 +470,260 @@
         <span class="strap-text">CAMPUS RECORDS {2026}</span>
     </div>
 
-    <!-- -- HERO -- -->
+    <!-- HERO -->
     <header class="hero">
         <h1 class="hero-title">ACADEMIC<span>DIRECTORY</span></h1>
     </header>
 
-    <!-- -- MENTORS -- -->
+    <!-- MENTORS -->
     <div id="mentors-anchor"></div>
     <h2 class="section-title">Hall of Mentors</h2>
     <div class="ornament"></div>
     <section class="mentor-grid" id="mentor-grid"></section>
 
-    <!-- -- STUDENTS -- -->
+    <!-- STUDENTS -->
     <h2 class="section-title">Student Archive</h2>
     <div class="ornament"></div>
-    
+
     <div class="search-wrap">
-        <input id="search" type="text" placeholder="Identify record..." oninput="filterCards()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+        <input id="search" type="text" placeholder="Identify record..." oninput="filterCards()"
+               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
     </div>
 
     <section class="grid" id="grid"></section>
 
-    <!-- -- FOOTER -- -->
+    <!-- FOOTER -->
     <footer class="footer">
         <p>DESIGNED BY JIVITMURDA</p>
     </footer>
 
     <script>
-        /* -- AUDIO LOGIC -- */
+        /* ============================================
+           AUDIO
+        ============================================ */
         const clickSfx = document.getElementById('aoeClick');
         function playSfx() {
             clickSfx.currentTime = 0;
-            clickSfx.play().catch(e => console.log("Audio play blocked."));
+            clickSfx.play().catch(() => {});
         }
+        document.addEventListener('click', e => {
+            if (e.target.closest('button, a, .card, .mentor-card, .ham-btn')) playSfx();
+        }, { passive: true });
 
-        document.addEventListener('click', (e) => {
-            if(e.target.closest('button, a, .card, .mentor-card, .ham-btn')) {
-                playSfx();
-            }
-        });
-
-        /* 
-        =========================================
-        DATA
-        =========================================
-        */
+        /* ============================================
+           DATA  — ALL COMMAS FIXED
+        ============================================ */
         const MENTOR_DATA = [
-            { name: "PROF. RAHUL SIR", rank: "CHEM EXPERT", img: "pfp/mentor1.jpg" },
-            { name: "PROF. ARUN SONAWANE SIR", rank: "MATHS EXPERT", img: "pfp/mentor2.jpg" }
-            { name: "PROF. MAYUR SIR", rank: "PHY EXPERT", img: "pfp/mentor3.jpg" }
-            { name: "PROF. DARADE MAM", rank: "BIO EXPERT", img: "pfp/mentor4.jpg" }
-         { name: "PROF. SHRADHA MAM", rank: "BIO EXPERT", img: "pfp/mentor5.png" }
+            { name: "PROF. RAHUL SIR",         rank: "CHEM EXPERT",  img: "pfp/mentor1.jpg"  },
+            { name: "PROF. ARUN SONAWANE SIR",  rank: "MATHS EXPERT", img: "pfp/mentor2.jpg"  },
+            { name: "PROF. MAYUR SIR",          rank: "PHY EXPERT",   img: "pfp/mentor3.jpg"  },
+            { name: "PROF. DARADE MAM",         rank: "BIO EXPERT",   img: "pfp/mentor4.jpg"  },
+            { name: "PROF. SHRADHA MAM",        rank: "BIO EXPERT",   img: "pfp/mentor5.png"  }
         ];
 
         const STUDENT_DATA = [
-            { name: "Abhinav Chauhan", meta: "SCHOLAR", img: "pfp/abhinav.png" },
-            { name: "Kunal Patne",     meta: "SCHOLAR", img: "" },
-            { name: "Ishant Gawali",   meta: "SCHOLAR", img: "" },
-            { name: "Jidnesh Kharole", meta: "SCHOLAR", img: "" }
+            { name: "Abhinav Chauhan",  meta: "SCHOLAR", img: "pfp/abhinav.png" },
+            { name: "Kunal Patne",      meta: "SCHOLAR", img: ""                },
+            { name: "Ishant Gawali",    meta: "SCHOLAR", img: ""                },
+            { name: "Jidnesh Kharole", meta: "SCHOLAR", img: ""                }
         ];
 
-        /* 
-        =========================================
-        CORE ENGINE
-        =========================================
-        */
-
+        /* ============================================
+           RENDER MENTORS
+        ============================================ */
         function renderMentors() {
             const mGrid = document.getElementById('mentor-grid');
-            mGrid.innerHTML = MENTOR_DATA.map(m => `
+            mGrid.innerHTML = MENTOR_DATA.map(m => {
+                const initial = m.name.replace('PROF. ', '').charAt(0).toUpperCase();
+                const photoContent = m.img
+                    ? `<img src="${m.img}" alt="${m.name}" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML='<div class=\\'mentor-placeholder\\'><div class=\\'mentor-placeholder-initial\\'>${initial}</div></div>'">`
+                    : `<div class="mentor-placeholder"><div class="mentor-placeholder-initial">${initial}</div></div>`;
+                return `
                 <div class="mentor-card">
-                    <div class="mentor-photo">
-                        <img src="${m.img}" onerror="this.src='https://via.placeholder.com/400x500/0A192F/C9A84C?text=MENTOR'" loading="lazy">
-                    </div>
+                    <div class="mentor-photo">${photoContent}</div>
                     <div class="mentor-info">
                         <div class="mentor-name">${m.name}</div>
                         <div class="mentor-rank">${m.rank}</div>
                     </div>
-                </div>
-            `).join('');
+                </div>`;
+            }).join('');
+
+            /* Stagger-in mentors */
+            gsap.from('.mentor-card', {
+                opacity: 0, y: 40, scale: 0.95,
+                stagger: 0.1, duration: 0.7,
+                ease: 'power3.out'
+            });
         }
 
+        /* ============================================
+           RENDER STUDENTS
+        ============================================ */
         function renderCards(data) {
             const grid = document.getElementById('grid');
+
+            if (!data.length) {
+                grid.innerHTML = `<div class="empty-state">NO RECORDS FOUND</div>`;
+                return;
+            }
+
             grid.innerHTML = data.map(p => {
                 const init = p.name.charAt(0).toUpperCase();
-                const imgHtml = p.img 
-                    ? `<img src="${p.img}" loading="lazy" alt="${p.name}">` 
+                const photoContent = p.img
+                    ? `<img src="${p.img}" loading="lazy" decoding="async" alt="${p.name}" onerror="this.remove()">`
                     : `<div class="card-initial">${init}</div>`;
-                
+
                 return `
                 <div class="card" onclick="navigateTo('profile.html')">
-                    <div class="card-photo">${imgHtml}</div>
+                    <div class="card-photo">
+                        ${photoContent}
+                        ${!p.img ? '' : `<div class="card-initial">${init}</div>`}
+                    </div>
                     <div class="card-info">
                         <div class="card-name">${p.name}</div>
                         <div class="card-meta">${p.meta}</div>
                     </div>
                 </div>`;
             }).join('');
-            
-            gsap.from(".card", { opacity: 0, y: 30, stagger: 0.05, duration: 0.8, ease: "power2.out" });
+
+            /* 4K-smooth stagger with hardware-composited props only */
+            gsap.fromTo('.card',
+                { opacity: 0, y: 28, scale: 0.97 },
+                { opacity: 1, y: 0, scale: 1, stagger: 0.06, duration: 0.55, ease: 'power2.out', clearProps: 'all' }
+            );
         }
 
-        function filterCards(){
-            const q = document.getElementById('search').value.toLowerCase();
+        function filterCards() {
+            const q = document.getElementById('search').value.toLowerCase().trim();
             const filtered = STUDENT_DATA.filter(x => x.name.toLowerCase().includes(q));
             renderCards(filtered);
         }
 
-        /* -- INTERACTION -- */
+        /* ============================================
+           NAV
+        ============================================ */
+        let navOpen = false;
         function toggleNav() {
-            const d = document.getElementById('nav-drawer');
-            const b = document.getElementById('nav-backdrop');
-            const h = document.getElementById('ham-btn');
-            d.classList.toggle('open');
-            h.classList.toggle('open');
-            b.style.display = d.classList.contains('open') ? 'block' : 'none';
-            // Prevent body scroll when nav is open
-            document.body.style.overflow = d.classList.contains('open') ? 'hidden' : '';
+            navOpen = !navOpen;
+            const drawer   = document.getElementById('nav-drawer');
+            const backdrop = document.getElementById('nav-backdrop');
+            const ham      = document.getElementById('ham-btn');
+
+            drawer.classList.toggle('open', navOpen);
+            ham.classList.toggle('open', navOpen);
+            backdrop.style.display = navOpen ? 'block' : 'none';
+            document.body.style.overflow = navOpen ? 'hidden' : '';
         }
 
         function scrollToMentors() {
-            toggleNav();
+            if (navOpen) toggleNav();
             setTimeout(() => {
                 document.getElementById('mentors-anchor').scrollIntoView({ behavior: 'smooth' });
             }, 400);
         }
 
-        /* -- NAVIGATION REDIRECT -- */
+        /* ============================================
+           PAGE TRANSITION  (GPU-accelerated)
+        ============================================ */
         function navigateTo(url) {
             const loader = document.getElementById('page-loader');
-            gsap.set(loader, { x: "-100%" });
-
-            gsap.to(loader, { 
-                x: "0%", 
-                duration: 0.8, 
-                ease: "power4.inOut", 
-                onStart: () => {
-                    loader.style.pointerEvents = "auto";
-                },
-                onComplete: () => {
-                    window.location.href = url;
-                }
+            gsap.set(loader, { x: '-100%', pointerEvents: 'none' });
+            gsap.to(loader, {
+                x: '0%', duration: 0.65, ease: 'power4.inOut',
+                onStart() { loader.style.pointerEvents = 'auto'; },
+                onComplete() { window.location.href = url; }
             });
         }
 
-        window.onload = () => {
-            renderMentors();
-            renderCards(STUDENT_DATA);
-            
-            gsap.registerPlugin(ScrollTrigger);
-            gsap.from(".hero-title", { y: 100, opacity: 0, duration: 1.5, ease: "power4.out" });
-            
-            document.addEventListener('visibilitychange', () => {
-                document.getElementById('sec-shield').style.display = document.hidden ? 'flex' : 'none';
-            });
-        };
+        /* ============================================
+           DUST PARTICLES  (offscreen canvas + rAF)
+        ============================================ */
+        (function initDust() {
+            const canvas = document.getElementById('dust');
+            const ctx    = canvas.getContext('2d');
+            let W, H, particles = [];
 
-        // DUST SYSTEM
-        (function(){
-            const c = document.getElementById('dust');
-            const ctx = c.getContext('2d');
-            let particles = [];
-            function res() { c.width = window.innerWidth; c.height = window.innerHeight; }
-            res(); window.onresize = res;
-            for(let i=0; i<60; i++) particles.push({ x:Math.random()*c.width, y:Math.random()*c.height, r:Math.random()*2, v:Math.random()*0.3 });
-            function draw(){
-                ctx.clearRect(0,0,c.width,c.height);
-                particles.forEach(p=>{
-                    p.y -= p.v; if(p.y < 0) p.y = c.height;
-                    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-                    ctx.fillStyle = 'rgba(201, 168, 76, 0.3)'; ctx.fill();
+            function resize() {
+                W = canvas.width  = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            }
+            resize();
+
+            const PARTICLE_COUNT = 50;
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                particles.push({
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight,
+                    r: Math.random() * 1.8 + 0.2,
+                    v: Math.random() * 0.25 + 0.05,
+                    o: Math.random() * 0.4 + 0.1
                 });
+            }
+
+            /* Throttle resize to once per 200ms */
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(resize, 200);
+            }, { passive: true });
+
+            function draw() {
+                ctx.clearRect(0, 0, W, H);
+                for (const p of particles) {
+                    p.y -= p.v;
+                    if (p.y < -2) { p.y = H + 2; p.x = Math.random() * W; }
+                    ctx.globalAlpha = p.o;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = '#C9A84C';
+                    ctx.fill();
+                }
+                ctx.globalAlpha = 1;
                 requestAnimationFrame(draw);
             }
             draw();
         })();
 
-        // SECURITY
+        /* ============================================
+           SCROLL ANIMATIONS
+        ============================================ */
+        function initScrollAnimations() {
+            gsap.registerPlugin(ScrollTrigger);
+
+            gsap.from('.hero-title', {
+                y: 80, opacity: 0, duration: 1.2, ease: 'power4.out'
+            });
+
+            gsap.from('.section-title, .ornament', {
+                scrollTrigger: { trigger: '#mentors-anchor', start: 'top 85%' },
+                opacity: 0, y: 30, stagger: 0.15, duration: 0.8, ease: 'power2.out'
+            });
+        }
+
+        /* ============================================
+           SECURITY
+        ============================================ */
         document.addEventListener('keydown', e => {
-            if(e.ctrlKey && (e.key === 'u' || e.key === 's' || e.key === 'i')) e.preventDefault();
+            if (e.ctrlKey && (e.key === 'u' || e.key === 's' || e.key === 'i')) e.preventDefault();
         });
+        document.addEventListener('visibilitychange', () => {
+            document.getElementById('sec-shield').style.display = document.hidden ? 'flex' : 'none';
+        });
+
+        /* ============================================
+           INIT  — deferred for first-paint speed
+        ============================================ */
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', boot);
+        } else {
+            boot();
+        }
+
+        function boot() {
+            renderMentors();
+            renderCards(STUDENT_DATA);
+            initScrollAnimations();
+        }
     </script>
 </body>
 </html>
