@@ -33,28 +33,21 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* — GPU-ACCELERATED SCROLL — */
-        html {
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-        }
+        html { scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
 
         body {
             background-color: var(--creme);
             font-family: 'DM Sans', sans-serif;
-            overflow-x: hidden;
-            color: var(--ink);
+            overflow-x: hidden; color: var(--ink);
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            /* GPU compositing hint */
             will-change: scroll-position;
         }
 
-        /* — PAPER TEXTURE (CSS-only, no network) — */
+        /* — PAPER TEXTURE — */
         body::before {
-            content: '';
-            position: fixed; inset: 0; z-index: -1;
+            content: ''; position: fixed; inset: 0; z-index: -1;
             background-image:
                 repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(201,168,76,0.03) 28px, rgba(201,168,76,0.03) 29px),
                 repeating-linear-gradient(90deg, transparent, transparent 28px, rgba(201,168,76,0.02) 28px, rgba(201,168,76,0.02) 29px);
@@ -69,22 +62,20 @@
             display: flex; align-items: center; justify-content: center;
             border-right: 8px solid var(--gold);
             box-shadow: 20px 0 60px rgba(0,0,0,0.6);
-            pointer-events: none;
-            will-change: transform;
+            pointer-events: none; will-change: transform;
         }
         .loader-logo {
             font-family: 'Cinzel Decorative';
             font-size: clamp(18px, 5vw, 45px);
-            color: var(--gold);
-            letter-spacing: 10px;
-            font-weight: 900;
-            text-shadow: 0 0 30px rgba(201, 168, 76, 0.6);
+            color: var(--gold); letter-spacing: 10px; font-weight: 900;
+            text-shadow: 0 0 30px rgba(201,168,76,0.6);
         }
 
         /* — SECURITY SHIELD — */
         #sec-shield {
             position: fixed; inset: 0; z-index: 10000000;
-            background: #000; display: none; align-items: center; justify-content: center;
+            background: #000; display: none;
+            align-items: center; justify-content: center;
         }
         .lock-ring {
             width: 70px; height: 70px;
@@ -111,12 +102,9 @@
             will-change: transform;
         }
         .strap-text {
-            font-family: 'Orbitron';
-            font-size: clamp(9px, 2.5vw, 11px);
-            font-weight: 900;
-            letter-spacing: clamp(2px, 1vw, 6px);
-            color: var(--gold);
-            text-transform: uppercase;
+            font-family: 'Orbitron'; font-size: clamp(9px, 2.5vw, 11px);
+            font-weight: 900; letter-spacing: clamp(2px, 1vw, 6px);
+            color: var(--gold); text-transform: uppercase;
         }
 
         /* — HAMBURGER — */
@@ -129,32 +117,30 @@
         .ham-btn span {
             display: block; width: 22px; height: 2px;
             background: var(--gold); border-radius: 2px;
-            transition: transform 0.3s, opacity 0.3s;
+            transition: transform 0.35s cubic-bezier(0.77,0,0.18,1), opacity 0.35s ease;
             will-change: transform;
         }
         .ham-btn.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-        .ham-btn.open span:nth-child(2) { opacity: 0; }
+        .ham-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
         .ham-btn.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
-        /* — NAV DRAWER — */
+        /* — NAV BACKDROP & DRAWER — */
         .nav-backdrop {
-            position: fixed; inset: 0;
-            background: rgba(0,0,0,0.8);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8);
             z-index: 1500; display: none;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            opacity: 0; transition: opacity 0.4s ease;
         }
+        .nav-backdrop.visible { opacity: 1; }
         .nav-drawer {
             position: fixed; top: 0; left: 0; bottom: 0;
             width: 320px; max-width: 85%;
-            background: var(--royal-blue);
-            z-index: 2000;
+            background: var(--royal-blue); z-index: 2000;
             transform: translateX(-100%);
             transition: transform 0.5s cubic-bezier(0.77, 0, 0.18, 1);
             border-right: 5px solid var(--gold);
             display: flex; flex-direction: column;
-            overflow-y: auto;
-            will-change: transform;
+            overflow-y: auto; will-change: transform;
         }
         .nav-drawer.open { transform: translateX(0); }
         .nav-header {
@@ -166,10 +152,9 @@
         .nav-links { list-style: none; padding: clamp(25px, 5vh, 40px) 30px; flex-grow: 1; }
         .nav-links li { margin-bottom: clamp(22px, 4vh, 35px); }
         .nav-links a {
-            color: var(--gold-bright); text-decoration: none;
-            font-family: 'Cinzel';
+            color: var(--gold-bright); text-decoration: none; font-family: 'Cinzel';
             font-size: clamp(14px, 4vw, 18px); letter-spacing: 3px; font-weight: 700;
-            transition: color 0.2s, padding-left 0.2s, border-color 0.2s;
+            transition: color 0.25s ease, padding-left 0.25s cubic-bezier(0.34,1.56,0.64,1), border-color 0.25s ease;
             display: flex; align-items: center; gap: 10px; padding: 8px 0;
             border-bottom: 1px solid rgba(201,168,76,0.1);
         }
@@ -195,11 +180,10 @@
             letter-spacing: clamp(6px, 3vw, 18px); margin-top: 20px;
         }
 
-        /* — SECTION — */
+        /* — SECTION TITLES — */
         .section-title {
             font-family: 'Cinzel', serif; text-align: center;
-            margin-top: clamp(60px, 10vh, 100px);
-            color: var(--mahogany);
+            margin-top: clamp(60px, 10vh, 100px); color: var(--mahogany);
             font-size: clamp(16px, 4vw, 26px);
             letter-spacing: clamp(4px, 2vw, 10px); text-transform: uppercase;
         }
@@ -213,41 +197,52 @@
             background: var(--creme); padding: 0 10px; color: var(--gold);
         }
 
-        /* — MENTOR CARDS — */
+        /* =====================================================
+           MENTOR GRID
+           Desktop: CSS grid 5 equal cols — frames are IDENTICAL
+           Tablet:  3 cols, females in col 1 & 3 of row 2
+           Mobile:  same 3-col layout
+        ===================================================== */
         .mentor-grid {
-            display: flex; justify-content: center;
-            gap: clamp(15px, 4vw, 40px);
-            padding: 0 5%; flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: clamp(12px, 2.2vw, 32px);
+            padding: 0 5%;
+            max-width: 1100px;
+            margin: 0 auto;
         }
+
         .mentor-card {
-            width: clamp(150px, 42vw, 320px);
             background: var(--creme);
-            border: clamp(4px, 1.5vw, 10px) solid var(--mahogany);
+            border: clamp(4px, 1.2vw, 9px) solid var(--mahogany);
             outline: 2px solid var(--gold);
-            padding: 10px;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
-            box-shadow: clamp(6px, 2vw, 15px) clamp(6px, 2vw, 15px) 0px var(--stone);
-            cursor: pointer;
-            will-change: transform;
+            padding: 9px;
+            transition: transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                        box-shadow 0.45s ease;
+            box-shadow: clamp(6px, 1.5vw, 12px) clamp(6px, 1.5vw, 12px) 0px var(--stone);
+            cursor: pointer; will-change: transform;
+            display: flex; flex-direction: column;
         }
         .mentor-card:hover {
             transform: translateY(-12px);
-            box-shadow: clamp(10px, 3vw, 25px) clamp(10px, 3vw, 25px) 0px var(--gold);
+            box-shadow: clamp(10px, 2.5vw, 20px) clamp(10px, 2.5vw, 20px) 0px var(--gold);
         }
+
+        /* aspect-ratio = every photo frame identical height */
         .mentor-photo {
             width: 100%; aspect-ratio: 4/5;
             background: var(--royal-blue);
             border: 1px solid var(--gold);
-            overflow: hidden; position: relative;
+            overflow: hidden; position: relative; flex-shrink: 0;
         }
         .mentor-photo img {
             width: 100%; height: 100%; object-fit: cover;
-            transition: transform 0.8s ease;
+            object-position: center center;
+            transition: transform 0.75s cubic-bezier(0.25,0.46,0.45,0.94);
             display: block;
         }
-        .mentor-card:hover .mentor-photo img { transform: scale(1.05); }
+        .mentor-card:hover .mentor-photo img { transform: scale(1.06); }
 
-        /* — MENTOR PLACEHOLDER — */
         .mentor-placeholder {
             width: 100%; height: 100%;
             display: flex; flex-direction: column;
@@ -255,19 +250,36 @@
             background: linear-gradient(135deg, var(--royal-blue), var(--imperial-purple));
         }
         .mentor-placeholder-initial {
-            font-family: 'Cinzel'; font-size: clamp(40px, 10vw, 70px);
+            font-family: 'Cinzel'; font-size: clamp(36px, 7vw, 58px);
             color: var(--gold); opacity: 0.6; line-height: 1;
         }
 
-        .mentor-info { text-align: center; padding-top: 14px; padding-bottom: 4px; }
+        .mentor-info { text-align: center; padding: 12px 4px 5px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
         .mentor-name {
-            font-family: 'Cinzel'; font-size: clamp(10px, 2.5vw, 15px);
-            font-weight: 900; color: var(--ink); letter-spacing: 1px; line-height: 1.3;
+            font-family: 'Cinzel'; font-size: clamp(9px, 1.5vw, 13px);
+            font-weight: 900; color: var(--ink); letter-spacing: 0.5px; line-height: 1.3;
         }
         .mentor-rank {
-            font-family: 'DM Sans'; font-size: clamp(9px, 2vw, 11px);
-            color: var(--gold-dark); letter-spacing: 3px; margin-top: 6px; text-transform: uppercase;
-            font-weight: 700;
+            font-family: 'DM Sans'; font-size: clamp(8px, 1.1vw, 10px);
+            color: var(--gold-dark); letter-spacing: 2.5px; margin-top: 5px;
+            text-transform: uppercase; font-weight: 700;
+        }
+
+        /* Mobile ≤600px: row1 = 3 males, row2 = 2 females in col1 & col3 */
+        @media (max-width: 600px) {
+            .mentor-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px; padding: 0 10px; max-width: 100%;
+            }
+            .mentor-card:nth-child(4) { grid-column: 1; }
+            .mentor-card:nth-child(5) { grid-column: 3; }
+        }
+
+        /* Tablet 601–899px */
+        @media (min-width: 601px) and (max-width: 899px) {
+            .mentor-grid { grid-template-columns: repeat(3, 1fr); max-width: 100%; }
+            .mentor-card:nth-child(4) { grid-column: 1; }
+            .mentor-card:nth-child(5) { grid-column: 3; }
         }
 
         /* — SEARCH — */
@@ -280,10 +292,13 @@
             font-size: clamp(0.9rem, 3vw, 1.1rem);
             box-shadow: 8px 8px 24px rgba(0,0,0,0.06);
             border-radius: 2px;
-            transition: box-shadow 0.2s;
+            transition: box-shadow 0.3s ease, border-color 0.3s ease;
         }
         #search::placeholder { color: rgba(74,44,42,0.45); }
-        #search:focus { box-shadow: 0 0 0 3px rgba(201,168,76,0.25), 8px 8px 24px rgba(0,0,0,0.06); }
+        #search:focus {
+            box-shadow: 0 0 0 3px rgba(201,168,76,0.25), 8px 8px 24px rgba(0,0,0,0.06);
+            border-color: var(--gold-bright);
+        }
 
         /* — STUDENT GRID — */
         .grid {
@@ -293,50 +308,39 @@
             padding: 0 clamp(12px, 4%, 6%) clamp(80px, 15vh, 150px);
             max-width: 1600px; margin: 0 auto;
         }
-
-        /* Desktop: 4 cols */
-        @media (min-width: 900px) {
-            .grid { grid-template-columns: repeat(4, 1fr); }
-        }
-        @media (min-width: 1200px) {
-            .grid { grid-template-columns: repeat(5, 1fr); }
-        }
+        @media (min-width: 900px)  { .grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (min-width: 1200px) { .grid { grid-template-columns: repeat(5, 1fr); } }
 
         .card {
-            background: var(--pure-white);
-            border: 1px solid var(--stone);
+            background: var(--pure-white); border: 1px solid var(--stone);
             cursor: pointer;
-            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s, box-shadow 0.35s;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        border-color 0.25s ease, box-shadow 0.4s ease;
             position: relative; overflow: hidden;
-            border-radius: 16px;
-            will-change: transform;
+            border-radius: 16px; will-change: transform;
         }
         .card:hover {
-            border-color: var(--gold);
-            transform: translateY(-8px);
+            border-color: var(--gold); transform: translateY(-8px);
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
-        /* Shimmer on hover */
         .card::after {
             content: ''; position: absolute; inset: 0;
             background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%);
             transform: translateX(-100%) skewX(-15deg);
-            transition: transform 0.6s ease;
+            transition: transform 0.65s cubic-bezier(0.25,0.46,0.45,0.94);
             z-index: 5; pointer-events: none;
         }
         .card:hover::after { transform: translateX(200%) skewX(-15deg); }
 
         .card-photo {
-            width: 100%; aspect-ratio: 4/5;
-            background: var(--royal-blue);
+            width: 100%; aspect-ratio: 4/5; background: var(--royal-blue);
             position: relative; overflow: hidden;
             border-bottom: 2px solid var(--stone);
             border-radius: 16px 16px 0 0;
         }
         .card-photo img {
-            width: 100%; height: 100%; object-fit: cover;
-            opacity: 0.85;
-            transition: opacity 0.5s, transform 0.7s ease;
+            width: 100%; height: 100%; object-fit: cover; opacity: 0.85;
+            transition: opacity 0.5s ease, transform 0.75s cubic-bezier(0.25,0.46,0.45,0.94);
             display: block;
         }
         .card:hover .card-photo img { opacity: 1; transform: scale(1.07); }
@@ -346,7 +350,6 @@
             font-family: 'Cinzel'; font-size: clamp(48px, 14vw, 80px);
             color: var(--gold); opacity: 0.12; user-select: none;
         }
-
         .card-info {
             padding: clamp(14px, 3vw, 22px) clamp(10px, 3vw, 15px);
             text-align: left; background: var(--creme);
@@ -364,8 +367,7 @@
 
         /* — EMPTY STATE — */
         .empty-state {
-            grid-column: 1 / -1; text-align: center;
-            padding: 60px 20px;
+            grid-column: 1 / -1; text-align: center; padding: 60px 20px;
             font-family: 'Cinzel'; color: rgba(74,44,42,0.4);
             letter-spacing: 3px; font-size: 14px;
         }
@@ -391,7 +393,7 @@
             .ham-btn:active { opacity: 0.7; }
         }
 
-        /* — RESPONSIVE — */
+        /* — RESPONSIVE OVERRIDES — */
         @media (max-width: 480px) {
             .grid { grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 8px 80px; }
             .card { border-radius: 12px; }
@@ -400,8 +402,6 @@
             .card-name { font-size: 8px; letter-spacing: 0.3px; }
             .card-meta { font-size: 7px; letter-spacing: 0.5px; margin-top: 2px; }
             .hero { padding: 50px 4% 40px; }
-            .mentor-grid { gap: 12px; padding: 0 12px; }
-            .mentor-card { width: calc(50% - 6px); }
             .search-wrap { padding: 30px 12px 20px; }
             #search { font-size: 14px; padding: 13px 15px; }
             .section-title { margin-top: 50px; }
@@ -411,10 +411,8 @@
             .nav-links li { margin-bottom: 18px; }
             .nav-links a { font-size: 13px; letter-spacing: 2px; }
         }
-
         @media (min-width: 481px) and (max-width: 899px) {
             .grid { grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 14px 90px; }
-            .mentor-card { width: calc(50% - 10px); }
         }
     </style>
 </head>
@@ -511,7 +509,8 @@
         }, { passive: true });
 
         /* ============================================
-           DATA  — ALL COMMAS FIXED
+           DATA
+           Order: first 3 = males (row 1), last 2 = females (row 2)
         ============================================ */
         const MENTOR_DATA = [
             { name: "PROF. RAHUL SIR",         rank: "CHEM EXPERT",  img: "pfp/mentor1.JPG"  },
@@ -525,7 +524,7 @@
             { name: "Abhinav Chauhan",  meta: "SCHOLAR", img: "pfp/abhinav.png" },
             { name: "Kunal Patne",      meta: "SCHOLAR", img: ""                },
             { name: "Ishant Gawali",    meta: "SCHOLAR", img: ""                },
-            { name: "Jidnesh Kharole", meta: "SCHOLAR", img: ""                }
+            { name: "Jidnesh Kharole",  meta: "SCHOLAR", img: ""                }
         ];
 
         /* ============================================
@@ -536,7 +535,8 @@
             mGrid.innerHTML = MENTOR_DATA.map(m => {
                 const initial = m.name.replace('PROF. ', '').charAt(0).toUpperCase();
                 const photoContent = m.img
-                    ? `<img src="${m.img}" alt="${m.name}" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML='<div class=\\'mentor-placeholder\\'><div class=\\'mentor-placeholder-initial\\'>${initial}</div></div>'">`
+                    ? `<img src="${m.img}" alt="${m.name}" loading="lazy" decoding="async"
+                         onerror="this.parentElement.innerHTML='<div class=\\'mentor-placeholder\\'><div class=\\'mentor-placeholder-initial\\'>${initial}</div></div>'">`
                     : `<div class="mentor-placeholder"><div class="mentor-placeholder-initial">${initial}</div></div>`;
                 return `
                 <div class="mentor-card">
@@ -548,11 +548,9 @@
                 </div>`;
             }).join('');
 
-            /* Stagger-in mentors */
             gsap.from('.mentor-card', {
                 opacity: 0, y: 40, scale: 0.95,
-                stagger: 0.1, duration: 0.7,
-                ease: 'power3.out'
+                stagger: 0.1, duration: 0.75, ease: 'power3.out'
             });
         }
 
@@ -561,18 +559,15 @@
         ============================================ */
         function renderCards(data) {
             const grid = document.getElementById('grid');
-
             if (!data.length) {
                 grid.innerHTML = `<div class="empty-state">NO RECORDS FOUND</div>`;
                 return;
             }
-
             grid.innerHTML = data.map(p => {
                 const init = p.name.charAt(0).toUpperCase();
                 const photoContent = p.img
                     ? `<img src="${p.img}" loading="lazy" decoding="async" alt="${p.name}" onerror="this.remove()">`
                     : `<div class="card-initial">${init}</div>`;
-
                 return `
                 <div class="card" onclick="navigateTo('profile.html')">
                     <div class="card-photo">
@@ -586,17 +581,15 @@
                 </div>`;
             }).join('');
 
-            /* 4K-smooth stagger with hardware-composited props only */
             gsap.fromTo('.card',
                 { opacity: 0, y: 28, scale: 0.97 },
-                { opacity: 1, y: 0, scale: 1, stagger: 0.06, duration: 0.55, ease: 'power2.out', clearProps: 'all' }
+                { opacity: 1, y: 0, scale: 1, stagger: 0.06, duration: 0.6, ease: 'power3.out', clearProps: 'all' }
             );
         }
 
         function filterCards() {
             const q = document.getElementById('search').value.toLowerCase().trim();
-            const filtered = STUDENT_DATA.filter(x => x.name.toLowerCase().includes(q));
-            renderCards(filtered);
+            renderCards(STUDENT_DATA.filter(x => x.name.toLowerCase().includes(q)));
         }
 
         /* ============================================
@@ -609,9 +602,18 @@
             const backdrop = document.getElementById('nav-backdrop');
             const ham      = document.getElementById('ham-btn');
 
+            if (navOpen) {
+                backdrop.style.display = 'block';
+                requestAnimationFrame(() => backdrop.classList.add('visible'));
+            } else {
+                backdrop.classList.remove('visible');
+                backdrop.addEventListener('transitionend', () => {
+                    if (!navOpen) backdrop.style.display = 'none';
+                }, { once: true });
+            }
+
             drawer.classList.toggle('open', navOpen);
             ham.classList.toggle('open', navOpen);
-            backdrop.style.display = navOpen ? 'block' : 'none';
             document.body.style.overflow = navOpen ? 'hidden' : '';
         }
 
@@ -623,20 +625,20 @@
         }
 
         /* ============================================
-           PAGE TRANSITION  (GPU-accelerated)
+           PAGE TRANSITION
         ============================================ */
         function navigateTo(url) {
             const loader = document.getElementById('page-loader');
             gsap.set(loader, { x: '-100%', pointerEvents: 'none' });
             gsap.to(loader, {
                 x: '0%', duration: 0.65, ease: 'power4.inOut',
-                onStart() { loader.style.pointerEvents = 'auto'; },
+                onStart()    { loader.style.pointerEvents = 'auto'; },
                 onComplete() { window.location.href = url; }
             });
         }
 
         /* ============================================
-           DUST PARTICLES  (offscreen canvas + rAF)
+           DUST PARTICLES
         ============================================ */
         (function initDust() {
             const canvas = document.getElementById('dust');
@@ -660,7 +662,6 @@
                 });
             }
 
-            /* Throttle resize to once per 200ms */
             let resizeTimer;
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimer);
@@ -669,13 +670,13 @@
 
             function draw() {
                 ctx.clearRect(0, 0, W, H);
+                ctx.fillStyle = '#C9A84C';
                 for (const p of particles) {
                     p.y -= p.v;
                     if (p.y < -2) { p.y = H + 2; p.x = Math.random() * W; }
                     ctx.globalAlpha = p.o;
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                    ctx.fillStyle = '#C9A84C';
                     ctx.fill();
                 }
                 ctx.globalAlpha = 1;
@@ -711,7 +712,7 @@
         });
 
         /* ============================================
-           INIT  — deferred for first-paint speed
+           INIT
         ============================================ */
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', boot);
